@@ -5,17 +5,13 @@ author:
   othernames: Caroline X.
   address: Centre for Youth Mental Health (Orygen), University of Melbourne; School of Public Health and Preventive Medicine, Monash University
   email: caroline.gao@orygen.org.au
-documentclass: ctexart
 output:
    bookdown::pdf_document2:
-     toc: no
+     toc: yes
      number_sections: false
      latex_engine: xelatex
      pandoc_args:
       - --template=template.tex
-   bookdown::word_document2:
-     toc: no 
-     number_sections: false       
 date: "`r format(Sys.time(), '%B %d, %Y')`" 
 geometry: margin=1in
 fontsize: 11pt
@@ -27,18 +23,23 @@ header-includes:
     \usepackage{lscape}
     \newcommand{\blandscape}{\begin{landscape}}
     \newcommand{\elandscape}{\end{landscape}}
-    \usepackage{ctex}
-
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(pacman)
+pkgs <- c("dplyr", "tidyr","tidyverse", "emo")
 ```
 
-This short practice guidance is designed based on a few guidelines and practice principles, books and jounal articles, including 
+
+# Introduction 
+
+This short practice guidance is designed based on a few guidelines and practice principles, books and jounal articles, including: 
 
 * [ASA "Ethical Guidelines for Statistical Practice"](https://www.amstat.org/ASA/Your-Career/Ethical-Guidelines-for-Statistical-Practice.aspx)
 * [Reproducible Research with R and R Studio](https://englianhu.files.wordpress.com/2016/01/reproducible-research-with-r-and-studio-2nd-edition.pdf)
+* [Efficient R programming](https://csgillespie.github.io/efficientR/)
 
 The aim of this guidance is to promote accountability, reproducibility and integrity of statistical practice in Orygen health service and outcome research team.  The guidance is divided into four parts: 1) planning for analysis, 2) data cleaning, 3) analysis, and 4) reporting.  
 
@@ -47,19 +48,28 @@ The aim of this guidance is to promote accountability, reproducibility and integ
 
 Rule number 1: The analysis will need to be planed before you touch the data. Your analysis may deviate from the analysis plan to some degrees, which may relate to data integrity of the variable selected, model fitting factors (i.e. multicollinearity, heteroscedasticity etc) and change of research questions. However, unless your aim is purely exploratory (i.e. identify latent clusters) or predictive, your analysis should be guided by the analysis plan to prevent "fishing" results. Remember "If you torture the data long enough, it will confess to anything - Ronald H. Coase", which is really against the scientific principle. The scientific evidence is  based on a collection of studies and findings rather than a single paper. If you have a negative finding, you are obligated to publish it !!! 
 
-Rule number 2: Be aware of the "Complexity Bias". "Life is really simple, but we insist on making it complicated. (世上本无事，庸人自扰之) - Confucius”. I don't think the Confucius sentence is translated well, but you get the idea. We often find it easier to face a complex problem than a simple one, and often feel that a complex solution must be better than an easier one. However this is often not true in applied statistics. More often than not, ingenious statistical designs are surprisingly simple. An famous example is the Cox model for survival analysis, which simplifies the needs to describe the baseline hazard function with proportional hazard assumption. Another example, Dijkstra's algorithm (algorithm for finding the shortest paths between nodes in a graph), the author, Edsger Dijkstra (the author), once said "One of the reasons that it is so nice was that I designed it without pencil and paper. I learned later that one of the advantages of designing without pencil and paper is that you are almost forced to avoid all avoidable complexities. " This is the same with your analysis, always force yourself to avoid complexities if you could achieve what you need with a simpler model. There are numerous benefits for simpler models, i.e. less likely to over-fitting with your model, easier to communicate with your audience, less likely to make mistakes etc. If a logistic regression works, there is no need to use a structure equation model. 
+Rule number 2: Be aware of the "Complexity Bias".  "Life is really simple, but we insist on making it complicated ".
+```{r , echo=FALSE,fig.align="center"}
+knitr::include_graphics(here::here("Graphics/quote.jpeg"))
+```
+
+
+The famous quote is not by Confucius (it is from the New Book of Tang published about 1500 years after his death), and it is not well translated, but you get the idea. We often find it easier to face a complex problem than a simple one, and often feel that a complex solution must be better than an easier one. However this is often not true in applied statistics. 
+
+More often than not, ingenious statistical designs are surprisingly simple. An famous example is the Cox model for survival analysis, which simplifies the needs to describe the baseline hazard function with proportional hazard assumption. Another example, Dijkstra's algorithm (algorithm for finding the shortest paths between nodes in a graph), the author, Edsger Dijkstra (the author), once said "One of the reasons that it is so nice was that I designed it without pencil and paper. I learned later that one of the advantages of designing without pencil and paper is that you are almost forced to avoid all avoidable complexities. " 
+
+This is the same with your analysis, always force yourself to avoid complexities if you could achieve what you need with a simpler model. There are numerous benefits for simpler models, i.e. less likely to over-fitting with your model, easier to communicate with your audience, less likely to make mistakes etc. If a logistic regression works, there is no need to use a structure equation model. 
 
 Rule number 3: Get your analysis plan approved or reviewed. I think we all do this to some degrees. Some studies have strict protocols on who and when the analysis plan will need to be approved together with other ethical requirements. Other studies will only require you to discuss with your supervisors. Regardless, it will be better to have a written analysis plan with review and/or approval and avoids confusions down the track. Sometimes you might want or need to [preregister](https://www.apa.org/science/about/psa/2015/08/pre-registration) your study, which is considered as a part of the open science practice. 
 
-
 Last rule: Choose a script language (by no means SPSS) for your analysis. If you have already started your analysis in SPSS, please abandoned it ASAP. My metaphor: If R is in its early adolescent years, SPSS is a toddler and it suffers from the Peter Pan Syndrome (it will never grow up). 
 
-```{r pressure, echo=FALSE, fig.cap="A caption", out.width = '100%'}
+```{r pressure, echo=FALSE, out.width = '100%'}
 knitr::include_graphics(here::here("Graphics/R_illustration.jpg"))
 ```
 
 
-Sorry for being a bit offensive, but the reality is that most of the skilled SPSS users that I know have already or have been considering to learn R or Stata. The rest of them are no longer doing any analysis. So to avoid long term pain, change to R (Stata is also good, since this is a practice guide for R, I won't touch too much on Stata). There are lots of good online training materials for R:
+Sorry for being a bit offensive, but the reality is that most of the skilled SPSS users that I know have already or have been considering to learn R or Stata. The rest of them are no longer doing much analysis. So to avoid long term pain, change to R (Stata is also good, since this is a practice guide for R, I won't touch too much on Stata). There are lots of good online training materials for R:
 
 * [R for Reproducible Scientific Analysis from Software Carpentry ](https://swcarpentry.github.io/r-novice-gapminder/)
 * [R Programming on Coursera by Roger Peng](https://www.coursera.org/learn/r-programming),
@@ -69,9 +79,26 @@ Sorry for being a bit offensive, but the reality is that most of the skilled SPS
 If you are a skilled R user but do not use Rmarkdown or Bookdown, I would also recommend you to read Yihui Xie's two books: 
 
 * [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
-* [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/). 
+* [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/) (for advanced users)
+
+Well, all books from bookdown.org are worth reading. 
 
 # R setup and project managment 
+
+One thing that you have to remember R is a fast evolving language. It has a new version every few months (sometimes two versions in one months) with funny names : ) 
+```{r}
+library(rversions)
+tail(r_versions())
+```
+Although R kept on updating, you do not need to re-install R all the time. But I tend to update my R half-yearly. It doesn't take a long time to update everything now a days. The first thing that you need to do after installing R is to install your commonly used packages. A good way to install + load packages is to use the [*pacman*](https://cran.r-project.org/web/packages/pacman/index.html) package, which is much faster than typing install.package() and library(). I normally store the names of my commonly used packages somewhere. So when I need to re-install R, I will call *pacman* to install all of those packages for me at once (only takes about 10 minutes). 
+
+```{r}
+#load libraries 
+library(pacman)
+p_load("dplyr", "tidyr", "ggplot2") 
+
+```
+
 
 
 # Data cleaning 
