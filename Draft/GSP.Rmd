@@ -3,8 +3,11 @@ title: "Good Statistical Practice (GSP): guidence for using R for scientific pub
 author:
 - familyname: Gao
   othernames: Caroline X.
-  address: Centre for Youth Mental Health (Orygen), University of Melbourne; School of Public Health and Preventive Medicine, Monash University
+  address: Centre for Youth Mental Health, University of Melbourne; School of Public Health and Preventive Medicine, Monash University, Melbourne, Australia
   email: caroline.gao@orygen.org.au
+- familyname: Hamilton
+  othernames: Matthew
+  address: Orygen, Melbourne, Australia
 output:
    bookdown::pdf_document2:
      toc: yes
@@ -33,7 +36,7 @@ pkgs <- c("dplyr", "tidyr","tidyverse", "emo")
 ```
 
 
-# Introduction 
+# Preface
 
 This short practice guidance is designed based on a few guidelines and practice principles, books and jounal articles, including: 
 
@@ -43,6 +46,9 @@ This short practice guidance is designed based on a few guidelines and practice 
 
 The aim of this guidance is to promote accountability, reproducibility and integrity of statistical practice in Orygen health service and outcome research team.  The guidance is divided into four parts: 1) planning for analysis, 2) data cleaning, 3) analysis, and 4) reporting.  
 
+Important note: **the authors do not give permission for you to print this resource on papers, unless you are experimenting magical ink that disappears after 3 months (you are considered to have net-zero carbon emissions in this case).**  If you are thinking about reading this on paper before going to sleep, you are too opportunistic for your study plan : P 
+
+Have fun ~~ 
 
 # Planning for anlaysis 
 
@@ -109,13 +115,13 @@ p_load("dplyr", "tidyr", "ggplot2")
 
 # Data cleaning 
 
-## Inporting data 
+## Import data 
 
 ## Tidy-version data cleaning routine 
 
 ## Notes for yourself and others
 
-## validity checking 
+## Validity checking 
 
 ## Common pitfalls 
 
