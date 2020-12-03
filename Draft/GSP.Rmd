@@ -83,9 +83,13 @@ If you are a skilled R user but do not use Rmarkdown or Bookdown, I would also r
 
 Well, all books from bookdown.org are worth reading. 
 
-# R setup and project managment 
+One more remark: you can use causal diagrams to assist the design your analysis. 
 
-One thing that you have to remember R is a fast evolving language. It has a new version every few months (sometimes two versions in one months) with funny names : ) 
+# R setup, project managment and Rmarkdown
+
+## Setup R on your computer
+
+One thing that you have to remember: R is a fast evolving language. It has a new version every few months (sometimes two versions in one months) with funny names : ) 
 ```{r}
 library(rversions)
 tail(r_versions())
@@ -99,16 +103,48 @@ p_load("dplyr", "tidyr", "ggplot2")
 
 ```
 
+## Project managment with R
 
+## Use Rmarkdown/Rnotebook for everything
 
 # Data cleaning 
 
+## Inporting data 
 
+## Tidy-version data cleaning routine 
+
+## Notes for yourself and others
+
+## validity checking 
+
+## Common pitfalls 
+
+## Documentation for the never ending data cleaning process 
 
 # Analysis 
 
+## Exploratory phase 
+
+## Statistical modeling with R 
+
+## Extract results
+
+## Advanced topics
+
+### Loops
+
+### Functions 
+
+### Render anlaysis results from different dataset with the same rmarkdown file
+
 
 # Reporting 
+
+## One-stop shop 
+
+## A good graph takes forever  
+
+## Write up of the analysis results
 
 * Report the nature and source of the data, validity of instrument and data collection process ( i.e. response rate and any possible bias).
 
@@ -136,6 +172,18 @@ p_load("dplyr", "tidyr", "ggplot2")
 
 * Provide all analysis code either as an Appendix or in open repositories such as Github
 
-# Version Control 
+## Advanced topics
+
+### Write a paper using R
+
+### Advanced Latex 
+
+# Version control 
+
+## Version control framework
+
+## Github 
+
+# Publication 
 
 # Reference
