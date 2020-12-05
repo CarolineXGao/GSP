@@ -84,25 +84,32 @@ knitr::include_graphics(here::here("Graphics/R_illustration.jpg"))
 ```
 
 
-Sorry for being a bit offensive, but the reality is the industry and scientific community are gradually moving away from SPSS to other languages for many reasons, cost, capacity, flexibility, reporducibility etc. So to avoid the long term pain, change to R (Stata is also good, since this is a practice guide for R, I won't touch too much on Stata). There are lots of good online training materials for R:
+Sorry for being a bit offensive, but the reality is the industry and scientific community are gradually moving away from SPSS to other languages for many reasons, cost, capacity, flexibility, reporducibility etc. So to avoid the long term pain, change to R (Stata is also good, since this is a practice guide for R, I won't touch too much on Stata). 
+
+
+# Learn to use R
+
+"R being hard to learn" mostly exists in our fears. Once you get on to it the challenges are mostly "feeling a bit confused", there are so many packages, so many ways to do the same thing, so much typing needed, so many materials everywhere... So the best way to learn R is to learn by using it. You can start with a short intensive introduction course (one or two days) to build up your confidence. Start using it in a small project, and then gradually roll out to more parts of your analysis tasks. You can also start by learning your collaborator's code (communicate with the author and create a separate environment so that you won't break anything).
+
+There are lots of good online training materials for R:
 
 * [R for Reproducible Scientific Analysis from Software Carpentry ](https://swcarpentry.github.io/r-novice-gapminder/)
 * [R Programming on Coursera by Roger Peng](https://www.coursera.org/learn/r-programming),
 * [An Introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
 * [R for Data Science](https://r4ds.had.co.nz/). 
 
-If you are a skilled R user but do not use Rmarkdown or Bookdown, I would also recommend you to read Yihui Xie's two books: 
+If you are a skilled R user but do not use Rmarkdown or Bookdown, I would also recommend you to read Yihui Xie's books: 
 
 * [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
 * [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/) (for advanced users)
 
-Well, almost all books from bookdown.org are worth reading. 
+Almost all R users are still learning R!! So you have no excuse not to ~~ 
 
 # R setup, project managment and Rmarkdown
 
 ## Setup R on your computer
 
-One thing that you have to remember: R is a fast evolving language. It has a new version every few months (sometimes two versions in one months) with funny names : ) 
+One thing that you have to remember: R is a fast evolving language. It has a new version every few months (sometimes two versions in one months), with funny names : ) 
 ```{r}
 library(rversions)
 tail(r_versions())
@@ -113,8 +120,38 @@ Although R kept on updating, you do not need to re-install R all the time. But I
 #load libraries 
 library(pacman)
 p_load("dplyr", "tidyr", "ggplot2") 
+```
+
+```{r}
 
 ```
+
+
+*install.package()* and *pacman* install packages from R CRAN. However, the authors may have additional update on Github which is not loaded to CRAN. You can install the most resent package using *devtools*
+
+```{r, eval=F}
+library(devtools)
+install_github('rstudio/bookdown')
+```
+
+To get start with things, just install it from R CRAN. If you came across with some problems which seems to be a software "bug" you can update your package using *install_github*. You can also check whether your issue was being reported on Github (i.e. https://github.com/rstudio/bookdown/issues).
+
+## Keep tracking of R and package versions
+
+For all your analysis, you need to keep track of the R environment, this includes R version, platform and all package versions that were loaded in your current analysis environment. You can easily get a summary using *sessionInfo*. 
+```{r}
+sessionInfo()
+```
+This is crucial as  packages or R updates may make your code fail or your results different. This sounds scary than it really is. All analysis packages will have this issue. It's slightly complected with R because updates of R and affiliated packages are not synchronized. For my 13 years of using R, I haven't found this particularly challenging for a few reasons. The packages update rates were not as fast as we are seeing today. Most of my projects were in isolated environment so I rarely need to re-run the analysis a few years later and will need to produce exactly the same results. If I need to re-run the analysis, I will mostly update the analysis code and make sure it adhere to the current best practice. Occasionally, some of my package updates will cause problems with my current analysis code. As I keep track of my R environment, I will be able to figure out the problem quickly and re-install the older version back. 
+
+```{r, eval=F}
+require(devtools)
+install_version("bookdown", version = "0.20", 
+                repos = "http://cran.us.r-project.org")
+```
+
+If you are in the area that requires 100% reproducibility all the time, you can use [**Microsoft R open**](https://mran.microsoft.com/open) together with *checkpoint* which lock down the set of packages in your project environment, so package updates will not impact your code. There are a few other alternatives, but you can get other benefits from **Microsoft R open** without too much trouble, so it seems to be a wise choice at the current stage. If you need to install lots of things from Github and work on package development, it may not be a good choice. 
+
 
 ## Project managment with R
 
