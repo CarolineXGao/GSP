@@ -132,6 +132,18 @@ install_github('rstudio/bookdown')
 
 To get start with things, just install it from R CRAN. If you came across with some problems which seems to be a software "bug" you can update your package using *install_github*. You can also check whether your issue was being reported on Github (i.e. https://github.com/rstudio/bookdown/issues).
 
+## Customizing RStudio 
+
+
+The modern use or R is almost always via RStudio. After installing the RStudio, you might want to customize it based on our own preferences. See the guide [here](https://support.rstudio.com/hc/en-us/articles/200549016-Customizing-RStudio).  I like the "Pastel On Dark" editor theme ( green and blue dominated dark theme. 
+
+```{r , echo=FALSE,fig.align="center",out.width="90%"}
+knitr::include_graphics(here::here("Graphics/theme.png"))
+```
+
+I also like to turn on a few diagnostics including "Check usage of <- in function call" and "Provide R style diagnostics" ( make sure you have a good R coding style, see style guide [here](http://adv-r.had.co.nz/Style.html) and a tidyverse style guide [here](https://style.tidyverse.org/index.html)). There is no need to strictly follow these guidelines, but you need to be aware of what is good, OK or bad. 
+
+
 ## Keep tracking of R and package versions
 
 For all your analysis, you need to keep track of the R environment, this includes R version, platform and all package versions that were loaded in your current analysis environment. You can easily get a summary using *sessionInfo*. 
