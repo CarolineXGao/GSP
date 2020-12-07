@@ -299,8 +299,34 @@ $endif$
 \def\showjel{{\large\textsf{\textbf{JEL classification:}}~\@jel}}
 \def\nojel{\def\showjel{}}
 \def\addresses#1{\gdef\@addresses{#1}}\def\@addresses{??}
-
+\def\cover{{\sffamily\setcounter{page}{0}
+        \thispagestyle{empty}
+        \placefig{2}{1.5}{width=5cm}{monash2}
+        \placefig{16.9}{1.5}{width=2.1cm}{MBusSchool}
+        \begin{textblock}{4}(16.9,4)ISSN 1440-771X\end{textblock}
+        \begin{textblock}{7}(12.7,27.9)\hfill
+        \includegraphics[height=0.7cm]{AACSB}~~~
+        \includegraphics[height=0.7cm]{EQUIS}~~~
+        \includegraphics[height=0.7cm]{AMBA}
+        \end{textblock}
+        \vspace*{2cm}
+        \begin{center}\Large
+        Department of Econometrics and Business Statistics\\[.5cm]
+        \footnotesize http://monash.edu/business/ebs/research/publications
+        \end{center}\vspace{2cm}
+        \begin{center}
+        \fbox{\parbox{14cm}{\begin{onehalfspace}\centering\Huge\vspace*{0.3cm}
+                \textsf{\textbf{\expandafter{\@title}}}\vspace{1cm}\par
+                \LARGE\@author\end{onehalfspace}
+        }}
+        \end{center}
+        \vfill
+                \begin{center}\Large
+                \Month~\Year\\[1cm]
+                Working Paper \@wp
+        \end{center}\vspace*{2cm}}}
 \def\pageone{{\sffamily\setstretch{1}%
+        \thispagestyle{empty}%
         \vbox to \textheight{%
         \raggedright\baselineskip=1.2cm
      {\fontsize{24.88}{30}\sffamily\textbf{\expandafter{\@title}}}
@@ -308,9 +334,20 @@ $endif$
         \hspace{1cm}\parbox{14cm}{\sffamily\large\@addresses}\vspace{1cm}\vfill
         \hspace{1cm}{\large\Date~\Month~\Year}\\[1cm]
         \hspace{1cm}\showjel\vss}}}
+\def\blindtitle{{\sffamily
+     \thispagestyle{plain}\raggedright\baselineskip=1.2cm
+     {\fontsize{24.88}{30}\sffamily\textbf{\expandafter{\@title}}}\vspace{1cm}\par
+        }}
+\def\titlepage{{\cover\newpage\pageone\newpage\blindtitle}}
+
+\def\blind{\def\titlepage{{\blindtitle}}\let\maketitle\blindtitle}
+\def\titlepageonly{\def\titlepage{{\pageone\end{document}}}}
+
 
 \def\nocover{\def\titlepage{{\pageone}}\let\maketitle\titlepage}
 
+
+\let\maketitle\titlepage
 \makeatother
 
 %% SPACING
@@ -431,15 +468,34 @@ $else$
 $endif$
 \makeatother
 
+$for(header-includes)$
+$header-includes$
+$endfor$
+
 
 \begin{document}
 $if(title)$
 \maketitle
-
+$endif$
+$if(abstract)$
+\begin{abstract}
+$abstract$
+\end{abstract}
+$endif$
+$if(keywords)$
+\begin{keywords}
+$keywords$
+\end{keywords}
 $endif$
 
+\newpage
+$for(include-before)$
+$include-before$
+
+$endfor$
 $if(toc)$
 {
+\newpage
 $if(colorlinks)$
 \hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$black$endif$}
 $endif$
@@ -448,7 +504,13 @@ $endif$
 \newpage
 }
 $endif$
-
+$if(lot)$
+\newpage
+\listoftables
+$endif$
+$if(lof)$
+\listoffigures
+$endif$
 $body$
 
 $if(natbib)$

@@ -12,29 +12,28 @@ output:
    bookdown::pdf_document2:
      toc: yes
      number_sections: false
-     latex_engine: xelatex
      pandoc_args:
       - --template=template.tex
 date: "`r format(Sys.time(), '%B %d, %Y')`" 
 geometry: margin=1in
 fontsize: 11pt
 bibliography: GSP.bib 
+tables: yes
 header-includes:  
-    \usepackage{float} 
-    \floatplacement{figure}{H} 
-    \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}}   \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
-    \usepackage{lscape}
-    \newcommand{\blandscape}{\begin{landscape}}
-    \newcommand{\elandscape}{\end{landscape}}
+   \usepackage{float} 
+   \floatplacement{figure}{H} 
+   \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}}   \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
+   \usepackage{lscape}
+   \newcommand{\blandscape}{\begin{landscape}}
+   \newcommand{\elandscape}{\end{landscape}}
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 55), tidy = TRUE )
 
 library(pacman)
-pkgs <- c("tidyverse", "emo")
+p_load("tidyverse", "knitr", "kableExtra") 
 ```
-
 
 # Preface
 
@@ -116,14 +115,14 @@ tail(r_versions())
 ```
 Although R kept on updating, you do not need to re-install R all the time. But I tend to update my R half-yearly. It doesn't take a long time to update everything now a days. The first thing that you need to do after installing R is to install your commonly used packages. A good way to install + load packages is to use the [*pacman*](https://cran.r-project.org/web/packages/pacman/index.html) package, which is much faster than typing install.package() and library(). I normally store the names of my commonly used packages somewhere. So when I need to re-install R, I will call *pacman* to install all of those packages for me at once (only takes about 10 minutes). 
 
-```{r}
+```{r,echo=FALSE}
 #load libraries 
 library(pacman)
 p_load("dplyr", "tidyr", "ggplot2") 
 ```
 
 
-*install.package()* and *pacman* install packages from R CRAN. However, the authors may have additional update on Github which is not loaded to CRAN. You can install the most resent package using *devtools*
+*install.package()* and *pacman* install packages from R CRAN. However, the authors may have additional update on Github which is not loaded to CRAN. You can install the most resent package from Github using *devtools*.
 
 ```{r, eval=F}
 library(devtools)
@@ -135,21 +134,52 @@ To get start with things, just install it from R CRAN. If you came across with s
 ## Customizing RStudio 
 
 
-The modern use or R is almost always via RStudio. After installing the RStudio, you might want to customize it based on our own preferences. See the guide [here](https://support.rstudio.com/hc/en-us/articles/200549016-Customizing-RStudio).  I like the "Pastel On Dark" editor theme ( green and blue dominated dark theme. 
+The modern use or R is almost always via RStudio. After installing the RStudio, you might want to customize it based on your own preferences. See the guide [here](https://support.rstudio.com/hc/en-us/articles/200549016-Customizing-RStudio).  I like the "Pastel On Dark" editor theme (green and blue dominated dark theme). 
 
 ```{r , echo=FALSE,fig.align="center",out.width="90%"}
 knitr::include_graphics(here::here("Graphics/theme.png"))
 ```
 
-I also like to turn on a few diagnostics including "Check usage of <- in function call" and "Provide R style diagnostics" ( make sure you have a good R coding style, see style guide [here](http://adv-r.had.co.nz/Style.html) and a tidyverse style guide [here](https://style.tidyverse.org/index.html)). There is no need to strictly follow these guidelines, but you need to be aware of what is good, OK or bad. 
+I also like to turn on a few diagnostics including "Check usage of <- in function call" and "Provide R style diagnostics" ( make sure you have a good R coding style, see style guide [here](http://adv-r.had.co.nz/Style.html) and a tidyverse style guide [here](https://style.tidyverse.org/index.html)). There is no need to strictly follow these guidelines, but you need to be aware of what is good, acceptable or bad. 
 
 
 ## Keep tracking of R and package versions
 
-For all your analysis, you need to keep track of the R environment, this includes R version, platform and all package versions that were loaded in your current analysis environment. You can easily get a summary using *sessionInfo*. 
+For all your analysis, you need to keep track of the R environment, this includes R version, platform and all package versions that were loaded in your current analysis environment. R envirolment information can be easily summarised using *sessionInfo*.
 ```{r}
 sessionInfo()
 ```
+In fact, it might also be a good idea to include a R package version table in the appendix of your paper. 
+
+```{r,results='asis'}
+my_session_info <- sessionInfo()
+#extract name, version and date
+Version <- lapply(my_session_info$otherPkgs,  function(x) x$Version)
+Version <- unlist( lapply( Version,function(x) ifelse( identical(x,character(0)) ," ", x)))
+Date <- lapply(my_session_info$otherPkgs,function(x) as.character(as.Date(x$Date)))
+Date <- unlist( lapply( Date,function(x) ifelse( identical(x,character(0)) ," ", x)))
+
+# extract session info in to data frame
+info_table <-  data.frame(Package = names(my_session_info$otherPkgs),
+                     Version = Version, 
+                     Date = Date)
+
+# keep in two columns as your list gets too long
+if (nrow(info_table) %% 2 == 0) {
+  info_table <- cbind(info_table[c(TRUE,FALSE),],
+                    info_table[c(FALSE,TRUE),])
+} else {
+  info_table <- cbind(info_table[c(TRUE,FALSE),],
+                    rbind(info_table[c(FALSE,TRUE),],c("","",""))) 
+}
+
+# display table
+rownames(info_table) <- NULL
+knitr::kable( info_table, booktabs = TRUE,linesep = "") %>% 
+    kable_styling(bootstrap_options = "striped") 
+```
+
+
 This is crucial as  packages or R updates may make your code fail or your results different. This sounds scary than it really is. All analysis packages will have this issue. It's slightly complected with R because updates of R and affiliated packages are not synchronized. For my 13 years of using R, I haven't found this particularly challenging for a few reasons. The packages update rates were not as fast as we are seeing today. Most of my projects were in isolated environment so I rarely need to re-run the analysis a few years later and will need to produce exactly the same results. If I need to re-run the analysis, I will mostly update the analysis code and make sure it adhere to the current best practice. Occasionally, some of my package updates will cause problems with my current analysis code. As I keep track of my R environment, I will be able to figure out the problem quickly and re-install the older version back. 
 
 ```{r, eval=F}
