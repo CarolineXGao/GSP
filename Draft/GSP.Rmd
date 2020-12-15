@@ -29,7 +29,7 @@ header-includes:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 55), tidy = TRUE )
+knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 45), tidy = TRUE )
 
 library(pacman)
 p_load("tidyverse", "knitr", "kableExtra") 
@@ -97,10 +97,6 @@ There are lots of good online training materials for R:
 * [An Introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
 * [R for Data Science](https://r4ds.had.co.nz/). 
 
-If you are a skilled R user but do not use Rmarkdown or Bookdown, I would also recommend you to read Yihui Xie's books: 
-
-* [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
-* [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/) (for advanced users)
 
 Almost all R users are still learning R!! So you have no excuse not to ~~ 
 
@@ -115,7 +111,7 @@ tail(r_versions())
 ```
 Although R kept on updating, you do not need to re-install R all the time. But I tend to update my R half-yearly. It doesn't take a long time to update everything now a days. The first thing that you need to do after installing R is to install your commonly used packages. A good way to install + load packages is to use the [*pacman*](https://cran.r-project.org/web/packages/pacman/index.html) package, which is much faster than typing install.package() and library(). I normally store the names of my commonly used packages somewhere. So when I need to re-install R, I will call *pacman* to install all of those packages for me at once (only takes about 10 minutes). 
 
-```{r,echo=FALSE}
+```{r,eval=FALSE}
 #load libraries 
 library(pacman)
 p_load("dplyr", "tidyr", "ggplot2") 
@@ -134,18 +130,18 @@ To get start with things, just install it from R CRAN. If you came across with s
 ## Customizing RStudio 
 
 
-The modern use or R is almost always via RStudio. After installing the RStudio, you might want to customize it based on your own preferences. See the guide [here](https://support.rstudio.com/hc/en-us/articles/200549016-Customizing-RStudio).  I like the "Pastel On Dark" editor theme (green and blue dominated dark theme). 
+The modern use of R is almost always via RStudio. After installing the RStudio, you might want to customize it based on your own preferences. See the guide [here](https://support.rstudio.com/hc/en-us/articles/200549016-Customizing-RStudio).  I like the "Pastel On Dark" editor theme (green and blue dominated dark theme). 
 
 ```{r , echo=FALSE,fig.align="center",out.width="90%"}
 knitr::include_graphics(here::here("Graphics/theme.png"))
 ```
 
-I also like to turn on a few diagnostics including "Check usage of <- in function call" and "Provide R style diagnostics" ( make sure you have a good R coding style, see style guide [here](http://adv-r.had.co.nz/Style.html) and a tidyverse style guide [here](https://style.tidyverse.org/index.html)). There is no need to strictly follow these guidelines, but you need to be aware of what is good, acceptable or bad. 
+I also like to turn on a few diagnostics including "Check usage of <- in function call" and "Provide R style diagnostics" (make sure you have a good R coding style, see style guide [here](http://adv-r.had.co.nz/Style.html) and a tidyverse style guide [here](https://style.tidyverse.org/index.html)). There is no need to strictly follow these guidelines, but you need to be aware of what is good, acceptable or bad. 
 
 
 ## Keep tracking of R and package versions
 
-For all your analysis, you need to keep track of the R environment, this includes R version, platform and all package versions that were loaded in your current analysis environment. R envirolment information can be easily summarised using *sessionInfo*.
+For all your analysis, you need to keep track of the R environment, this includes R version, platform and all package versions that were loaded in your current analysis environment. R environment information can be easily summarised using *sessionInfo*.
 ```{r}
 sessionInfo()
 ```
@@ -154,10 +150,10 @@ In fact, it might also be a good idea to include a R package version table in th
 ```{r,results='asis'}
 my_session_info <- sessionInfo()
 #extract name, version and date
-Version <- lapply(my_session_info$otherPkgs,  function(x) x$Version)
-Version <- unlist( lapply( Version,function(x) ifelse( identical(x,character(0)) ," ", x)))
-Date <- lapply(my_session_info$otherPkgs,function(x) as.character(as.Date(x$Date)))
-Date <- unlist( lapply( Date,function(x) ifelse( identical(x,character(0)) ," ", x)))
+Version <- lapply(my_session_info$otherPkgs, function(x) x$Version)
+Version <- unlist(lapply(Version, function(x) ifelse( identical(x,character(0)) ," ", x)))
+Date <- lapply(my_session_info$otherPkgs, function(x) as.character(as.Date(x$Date)))
+Date <- unlist(lapply(Date, function(x) ifelse( identical(x,character(0)) ," ", x)))
 
 # extract session info in to data frame
 info_table <-  data.frame(Package = names(my_session_info$otherPkgs),
@@ -180,7 +176,7 @@ knitr::kable( info_table, booktabs = TRUE,linesep = "") %>%
 ```
 
 
-This is crucial as  packages or R updates may make your code fail or your results different. This sounds scary than it really is. All analysis packages will have this issue. It's slightly complected with R because updates of R and affiliated packages are not synchronized. For my 13 years of using R, I haven't found this particularly challenging for a few reasons. The packages update rates were not as fast as we are seeing today. Most of my projects were in isolated environment so I rarely need to re-run the analysis a few years later and will need to produce exactly the same results. If I need to re-run the analysis, I will mostly update the analysis code and make sure it adhere to the current best practice. Occasionally, some of my package updates will cause problems with my current analysis code. As I keep track of my R environment, I will be able to figure out the problem quickly and re-install the older version back. 
+This is crucial as packages or R updates may make your code fail or your results different. This sounds scary than it really is. All analysis packages will have this issue. It's slightly complected with R because updates of R and affiliated packages are not synchronized. For my 13 years of using R, I haven't found this particularly challenging for a few reasons. The packages update rates were not as fast as we are seeing today. Most of my projects were in isolated environments so I rarely need to re-run the analysis a few years later and will need to produce exactly the same results. If I need to re-run the analysis, I will mostly update the analysis code and make sure it adhere to the current best practice. Occasionally, some of my package updates will cause problems with my current analysis code. As I keep track of my R environment, I will be able to figure out the problem quickly and re-install the older version back. 
 
 ```{r, eval=F}
 require(devtools)
@@ -192,9 +188,10 @@ If you are in the area that requires 100% reproducibility all the time, you can 
 
 ## Project managment with R
 
-Over the years of being a programmer and biostatistician, I have learned many things in a painful way. One of them is the importance of good project management with your data, analysis, documentation and drafts. I had to spent a long time to remember what I did, where I save things and also lots of detective work on whether anyone have touched my 'cheese' (with files stored on network drives). When I am lucky I can request IT to restore a backup at specific time to find the lost treasure. But many cases, this doesn't work as either I was stupid enough not to save things on the network drive, or the network drive deletes backups automatically. 
+Over the years of being a programmer and biostatistician, I have learned many things in a painful way. One of them is the importance of good project management with your data, analysis, documentation and drafts. I had to spent a long time to remember what I did, where I save things and also lots of detective work on whether anyone have touched my 'cheese' (with files stored on network drives). When I am lucky I can request IT to restore a backup at specific time to find the lost treasure. But in many cases, this doesn't work as either I was stupid enough not to save things on the network drive, or the network drive deletes backups automatically. 
 
-Project management became more critical when I had to change my work between computers, laptops and servers as well as swap frequently between Windows and Mac. Managing file versions, backups and file paths became additional burdens. However, all of these things became much more easier with RStudio + Github. It's also more user friendly with people who are not familiar with Git.  
+Project management became more critical when I had to change my work between computers, laptops and servers as well as swap frequently between Windows and Mac. Managing file versions, backups and file paths became additional burdens. However, all of these things became much more easier with RStudio + Github. It's also more user friendly with people who are not familiar with Git.
+
 Essentially the idea is that you can create an independent project environment for isolated task or tasks that shares common data source. This can be a specific analysis for a paper or a range of analysis base on the same dataset. When there are multiple users, it's always the best to use separate project environment for individual analysis, so users do not load the same project file on the network drive.
 
 The method for setting up projects are described [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects). There are many benefits using projects:
@@ -206,16 +203,111 @@ The method for setting up projects are described [here](https://support.rstudio.
 
 You can setup a rule for organising sub-folders and files. I like to separate code, data and results. However, it is slightly complicated to split analysis code and results when you are using Rmarkdown. Regardless, it would be better to have sub-folder structure in placed so you can find files easily.
 
-## Github 
-
-
-https://swcarpentry.github.io/git-novice/
-
-
 
 
 ## State-of-art Rmarkdown/Rnotebook paractice
 
+The idea of Markdown practice was originated from [Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth). Donald  believed that programmers should think of programs as works of literature and introduced a new programming paradigm called ["Literate programming"](https://en.wikipedia.org/wiki/Literate_programming).  He then developed TeX to facilitate this paradigm of coding, which is the typesetting system that LaTex is based. The idea behind it is simple, combining the text and code for human to read not computers. In the end, scientific discoveries are for humans to interpret, replicate and extend, and not for computers. 
+
+Although this is a fascinating idea, it had been hard to achieve for many reasons. Academic publications mostly only allow words, tables, figures but not computer code, so there is no obvious momentum from the academic communities. Software developers and computer science engineers mostly focused on the end product and not so much of the process in between. Technically it is also difficult to achieve as this approach will need to be implemented within or closely connected to one or multiple programming environments.
+
+
+```{r , echo=FALSE,fig.align="center",out.width="100%"}
+knitr::include_graphics(here::here("Graphics/code_quality.jpg"))
+```
+
+However, the sudden boom of data science brought in new challenges. As software engineers move towards data science, the community gradually realised that the traditional coding style (i.e. modular programming, black-box approach) became barriers instead of advantages. Each step of the programming code, from cleaning variables to running algorithm, suddenly became all important. Hence there is an immediate need to communicate regarding every step of the process. This needs drove the birth of many interactive computational notebooks (IPython, SageMath, Beaker, Jupyter, Apache Zeppelin and Rmarkdown). R markdown became the most successful computational notebooks for R users. Why? Probably for the same reason as why R has been successful, simplicity, flexibility, open source etc.  
+
+```{r , echo=FALSE,fig.align="center",out.width="60%"}
+knitr::include_graphics(here::here("Graphics/rmarkdown_workflow.png"))
+```
+R markdown is a system that integrate narrative, analysis, code and output to create a production quality document. The code and text were implemented via R in a *.Rmd file, which will be knit to Markdown file and then convert to file type of choice via Pandoc. There are a few important features that makes it one of R's "killer" feature 
+
+* Reproducibility. You are no longer required to live in the copying and pasting world. All the analysis, results can be easily reproduced with changes in source data, cleaning routine and analyses. There are different degrees of implementing R markdown, from basic including notes for your data cleaning process to write a whole paper in one markdown file. Regardless of where you are at, using R markdown will significantly reduced you workload of having to find and copying and pasting results to the final paper. So you won't need to panic when your cohorts said one person is missing from the data set, and the 12 large tables in your paper will need to be updated. 
+
+* Easy progress tracking and debugging. Before the age of R markdown, R users will need to store all the code into a plain text file or R file and execute the code one by one to see the results. When the code file is getting very long, it gets harder to maintain the code and changes. Then coders will use split system to break long code into modules to make the progress tracking and debugging easier. However this will no longer be the case with R markdown, because you will see the code and results together and you can also tag the section of your code and use hyperlinks to quickly find things. 
+
+* Communication. You can integrate narrative, code and results together. This is quite crucial in the communication in data analysis, because it avoid all the efforts of reading segregated code comments, switching between documents to find results and maintaining separate documentations. All this process can be integrated into one system. 
+
+* Very nice for equations. If you need to type lots equations, then R markdown is also your friend. The standard LaTeX equations works with all types of outputs (when your equations are getting complicated, sometimes word doesn't work)
+
+* Extension. R markdown system provides you will limitless extension capacities, such as integrating multiple languages (I can combine python, Stan and R in the same file now), producing multiple types of documents (word, html, pdf, slides, books, shiny app etc), displaying [interactive plots](https://www.r-graph-gallery.com/interactive-charts.html)
+
+J.J. Allaire gave an excellent introduction presentation, [Notebooks with R Markdown](https://channel9.msdn.com/Events/useR-international-R-User-conference/useR2016/Notebooks-with-R-Markdown), in useR conference in 2016. I hope I have convinced you to move to move to R markdown. 
+
+Here are some practical point.
+
+### Learn to use R markdown 
+
+There are many good online introductions on using R markdown:
+
+* [R Markdown from R Studio](https://rmarkdown.rstudio.com/lesson-1.html)
+* [R Markdown Basics](https://stats.idre.ucla.edu/r/seminars/r-markdown-basics/) by Andy Lin from the famous IDRE, UCLA stats resource website.
+* [R Markdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf)
+* [R Markdown Reference Guide](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+* [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/) by Yihui Xie
+* [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/) (for advanced users) by Yihui Xie
+
+### Using R Markdown
+R Markdown files (*.Rmd) starts with YAML headers, which specify document parameters (or pandoc parameters), such as title, author, type of document, parameters etc.  
+
+```{r, eval=FALSE}
+---
+title: "Good Statistical Practice (GSP)"
+output: html_document
+---
+```
+
+One thing you have to remember is that indentation has its meaning in YAML header. See the following example, having a table of content (toc), is a sub-option for the HTML document, hence is it needs to be indented. 
+
+```{r, eval=FALSE}
+---
+title: "Good Statistical Practice (GSP)"
+output: 
+  html_document: 
+    toc: TRUE
+---
+```
+
+There is no comprehensive YAML guide exist. However, there is a nice package called [ymlthis](https://www.youtube.com/watch?v=S-hrPH-uLSw), which provides an addin for choosing YAML specifications. 
+
+### Citation in R markdown. 
+
+Another advantage of using R markdown is that you can finally give up using Endnote (the monster crashes your computer and word all the time). R markdown can work with the many citation management file types. The commonly used one is the LaTeX bibliography management system BibTeX, in which the references were stored as plain text like this: 
+
+```{r, eval=FALSE}
+@article{Xu_2020,
+  title={Socioeconomic inequality in vulnerability to 
+    all-cause and cause-specific hospitalisation associated 
+    with temperature variability: a time-series study 
+    in 1814 Brazilian cities},
+  author={Xu, Rongbin and Zhao, Qi and Coelho, 
+    Micheline SZS and Saldiva, Paulo HN and
+    Abramson, Michael J and Li, Shanshan and Guo, Yuming},
+  journal={The Lancet Planetary Health},
+  volume={4},
+  number={12},
+  pages={e566--e576},
+  year={2020},
+  publisher={Elsevier}
+}
+```
+
+When using the BibTeX, you need to first store the reference in a *.bib file and specify the name of the file in the YAML header. Then you can reference all your code in the text  using @ followed by the id of the reference with either \@Xu_2020 which generates author (year) or [\@Xu_2020] which generates (author, year). By default Pandoc uses Chicago author-date CSL format for citations and references. You can specify the style according to the journal's requirements. Most of journals' csl styles can be found [here](https://github.com/citation-style-language/styles). All features will be automatic including whether the numbers will be included before or after punctuation. 
+
+```{r, eval=FALSE}
+---
+title: "Good Statistical Practice (GSP)"
+output: 
+  html_document: 
+    toc: TRUE
+bibliography: GSP.bib 
+csl: biomed-central.csl
+---
+```
+
+
+You can also use biblatex if you use LaTeX. 
 
 # Data cleaning 
 
@@ -293,6 +385,8 @@ https://swcarpentry.github.io/git-novice/
 ## Version control framework
 
 ## Github 
+
+https://swcarpentry.github.io/git-novice/
 
 # Publication 
 
