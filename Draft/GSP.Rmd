@@ -65,7 +65,7 @@ knitr::include_graphics(here::here("Graphics/quote.jpeg"))
 
 The famous quote is not by Confucius (it is from the New Book of Tang published about 1500 years after his death), and it is not well translated, but you get the idea. We often find it easier to face a complex problem than a simple one, and often feel that a complex solution must be better than an easier one. However this is often not true in applied statistics. 
 
-More often than not, ingenious statistical designs are surprisingly simple. An famous example is the Cox model for survival analysis, which simplifies the needs to describe the baseline hazard function with proportional hazard assumption. Another example, Dijkstra's algorithm (algorithm for finding the shortest paths between nodes in a graph), the author, Edsger Dijkstra, once said "One of the reasons that it is so nice was that I designed it without pencil and paper. I learned later that one of the advantages of designing without pencil and paper is that you are almost forced to avoid all avoidable complexities. " 
+More often than not, ingenious statistical designs are surprisingly simple. An famous example is the Cox model for survival analysis, which simplifies the needs to describe the baseline hazard function with proportional hazard assumption. Another example, Dijkstra's algorithm (algorithm for finding the shortest paths between nodes in a graph), the author, Edsger Dijkstra, once said "One of the reasons that it is so nice was that I designed it without pencil and paper. I learned later that one of the advantages of designing without pencil and paper is that you are almost forced to avoid all avoidable complexities." 
 
 This is the same with your analysis, always force yourself to avoid complexities if you could achieve what you need with a simpler model. There are numerous benefits for simpler models, i.e. less likely to over-fitting with your model, easier to communicate with your audience, less likely to make mistakes etc. If a logistic regression works, there is no need to use a structure equation model. 
 
@@ -79,7 +79,7 @@ Get your analysis plan approved or reviewed. I think we all do this to some degr
 
 ## Why R?
 
-The essential skill set in the modern analytical community is the ability to use one or more script languages, SPSS doesn't count here. It's often critical for the success of your publication. More often then not, you might face challenges from the reviewer to do something that SPSS is not capable of. If you have already started your analysis in SPSS, please abandoned it ASAP. If R is in its early adolescent years, SPSS is a toddler and it suffers from the Peter Pan Syndrome (it will never grow up). 
+The essential skill set in the modern analytical community is the ability to use one or more script languages, SPSS doesn't count here. It's often critical for the success of your publications. More often then not, you might face challenges from the reviewer to do something that SPSS is not capable of. If you have already started your analysis in SPSS, please abandoned it ASAP. If R is in its early adolescent years, SPSS is a toddler and it suffers from the Peter Pan Syndrome (it will never grow up). 
 
 ```{r pressure, echo=FALSE, out.width = '100%'}
 knitr::include_graphics(here::here("Graphics/R_illustration.jpg"))
@@ -128,7 +128,7 @@ library(devtools)
 install_github('rstudio/bookdown')
 ```
 
-To get start with things, just install it from R CRAN. If you came across with some problems which seems to be a software "bug" you can update your package using *install_github*. You can also check whether your issue was being reported on Github (i.e. https://github.com/rstudio/bookdown/issues).
+To get start with things, just install packages from R CRAN. If you come across with a problem which seems to be a software "bug", you can update your package using *install_github*. You can also check whether your issue was being reported on Github (i.e. https://github.com/rstudio/bookdown/issues).
 
 ## Customizing RStudio 
 
@@ -179,7 +179,7 @@ knitr::kable( info_table, booktabs = TRUE,linesep = "") %>%
 ```
 
 
-This is crucial as packages or R updates may make your code fail or your results different. This sounds scary than it really is. All analysis packages will have this issue. It's slightly complected with R because updates of R and affiliated packages are not synchronized. For my 13 years of using R, I haven't found this particularly challenging for a few reasons. The packages update rates were not as fast as we are seeing today. Most of my projects were in isolated environments so I rarely need to re-run the analysis a few years later and will need to produce exactly the same results. If I need to re-run the analysis, I will mostly update the analysis code and make sure it adhere to the current best practice. Occasionally, some of my package updates will cause problems with my current analysis code. As I keep track of my R environment, I will be able to figure out the problem quickly and re-install the older version back. 
+This is crucial as packages or R updates may make your code fail or your results differ. This sounds scary than it really is. All analysis packages will have this issue. It's slightly complected with R because updates of R and affiliated packages are not synchronized. For my 13 years of using R, I haven't found this particularly challenging for a few reasons. The packages update rates were not as fast as we are seeing today. Most of my projects were in isolated environments so I rarely need to re-run the analysis a few years later and will need to produce exactly the same results. If I need to re-run the analysis, I will mostly update the analysis code and make sure it adhere to the current best practice. Occasionally, some of my package updates will cause problems with my current analysis code. As I keep track of my R environment, I will be able to figure out the problem quickly and re-install the older version back. 
 
 ```{r, eval=F}
 require(devtools)
@@ -310,14 +310,12 @@ header-includes:
 ---
 ```
 
-You may notice that I have used template documents, "template.tex" and  "template.docx". The LaTex template was inherited from [Prof Rob hyndman](https://robjhyndman.com/)'s [MonashEBSTemplates](https://github.com/robjhyndman/MonashEBSTemplates) with minor modification. "template.docx" is simply a Word document with defined fonts. Header-includes contains the additional latex command that I want to use in the documents, i.e. "lscape" package is used to define the landscape pdf page.  
+You may notice that I have used template documents, "template.tex" and  "template.docx". The LaTex template was inherited from [Prof Rob hyndman](https://robjhyndman.com/)'s [MonashEBSTemplates](https://github.com/robjhyndman/MonashEBSTemplates) with minor modifications. "template.docx" is simply a Word document with defined fonts. "Header-includes" contains the additional latex command that I want to use in the documents, i.e. "lscape" package is for the landscape pdf page and "beginsupplement" is for setting supplementary table and figure captions (starts from Table S1 and Figure S1) .  
 
 
 ### Using R markdown 
 
-R markdown is very easy to use. Code will need to be included as code chunk and everthing else outside of code chunks will be treated as formatted text, which includes, headings, list, standard text and equations, see [R Markdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf) for details. Code chunk include varies of definitions, such as code type (R, Python, Stan ...), chunk name, whether to display code, figure specifications. * [R Markdown Reference Guide](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf?_ga=2.27162299.765406861.1611275642-1346409885.1598176219) provides very detailed information about this. 
-
-
+R markdown is very easy to use. Code will need to be included as code chunk and everthing else outside of code chunks will be treated as formatted text, which includes, headings, lists, standard text and equations, see [R Markdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf) for details. Code chunk include varies of definitions, such as code type (R, Python, Stan ...), chunk name, whether to display code, figure size, table options etc. * [R Markdown Reference Guide](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf?_ga=2.27162299.765406861.1611275642-1346409885.1598176219) provides very detailed information about this. 
 
 
 ### Knit document
@@ -328,7 +326,7 @@ To create html, word or pdf file requires to Knit the Rmd document.
 knitr::include_graphics(here::here("Graphics/Knit.png"))
 ```
 
-You also need to install LaTex (https://www.latex-project.org/get/). However, LaTex is realy a large monster to work with. So Yihui Xie has developed [TinyTeX](https://yihui.name/tinytex/) for R users, which is much smaller. 
+You also need to install LaTex (https://www.latex-project.org/get/). However, LaTex is really a large monster to work with. So Yihui Xie has developed [TinyTeX](https://yihui.name/tinytex/) for R users, which is much smaller. You can install additional LaTex packages easily if needed. 
 
 ### Citation in R markdown. 
 
