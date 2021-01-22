@@ -273,11 +273,12 @@ There is no comprehensive YAML guide exist. However, there is a nice package cal
 
 ```{r, eval=FALSE}
 ---
-title: "Good Statistical Practice (GSP): guidence for using R for scientific publication"
+title: "Good Statistical Practice (GSP) "
 author:
 - familyname: Gao
   othernames: Caroline X.
-  address: Centre for Youth Mental Health, University of Melbourne; School of Public Health and Preventive Medicine, Monash University, Melbourne, Australia
+  address: Centre for Youth Mental Health, University of Melbourne; 
+  School of Public Health and Preventive Medicine, Monash University
   email: caroline.gao@orygen.org.au
 - familyname: Hamilton
   othernames: Matthew
