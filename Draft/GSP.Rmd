@@ -77,7 +77,7 @@ Get your analysis plan approved or reviewed. I think we all do this to some degr
 # Use R
 
 
-## Why R ?
+## Why R?
 
 The essential skill set in the modern analytical community is the ability to use one or more script languages, SPSS doesn't count here. It's often critical for the success of your publication. More often then not, you might face challenges from the reviewer to do something that SPSS is not capable of. If you have already started your analysis in SPSS, please abandoned it ASAP. If R is in its early adolescent years, SPSS is a toddler and it suffers from the Peter Pan Syndrome (it will never grow up). 
 
