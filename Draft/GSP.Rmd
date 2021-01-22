@@ -209,7 +209,7 @@ You can setup a rule for organising sub-folders and files. I like to separate co
 
 The idea of Markdown practice was originated from [Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth). Donald  believed that programmers should think of programs as works of literature and introduced a new programming paradigm called ["Literate programming"](https://en.wikipedia.org/wiki/Literate_programming).  He then developed TeX to facilitate this paradigm of coding, which is the typesetting system that LaTex is based. The idea behind it is simple, combining the text and code for human to read not computers. In the end, scientific discoveries are for humans to interpret, replicate and extend, and not for computers. 
 
-Although this is a fascinating idea, it had been hard to achieve for many reasons. Academic publications mostly only allow words, tables, figures but not computer code, so there is no obvious momentum from the academic communities. Software developers and computer science engineers mostly focused on the end product and not so much of the process in between. Technically it is also difficult to achieve as this approach will need to be implemented within or closely connected to one or multiple programming environments.
+Although this is a fascinating idea, it had been hard to achieve for many reasons. Academic publications mostly only allow words, tables, figures but not computer code, so there is no obvious momentum from the academic communities. Software developers and computer science engineers mostly focused on the end product and not so much on displaying the process in between. Technically it is also difficult to achieve as this approach will need to be implemented within or closely connected to one or multiple programming environments.
 
 
 ```{r , echo=FALSE,fig.align="center",out.width="100%"}
@@ -269,7 +269,54 @@ output:
 ---
 ```
 
-There is no comprehensive YAML guide exist. However, there is a nice package called [ymlthis](https://www.youtube.com/watch?v=S-hrPH-uLSw), which provides an addin for choosing YAML specifications. 
+There is no comprehensive YAML guide exist. However, there is a nice package called [ymlthis](https://www.youtube.com/watch?v=S-hrPH-uLSw), which provides an addin for choosing YAML specifications. I normally use the bookdown output styles which makes, references tables and figures citation slightly easier for both pdf and word documents. The YAML header for this document looks like this: 
+
+```{r, eval=FALSE}
+---
+title: "Good Statistical Practice (GSP): guidence for using R for scientific publication"
+author:
+- familyname: Gao
+  othernames: Caroline X.
+  address: Centre for Youth Mental Health, University of Melbourne; School of Public Health and Preventive Medicine, Monash University, Melbourne, Australia
+  email: caroline.gao@orygen.org.au
+- familyname: Hamilton
+  othernames: Matthew
+  address: Orygen, Melbourne, Australia
+output:
+   bookdown::pdf_document2:
+     toc: yes
+     number_sections: false
+     pandoc_args:
+      - --template=template.tex
+   bookdown::word_document2:
+     toc: yes 
+     number_sections: false
+     reference_docx: "template.docx"
+date: "`r format(Sys.time(), '%B %d, %Y')`" 
+geometry: margin=1in
+fontsize: 11pt
+bibliography: GSP.bib 
+header-includes:  
+   \usepackage{float} 
+   \floatplacement{figure}{H} 
+   \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}}   \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
+   \usepackage{lscape}
+   \newcommand{\blandscape}{\begin{landscape}}
+   \newcommand{\elandscape}{\end{landscape}}
+---
+```
+
+You may notice that I have used template documents, "template.tex" and  "template.docx". The LaTex template was inherited from [Prof Rob hyndman](https://robjhyndman.com/)'s [MonashEBSTemplates](https://github.com/robjhyndman/MonashEBSTemplates) with minor modification. "template.docx" is simply a Word document with defined fonts. Header-includes contains the additional latex command that I want to use in the documents, i.e. "lscape" package is used to define the landscape pdf page.  
+
+### Knit document
+
+To create html, word or pdf file requires to Knit the Rmd document. 
+
+```{r , echo=FALSE,fig.align="center",out.width="60%"}
+knitr::include_graphics(here::here("Graphics/Knit.png"))
+```
+
+You also need to install LaTex (https://www.latex-project.org/get/). However, LaTex is realy a large monster to work with. So Yihui Xie has developed [TinyTeX](https://yihui.name/tinytex/) for R users, which is much smaller. 
 
 ### Citation in R markdown. 
 
@@ -293,6 +340,12 @@ Another advantage of using R markdown is that you can finally give up using Endn
 }
 ```
 
+Most journals provide direct download of the BibTex of articles. You can also export the Endnote library to a bib file. What I like to use is the Google Scholar BibTex Citation. However, it does not include doi of the paper.
+
+```{r , echo=FALSE,fig.align="center",out.width="60%"}
+knitr::include_graphics(here::here("Graphics/Google_bib.png"))
+```
+
 When using the BibTeX, you need to first store the reference in a *.bib file and specify the name of the file in the YAML header. Then you can reference all your code in the text  using @ followed by the id of the reference with either \@Xu_2020 which generates author (year) or [\@Xu_2020] which generates (author, year). By default Pandoc uses Chicago author-date CSL format for citations and references. You can specify the style according to the journal's requirements. Most of journals' csl styles can be found [here](https://github.com/citation-style-language/styles). All features will be automatic including whether the numbers will be included before or after punctuation. 
 
 ```{r, eval=FALSE}
@@ -307,7 +360,6 @@ csl: biomed-central.csl
 ```
 
 
-You can also use biblatex if you use LaTeX. 
 
 # Data cleaning 
 
