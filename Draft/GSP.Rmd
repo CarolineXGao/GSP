@@ -76,6 +76,9 @@ Get your analysis plan approved or reviewed. I think we all do this to some degr
 
 # Use R
 
+
+## Why R ?
+
 The essential skill set in the modern analytical community is the ability to use one or more script languages, SPSS doesn't count here. It's often critical for the success of your publication. More often then not, you might face challenges from the reviewer to do something that SPSS is not capable of. If you have already started your analysis in SPSS, please abandoned it ASAP. If R is in its early adolescent years, SPSS is a toddler and it suffers from the Peter Pan Syndrome (it will never grow up). 
 
 ```{r pressure, echo=FALSE, out.width = '100%'}
@@ -86,7 +89,7 @@ knitr::include_graphics(here::here("Graphics/R_illustration.jpg"))
 Sorry for being a bit offensive, but the reality is the industry and scientific community are gradually moving away from SPSS to other languages for many reasons, cost, capacity, flexibility, reporducibility etc. So to avoid the long term pain, change to R (Stata is also good, since this is a practice guide for R, I won't touch too much on Stata). 
 
 
-# Learn to use R
+## Learn to use R
 
 "R being hard to learn" mostly exists in our fears. Once you get on to it the challenges are mostly "feeling a bit confused", there are so many packages, so many ways to do the same thing, so much typing needed, so many materials everywhere... So the best way to learn R is to learn by using it. You can start with a short intensive introduction course (one or two days) to build up your confidence. Start using it in a small project, and then gradually roll out to more parts of your analysis tasks. You can also start by learning your collaborator's code (communicate with the author and create a separate environment so that you won't break anything).
 
@@ -233,7 +236,7 @@ R markdown is a system that integrate narrative, analysis, code and output to cr
 
 * Extension. R markdown system provides you will limitless extension capacities, such as integrating multiple languages (I can combine python, Stan and R in the same file now), producing multiple types of documents (word, html, pdf, slides, books, shiny app etc), displaying [interactive plots](https://www.r-graph-gallery.com/interactive-charts.html)
 
-J.J. Allaire gave an excellent introduction presentation, [Notebooks with R Markdown](https://channel9.msdn.com/Events/useR-international-R-User-conference/useR2016/Notebooks-with-R-Markdown), in useR conference in 2016. I hope I have convinced you to move to move to R markdown. 
+J.J. Allaire gave an excellent introduction presentation, [Notebooks with R Markdown](https://channel9.msdn.com/Events/useR-international-R-User-conference/useR2016/Notebooks-with-R-Markdown), in useR conference in 2016. I hope I have convinced you to move to R markdown. 
 
 Here are some practical point.
 
@@ -244,11 +247,11 @@ There are many good online introductions on using R markdown:
 * [R Markdown from R Studio](https://rmarkdown.rstudio.com/lesson-1.html)
 * [R Markdown Basics](https://stats.idre.ucla.edu/r/seminars/r-markdown-basics/) by Andy Lin from the famous IDRE, UCLA stats resource website.
 * [R Markdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf)
-* [R Markdown Reference Guide](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+* [R Markdown Reference Guide](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf?_ga=2.27162299.765406861.1611275642-1346409885.1598176219)
 * [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/) by Yihui Xie
 * [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/) (for advanced users) by Yihui Xie
 
-### Using R Markdown
+### YAML header
 R Markdown files (*.Rmd) starts with YAML headers, which specify document parameters (or pandoc parameters), such as title, author, type of document, parameters etc.  
 
 ```{r, eval=FALSE}
@@ -308,6 +311,14 @@ header-includes:
 ```
 
 You may notice that I have used template documents, "template.tex" and  "template.docx". The LaTex template was inherited from [Prof Rob hyndman](https://robjhyndman.com/)'s [MonashEBSTemplates](https://github.com/robjhyndman/MonashEBSTemplates) with minor modification. "template.docx" is simply a Word document with defined fonts. Header-includes contains the additional latex command that I want to use in the documents, i.e. "lscape" package is used to define the landscape pdf page.  
+
+
+### Using R markdown 
+
+R markdown is very easy to use. Code will need to be included as code chunk and everthing else outside of code chunks will be treated as formatted text, which includes, headings, list, standard text and equations, see [R Markdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf) for details. Code chunk include varies of definitions, such as code type (R, Python, Stan ...), chunk name, whether to display code, figure specifications. * [R Markdown Reference Guide](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf?_ga=2.27162299.765406861.1611275642-1346409885.1598176219) provides very detailed information about this. 
+
+
+
 
 ### Knit document
 
