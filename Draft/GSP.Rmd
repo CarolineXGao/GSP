@@ -1,24 +1,18 @@
 ---
 title: "Good Statistical Practice (GSP): guidence for using R for scientific publication"
-author:
-- familyname: Gao
-  othernames: Caroline X.
-  address: Centre for Youth Mental Health, University of Melbourne; School of Public Health and Preventive Medicine, Monash University, Melbourne, Australia
-  email: caroline.gao@orygen.org.au
-- familyname: Hamilton
-  othernames: Matthew
-  address: Orygen, Melbourne, Australia
+author: Caroline X. Gao [1],  Matthew Hamilton [2]
+date: "[1] University of Melbourne, Parkview, VIC, Australia \\newline [2] Orygen, Parkview, VIC, Australia" 
 output:
    bookdown::pdf_document2:
      toc: yes
      number_sections: false
+     latex_engine: xelatex
      pandoc_args:
       - --template=template.tex
    bookdown::word_document2:
      toc: yes 
      number_sections: false
      reference_docx: "template.docx"
-date: "`r format(Sys.time(), '%B %d, %Y')`" 
 geometry: margin=1in
 fontsize: 11pt
 bibliography: GSP.bib 
@@ -139,7 +133,7 @@ To get start with things, just install packages from R CRAN. If you come across 
 
 The modern use of R is almost always via RStudio. After installing the RStudio, you might want to customize it based on your own preferences. See the guide [here](https://support.rstudio.com/hc/en-us/articles/200549016-Customizing-RStudio).  I like the "Pastel On Dark" editor theme (green and blue dominated dark theme). 
 
-```{r , echo=FALSE,fig.align="center",out.width="90%"}
+```{r , echo=FALSE,fig.align="center",out.width="70%"}
 knitr::include_graphics(here::here("Graphics/theme.png"))
 ```
 
@@ -219,13 +213,13 @@ The idea of Markdown practice was originated from [Donald Knuth](https://en.wiki
 Although this is a fascinating idea, it had been hard to achieve for many reasons. Academic publications mostly only allow words, tables, figures but not computer code, so there is no obvious momentum from the academic communities. Software developers and computer science engineers mostly focused on the end product and not so much on displaying the process in between. Technically it is also difficult to achieve as this approach will need to be implemented within or closely connected to one or multiple programming environments.
 
 
-```{r , echo=FALSE,fig.align="center",out.width="100%"}
-knitr::include_graphics(here::here("Graphics/code_quality.jpg"))
+```{r , echo=FALSE,fig.align="center",idth="100%"}
+knitr::include_graphics(here::here("Graphics/code_quality.png"))
 ```
 
 However, the sudden boom of data science brought in new challenges. As software engineers move towards data science, the community gradually realised that the traditional coding style (i.e. modular programming, black-box approach) became barriers instead of advantages. Each step of the programming code, from cleaning variables to running algorithm, suddenly became all important. Hence there is an immediate need to communicate regarding every step of the process. This needs drove the birth of many interactive computational notebooks (IPython, SageMath, Beaker, Jupyter, Apache Zeppelin and Rmarkdown). R markdown became the most successful computational notebooks for R users. Why? Probably for the same reason as why R has been successful, simplicity, flexibility, open source etc.  
 
-```{r , echo=FALSE,fig.align="center",out.width="60%"}
+```{r , echo=FALSE,fig.align="center",out.width="90%"}
 knitr::include_graphics(here::here("Graphics/rmarkdown_workflow.png"))
 ```
 R markdown is a system that integrate narrative, analysis, code and output to create a production quality document. The code and text were implemented via R in a *.Rmd file, which will be knit to Markdown file and then convert to file type of choice via Pandoc. There are a few important features that makes it one of R's "killer" feature 
@@ -328,7 +322,7 @@ R markdown is very easy to use. Code will need to be included as code chunk and 
 
 To create html, word or pdf file requires to Knit the Rmd document. 
 
-```{r , echo=FALSE,fig.align="center",out.width="60%"}
+```{r , echo=FALSE,fig.align="center",out.width="100%"}
 knitr::include_graphics(here::here("Graphics/Knit.png"))
 ```
 
@@ -358,7 +352,7 @@ Another advantage of using R markdown is that you can finally give up using Endn
 
 Most journals provide direct download of the BibTex of articles. You can also export the Endnote library to a bib file. What I like to use is the Google Scholar BibTex Citation. However, it does not include doi of the paper.
 
-```{r , echo=FALSE,fig.align="center",out.width="60%"}
+```{r , echo=FALSE,fig.align="center",out.width="100%"}
 knitr::include_graphics(here::here("Graphics/Google_bib.png"))
 ```
 
@@ -384,7 +378,7 @@ A range of names were used to refer to the pre-processing stage of your data ana
 
 ## Importing data to R 
 
-R can import different types of source data (csv, excel, SPSS, Stata, SAS. SQL...). See comperhensive guide [here](https://cran.r-project.org/doc/manuals/r-release/R-data.html). There are three packages frequently used for processing common external data: [foreign](https://cran.r-project.org/web/packages/foreign/foreign.pdf) , [haven](https://cran.r-project.org/web/packages/haven/haven.pdf), [Hmisc](https://cran.r-project.org/web/packages/Hmisc/Hmisc.pdf). *foreign* include most of the importing and exporting functions, however *spss.get* from *Hmisc* provides additional enhanced features including applying proper labels, compress data etc. *haven* is also easy to work with which allows you to use the numeric values instead of directly import as factor varaibles.  
+R can import different types of source data (csv, excel, SPSS, Stata, SAS. SQL...). See the comprehensive guide [here](https://cran.r-project.org/doc/manuals/r-release/R-data.html). There are three packages frequently used for processing common external data: [foreign](https://cran.r-project.org/web/packages/foreign/foreign.pdf) , [haven](https://cran.r-project.org/web/packages/haven/haven.pdf), [Hmisc](https://cran.r-project.org/web/packages/Hmisc/Hmisc.pdf). *foreign* includes most of the importing and exporting functions, however *spss.get* from *Hmisc* provides additional enhanced features including applying proper labels, compress data etc. *haven* is also easy to work with which allows you to use the numeric values instead of directly import as factor variables.  
 
 ```{r}
 dta <- haven::read_sav(here::here("Data","testdata.sav")) 
@@ -418,7 +412,7 @@ If you are using large datasets, you can also use [data.table](https://cran.r-pr
 
 In this stage, you will need to combine data from different sources to one or more datasets. In many cases, raw data were extracted from relational database into multiple flat data files, which will need to be merged first. R has many packages for merging the datasets. As I normally use [mutating joins](https://dplyr.tidyverse.org/reference/mutate-joins.html) from  *tidyverse*. An important thing to check is whether the *by* variable(s) can uniquely define a records before merging the data. If not, joins will create all possible pairs, so you are at risk of double up your records. A easier way of checking is to count the number of records before and other *join*.  
 
-```{r , echo=FALSE,fig.align="center",out.width="90%" }
+```{r , echo=FALSE,fig.align="center",out.width="100%" }
 knitr::include_graphics(here::here("Graphics/Join.png"))
 ```
 
@@ -437,12 +431,38 @@ data2 <- tibble(c = 3:6, d = 4:7)
 ManyDatasets <- list(data1,data2)
 ManyDatasets
 ```
+
+<br /> 
+
 ## Inspection 
 
+An important stage of pre-processing is to have a global understanding of your data: 
 
+* Is the number of observations of your data correct? 
+* Are factor variables stored as character of numeric ? 
+* Is the data file long or wide (longitudinal)? 
+* How is missing data coded?
+* What's the proportion of missing in different variables? 
+* Are date variables correct? 
+
+There are a few functions that are quite useful: 
+
+```{r}
+Hmisc::describe(iris)
+```
+\vspace{5mm} 
+
+
+```{r, eval=FALSE }
+summarytools::view(summarytools::dfSummary(iris))
+```
+
+```{r , echo=FALSE,fig.align="center",out.width="100%"}
+knitr::include_graphics(here::here("Graphics/Summary.png"))
+```
 ## Tidy-version data cleaning routine 
 
-After the data is properly orgnised, you will need to start clea
+After the data is properly organised, you will need to start 
 
 
 ## Notes for yourself and others
