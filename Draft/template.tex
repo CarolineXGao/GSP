@@ -9,6 +9,7 @@ $if(linestretch)$
 \setstretch{$linestretch$}
 $endif$
 
+
 $if(csl-refs)$
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
@@ -17,7 +18,6 @@ $if(csl-refs)$
   \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces$endif$}%
   {\par}
 $endif$
-
 
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
@@ -342,11 +342,7 @@ $endif$
 
 \def\blind{\def\titlepage{{\blindtitle}}\let\maketitle\blindtitle}
 \def\titlepageonly{\def\titlepage{{\pageone\end{document}}}}
-
-
-\def\nocover{\def\titlepage{{\pageone}}\let\maketitle\titlepage}
-
-
+\def\nocover{\def\titlepage{{\pageone\newpage}}\let\maketitle\titlepage}
 \let\maketitle\titlepage
 \makeatother
 
@@ -488,7 +484,6 @@ $keywords$
 \end{keywords}
 $endif$
 
-\newpage
 $for(include-before)$
 $include-before$
 
@@ -535,3 +530,4 @@ $include-after$
 
 $endfor$
 \end{document}
+

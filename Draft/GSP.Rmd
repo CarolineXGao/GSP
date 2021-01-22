@@ -14,6 +14,10 @@ output:
      number_sections: false
      pandoc_args:
       - --template=template.tex
+   bookdown::word_document2:
+     toc: yes 
+     number_sections: false
+     reference_docx: "template.docx"
 date: "`r format(Sys.time(), '%B %d, %Y')`" 
 geometry: margin=1in
 fontsize: 11pt
@@ -103,7 +107,7 @@ There are lots of good online training materials for R:
 
 Almost all R users are still learning R!! So you have no excuse not to ~~ 
 
-# R setup, project managment and Rmarkdown
+# R setup and project managment
 
 ## Setup R on your computer
 
@@ -208,7 +212,7 @@ You can setup a rule for organising sub-folders and files. I like to separate co
 
 
 
-## State-of-art Rmarkdown/Rnotebook paractice
+# State-of-art Rmarkdown/Rnotebook paractice
 
 The idea of Markdown practice was originated from [Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth). Donald  believed that programmers should think of programs as works of literature and introduced a new programming paradigm called ["Literate programming"](https://en.wikipedia.org/wiki/Literate_programming).  He then developed TeX to facilitate this paradigm of coding, which is the typesetting system that LaTex is based. The idea behind it is simple, combining the text and code for human to read not computers. In the end, scientific discoveries are for humans to interpret, replicate and extend, and not for computers. 
 
@@ -240,7 +244,7 @@ J.J. Allaire gave an excellent introduction presentation, [Notebooks with R Mark
 
 Here are some practical point.
 
-### Learn to use R markdown 
+## Learn to use R markdown 
 
 There are many good online introductions on using R markdown:
 
@@ -251,7 +255,7 @@ There are many good online introductions on using R markdown:
 * [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/) by Yihui Xie
 * [bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/) (for advanced users) by Yihui Xie
 
-### YAML header
+## YAML header
 R Markdown files (*.Rmd) starts with YAML headers, which specify document parameters (or pandoc parameters), such as title, author, type of document, parameters etc.  
 
 ```{r, eval=FALSE}
@@ -290,11 +294,13 @@ output:
    bookdown::pdf_document2:
      toc: yes
      number_sections: false
+     fig_caption: no
      pandoc_args:
       - --template=template.tex
    bookdown::word_document2:
      toc: yes 
      number_sections: false
+     fig_caption: no
      reference_docx: "template.docx"
 date: "`r format(Sys.time(), '%B %d, %Y')`" 
 geometry: margin=1in
@@ -313,12 +319,12 @@ header-includes:
 You may notice that I have used template documents, "template.tex" and  "template.docx". The LaTex template was inherited from [Prof Rob hyndman](https://robjhyndman.com/)'s [MonashEBSTemplates](https://github.com/robjhyndman/MonashEBSTemplates) with minor modifications. "template.docx" is simply a Word document with defined fonts. "Header-includes" contains the additional latex command that I want to use in the documents, i.e. "lscape" package is for the landscape pdf page and "beginsupplement" is for setting supplementary table and figure captions (starts from Table S1 and Figure S1) .  
 
 
-### Using R markdown 
+## Using R markdown 
 
 R markdown is very easy to use. Code will need to be included as code chunk and everthing else outside of code chunks will be treated as formatted text, which includes, headings, lists, standard text and equations, see [R Markdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf) for details. Code chunk include varies of definitions, such as code type (R, Python, Stan ...), chunk name, whether to display code, figure size, table options etc. * [R Markdown Reference Guide](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf?_ga=2.27162299.765406861.1611275642-1346409885.1598176219) provides very detailed information about this. 
 
 
-### Knit document
+## Knit document
 
 To create html, word or pdf file requires to Knit the Rmd document. 
 
@@ -328,7 +334,7 @@ knitr::include_graphics(here::here("Graphics/Knit.png"))
 
 You also need to install LaTex (https://www.latex-project.org/get/). However, LaTex is really a large monster to work with. So Yihui Xie has developed [TinyTeX](https://yihui.name/tinytex/) for R users, which is much smaller. You can install additional LaTex packages easily if needed. 
 
-### Citation in R markdown. 
+## Citation in R markdown. 
 
 Another advantage of using R markdown is that you can finally give up using Endnote (the monster crashes your computer and word all the time). R markdown can work with the many citation management file types. The commonly used one is the LaTeX bibliography management system BibTeX, in which the references were stored as plain text like this: 
 
@@ -371,11 +377,73 @@ csl: biomed-central.csl
 
 
 
-# Data cleaning 
+# Data pre-processing
 
-## Import data 
+A range of names were used to refer to the pre-processing stage of your data analysis: data cleaning, data cleansing,  data wrangling, data mungling... This is a stage that you organize, validate, and prepare data for further analysis. 
+
+
+## Importing data to R 
+
+R can import different types of source data (csv, excel, SPSS, Stata, SAS. SQL...). See comperhensive guide [here](https://cran.r-project.org/doc/manuals/r-release/R-data.html). There are three packages frequently used for processing common external data: [foreign](https://cran.r-project.org/web/packages/foreign/foreign.pdf) , [haven](https://cran.r-project.org/web/packages/haven/haven.pdf), [Hmisc](https://cran.r-project.org/web/packages/Hmisc/Hmisc.pdf). *foreign* include most of the importing and exporting functions, however *spss.get* from *Hmisc* provides additional enhanced features including applying proper labels, compress data etc. *haven* is also easy to work with which allows you to use the numeric values instead of directly import as factor varaibles.  
+
+```{r}
+dta <- haven::read_sav(here::here("Data","testdata.sav")) 
+dta
+dta<-as_factor(dta)
+dta
+```
+
+
+```{r}
+dta <- foreign::read.spss(here::here("Data","testdata.sav"),to.data.frame=TRUE) 
+head(dta)
+```
+```{r}
+dta<-Hmisc::spss.get(here::here("Data","testdata.sav"), datevars=c("date")) 
+dta
+```
+
+##  Working with data.frame, tibble and data.table 
+
+Data frame is an easier understandable term, representing a flat data file with different columns having different variables with different format. However you might also hear [tibbles](https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html). It was designed as a modern version of data frame, it allows better print visualization, flexible variable names, no row names etc. Normally it is better to use tibble, however sometimes it gets into trouble, then you need to change back to data frame. 
+
+```{r}
+as_tibble(dta)
+data.frame(dta)
+```
+
+If you are using large datasets, you can also use [data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html). The coding style follows SQL. Although it takes some time to learn the coding style, it is generally over 10 times faster than operating with data.frame. I never had to move to data.table because most of my time consuming code/functions require data.frame as input : P 
+
+## Data orgnizing 
+
+In this stage, you will need to combine data from different sources to one or more datasets. In many cases, raw data were extracted from relational database into multiple flat data files, which will need to be merged first. R has many packages for merging the datasets. As I normally use [mutating joins](https://dplyr.tidyverse.org/reference/mutate-joins.html) from  *tidyverse*. An important thing to check is whether the *by* variable(s) can uniquely define a records before merging the data. If not, joins will create all possible pairs, so you are at risk of double up your records. A easier way of checking is to count the number of records before and other *join*.  
+
+```{r , echo=FALSE,fig.align="center",out.width="90%" }
+knitr::include_graphics(here::here("Graphics/Join.png"))
+```
+
+Source: https://twitter.com/hadleywickham/status/68440762925952614
+
+<br /> 
+<br /> 
+
+One important benefit of using R is that it allows you to open many datasets and process them simultaneously. This is the major difference compared with working with SPSS and Stata which allows one data file at a time. 
+
+R also allows you to store many datasets in to one [list](https://towardsdatascience.com/introduction-to-lists-in-r-ff6469e6ca79). The benefit of list + data frame may not be trivial at this stage. But it is extremely powerful to make you code simple and efficient. 
+ 
+```{r}
+data1 <- tibble(a = 1:4, b = 2:5)
+data2 <- tibble(c = 3:6, d = 4:7)
+ManyDatasets <- list(data1,data2)
+ManyDatasets
+```
+## Inspection 
+
 
 ## Tidy-version data cleaning routine 
+
+After the data is properly orgnised, you will need to start clea
+
 
 ## Notes for yourself and others
 
