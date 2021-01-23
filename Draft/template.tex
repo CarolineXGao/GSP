@@ -14,10 +14,10 @@ $if(subtitle)$
 $endif$
 $if(institute)$
 \providecommand{\institute}[1]{}
-\institute{$for(institute)$$institute$$sep$ \and $endfor$}
+\institute{$institute$}
 $endif$
 
-\author{$for(author)$$author$$sep$ \and $endfor$}
+\author{$for(author)$$author.name$$sep$ \and $endfor$}
 
 $if(date)$
 \date{$date$}
@@ -162,7 +162,8 @@ $endif$
 \renewcommand*{\maketitle}{%
     \begin{titlepage}
         \begin{center}
-        \sffamily\Huge\bfseries\@title \\
+        \raggedright\baselineskip=1.2cm
+        \fontsize{24.88}{30}\sffamily\textbf{\expandafter{\@title}} \\
         \vspace{2 cm}
         \sffamily\Large\mdseries\@author
         \vspace{1.5cm}

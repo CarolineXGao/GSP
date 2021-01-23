@@ -1,7 +1,11 @@
 ---
 title: "Good Statistical Practice (GSP): guidence for using R for scientific publication"
-author: Caroline X. Gao [1],  Matthew Hamilton [2]
-date: "[1] University of Melbourne, Parkview, VIC, Australia \\newline [2] Orygen, Parkview, VIC, Australia" 
+author:
+- name: Caroline X. Gao [1,2], Matthew Hamilton [3]
+  familyname: Gao
+  othernames: Caroline X.
+  address: "No address"
+date: "[1] Centre for Youth Mental Health, University of Melbourne \\newline [2] School of Public Health and Preventive Medicine, Monash University \\newline [3] Orygen, Austrlia"
 output:
    bookdown::pdf_document2:
      toc: yes
