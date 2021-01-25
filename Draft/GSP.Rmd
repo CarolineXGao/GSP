@@ -87,6 +87,9 @@ The essential skill set in the modern analytical community is the ability to use
 knitr::include_graphics(here::here("Graphics/R_illustration.jpg"))
 ```
 
+Source: unknown
+
+\vspace{0.2 cm}
 
 Sorry for being a bit offensive, but the reality is the industry and scientific community are gradually moving away from SPSS to other languages for many reasons, cost, capacity, flexibility, reporducibility etc. So to avoid the long term pain, change to R (Stata is also good, since this is a practice guide for R, I won't touch too much on Stata). 
 
@@ -217,15 +220,22 @@ The idea of Markdown practice was originated from [Donald Knuth](https://en.wiki
 Although this is a fascinating idea, it had been hard to achieve for many reasons. Academic publications mostly only allow words, tables, figures but not computer code, so there is no obvious momentum from the academic communities. Software developers and computer science engineers mostly focused on the end product and not so much on displaying the process in between. Technically it is also difficult to achieve as this approach will need to be implemented within or closely connected to one or multiple programming environments.
 
 
-```{r , echo=FALSE,fig.align="center",idth="100%"}
+```{r , echo=FALSE,fig.align="center",idth="100%" }
 knitr::include_graphics(here::here("Graphics/code_quality.png"))
 ```
+Source: http://geek-and-poke.com/geekandpoke/2009/7/25/the-art-of-programming-part-2.html
+
+\vspace{0.2 cm}
 
 However, the sudden boom of data science brought in new challenges. As software engineers move towards data science, the community gradually realised that the traditional coding style (i.e. modular programming, black-box approach) became barriers instead of advantages. Each step of the programming code, from cleaning variables to running algorithm, suddenly became all important. Hence there is an immediate need to communicate regarding every step of the process. This needs drove the birth of many interactive computational notebooks (IPython, SageMath, Beaker, Jupyter, Apache Zeppelin and Rmarkdown). R markdown became the most successful computational notebooks for R users. Why? Probably for the same reason as why R has been successful, simplicity, flexibility, open source etc.  
 
 ```{r , echo=FALSE,fig.align="center",out.width="90%"}
 knitr::include_graphics(here::here("Graphics/rmarkdown_workflow.png"))
 ```
+Source: http://applied-r.com/project-reporting-template/
+
+\vspace{0.2 cm}
+
 R markdown is a system that integrate narrative, analysis, code and output to create a production quality document. The code and text were implemented via R in a *.Rmd file, which will be knit to Markdown file and then convert to file type of choice via Pandoc. There are a few important features that makes it one of R's "killer" feature 
 
 * Reproducibility. You are no longer required to live in the copying and pasting world. All the analysis, results can be easily reproduced with changes in source data, cleaning routine and analyses. There are different degrees of implementing R markdown, from basic including notes for your data cleaning process to write a whole paper in one markdown file. Regardless of where you are at, using R markdown will significantly reduced you workload of having to find and copying and pasting results to the final paper. So you won't need to panic when your cohorts said one person is missing from the data set, and the 12 large tables in your paper will need to be updated. 
@@ -422,13 +432,12 @@ knitr::include_graphics(here::here("Graphics/Join.png"))
 
 Source: https://twitter.com/hadleywickham/status/68440762925952614
 
-<br /> 
-<br /> 
+\vspace{0.2 cm} 
 
 One important benefit of using R is that it allows you to open many datasets and process them simultaneously. This is the major difference compared with working with SPSS and Stata which allows one data file at a time. 
 
 R also allows you to store many datasets in to one [list](https://towardsdatascience.com/introduction-to-lists-in-r-ff6469e6ca79). The benefit of list + data frame may not be trivial at this stage. But it is extremely powerful to make you code simple and efficient. 
- 
+ T
 ```{r}
 data1 <- tibble(a = 1:4, b = 2:5)
 data2 <- tibble(c = 3:6, d = 4:7)
@@ -443,19 +452,20 @@ ManyDatasets
 An important stage of pre-processing is to have a global understanding of your data: 
 
 * Is the number of observations of your data correct? 
-* Are factor variables stored as character of numeric ? 
+* Are factor variables stored as character or numeric ? 
 * Is the data file long or wide (longitudinal)? 
 * How is missing data coded?
 * What's the proportion of missing in different variables? 
 * Are date variables correct? 
 
-There are a few functions that are quite useful: 
+There are a few functions that are quite useful, including *summary()*, *str()*, *psych::describe()* ...  The function I used the most is *describe()* from *Hmisc* which is similar with the codebook command in Stata. 
 
 ```{r}
 Hmisc::describe(iris)
 ```
 \vspace{5mm} 
 
+*dfSummary* from *summarytools* is a new function being developed which provides more comprehensive evaluations including distributions, distinct values and missing data. 
 
 ```{r, eval=FALSE }
 summarytools::view(summarytools::dfSummary(iris))
@@ -464,9 +474,37 @@ summarytools::view(summarytools::dfSummary(iris))
 ```{r , echo=FALSE,fig.align="center",out.width="100%"}
 knitr::include_graphics(here::here("Graphics/Summary.png"))
 ```
-## Tidy-version data cleaning routine 
+You might also need to check multivariate associations briefly to check if there were any variables were coded in the wrong direction (i.e. some psychological instruments requires reverse coding). This can be achieved via simply checking, scatter plots and correlations.  
 
-After the data is properly organised, you will need to start 
+```{r,fig.height=8,fig.width=9,message=FALSE, warning=FALSE}
+library("PerformanceAnalytics")
+PerformanceAnalytics::chart.Correlation(iris[1:4], histogram=TRUE, pch=19)
+```
+
+*ggpairs* is an interesting library I found recently, which provides comined multivariate plots.
+
+```{r,fig.height=8,fig.width=9,message=FALSE, warning=FALSE}
+library(GGally)
+GGally::ggpairs(iris, aes(color = Species))+ theme_bw()
+```
+
+There are many other types of plots displaying multivariate associations, such as heatmaps, mosaic plots, flow diagrams etc. Interested readers can find more examples in [Data Visualization with R](https://rkabacoff.github.io/datavis/) by Rob Kabacoff.
+
+
+
+## Data cleaning
+
+After the data is properly organised, you will need to start the data cleaning phase. The total workload depends on the type of source data received. If you are lucky that the data is collected using a more advanced tool such as Redcap (designed by a competent data manager), the process may not be substantially tedious. Still, generally data scientists and statisticians spend 60%-80% of their time in data cleaning and pre-processing. So be prepared!! 
+
+Another issue with data cleaning is that there is no clear definition of what is a "cleaned" data. This is my definition: 
+
+*A cleaned data is one dataset with all fields (i) validated, (ii) clearly labeled, (iii) properly categorized (with clear labels), (iv) summary variables generated (i.e. total scores of psychological measurements), (v) and with the format that is ready for analysis (i.e. cross-sectional analysis requires wide version of data, whereas longitudinal analysis requires long version of data).*
+
+"Validated" refers to a range of expects including: consistency (male participants should not reported menstrual cramps in PHQ15), validity (poor quality tests sometimes needed to be excluded, should be coded as missing), variable type ( numeric variables should not include strings i.e. <5 ).
+
+More often your final "cleaned" data will change over time for most of larger studies due to issues identified when the study evolves, i.e. additional errors identified, more data collected etc. Hence you will need to create a version control system to capture these changes. A common practice is to store the "cleaned" versions of data with a time stamp, i.e.  "A_brilliant_study_cleaned_V1_03032012.rds". It will also be a good practice to write a data processing document to list all the decisions, changes and associated locations where datasets are stored. 
+
+## Tidy-version data cleaning routine 
 
 
 ## Notes for yourself and others
