@@ -35,6 +35,9 @@ knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 45), tidy = T
 
 library(pacman)
 p_load("tidyverse", "knitr", "kableExtra") 
+
+conflicted::conflict_prefer("filter","dplyr")
+conflicted::conflict_prefer("select","dplyr")
 ```
 
 # Preface
@@ -828,9 +831,7 @@ Once your data is cleaned, you will normally start with the "exploratory" analys
 even when there is no “fishing expedition” or “p-hacking” and the research
 hypothesis was posited ahead of time](http://stat.columbia.edu/~gelman/research/unpublished/forking.pdf).
 
-## Statistical modeling with R 
-
-### Table 1
+## Table 1
 
 Simple descriptive table, normally referred as the "Table 1", is where your data story start. In this table you will need to provide enough information about the data that was used in then analyses so your readers can have a over view of it's profiles. For most of health analysis, your reporting unit is participants and you would generally be required to report demographics characteristics and risk factors in this table. R has lots of existing packages that automatic generate table 1.  [*tableby*](https://www.rdocumentation.org/packages/arsenal/versions/3.5.0/topics/tableby) from  *arsenal* is very easy to use when you directly display your results. However, it is difficult to be extracted to tibble/data frame for further manipulations.   
 
@@ -865,7 +866,8 @@ summary(table,
 
 Another useful Table 1 function is [*tbl_summary*](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) from *gtsummary* , which you can extract results as tibble.  
 
-```{r,results='asis'}
+
+```{r,results="hide"}
 library(gtsummary)
 tbl <- 
     iris %>%
@@ -878,6 +880,10 @@ tbl <-
     add_p(test=list(all_numeric() ~ "aov"),
           pvalue_fun = ~style_pvalue(.x, digits = 3))
 
+tbl
+```
+
+```{r,results='asis',echo=FALSE}
 #printing results in Latex
 as_gt(tbl) %>% gt::as_latex()
 ```
@@ -905,21 +911,53 @@ knitr::kable( tbl, booktabs = TRUE,linesep = "") %>%
     kable_styling(bootstrap_options = "striped") %>% 
     add_indent(c(2,3,5,6))
 ```
+## Regression models
 
-### Extract results
+Regression model follows very similar style of coding: 
 
-Although R can print analysis results, it often will not present results that can be directly reportable. You often required to programe your own code to store and process results and then assemble proper tables and figures. Luckily there are many third party packages available to extract results from common models. [*sjPlot*](https://cran.r-project.org/web/packages/sjPlot/sjPlot.pdf) is a useful package than can process many common model results. 
+function( y~ x1 + x2 + x3, data=data, additional specifications)
+
+```{r}
+mod1 <- lm(Petal.Length ~ Species + Sepal.Width*Sepal.Length, data=iris)
+summary(mod1)
+```
+
+"Sepal.Width*Sepal.Length" is the interaction term. Most of regression models are easy to fit. The following lists are some of known issues for common models (some are not specific to R): 
+
+* Some GLMs, particularly Relative Risk regression also known as log-binomial regression (GLM with log link and binomial distribution model), have convergence problem [@Williamson_2013]. This is relate to parameter constraints at boundaries. For log-binomial regression, a package [*logbin*](https://cran.r-project.org/web/packages/logbin/logbin.pdf) was developed with advance convergence ability (use combinatorial EM to cycles through parameter space). For other GLMs, Bayesian models (i.e. using [*brms*](https://cran.r-project.org/web/packages/brms/vignettes/brms_overview.pdf)) can be used to overcome some of the convergence problems.
+* Linear mixed effect models sometimes have convergence issues too. You can test performance of different optimizers, see example [here](http://svmiller.com/blog/2018/06/mixed-effects-models-optimizer-checks/). 
+* Multinomial logistic regression model [*nnet::multinom*](nnet::multinom) requires predictors to be roughly scaled to [0,1] or the fit will be slow or may not converge at all. Normally this is fine, however when you have some large values (i.e. IRSAD scores which is around 1000), the model will stop working. Hence it will be better to standardise those predictors.
+* Sometimes there will be an error message "Error: no valid set of coefficients has been found: please supply starting values", this means the model is having trouble to initialize the optimization and require you to supply a set of starting values for intercept and predictors. I normally run a model with reduced number of predictors and use the coefs from the reduced model as starting values. 
+* Different package will not necessary produce identical results, but they should generally agree with each other.  If not something is wrong: either a bug in your code or in the existing code libraries.
+
+
+
+
+```{r,message=FALSE,warning=FALSE}
+library(logbin)
+iris$Versicolor = as.numeric(iris$Species == "versicolor")
+mod1 <- glm(Versicolor~ Sepal.Length ,
+            family = binomial(link = "log"), data = iris)
+mod2 <- logbin::logbin(formula(mod1), data = iris,method = "cem", trace = TRUE)
+
+coefficients( summary(mod1))
+coefficients( summary(mod2))
+```
+
+## Extract results
+
+Although R can print analysis results, it often will not present results that can be directly reportable. You often required to programe your own code to store and process results and then assemble proper tables and figures. Luckily there are many third party packages available to extract results from common models. [*sjPlot*](https://cran.r-project.org/web/packages/sjPlot/sjPlot.pdf) is a useful package which can process many common model results. 
 
 
 ```{r}
 library(sjPlot)
-mod1 <- lm(Petal.Length ~ Species, data=iris)
+mod1 <- lm(Petal.Length ~ Species , data=iris)
 mod2 <- lm(Petal.Length ~ Species + Petal.Width, data=iris)
 mod3 <- lm(Petal.Length ~ Species + Petal.Width + Species:Petal.Width, data=iris)
 ```
 
 ```{r, eval=FALSE}
-tab_model(mod1, mod2, mod3,file = "temp.html")
+tab_model(mod1, mod2, mod3)
 ```
 
 
@@ -932,7 +970,114 @@ Currently *tab_model* only support html output, which hopefully can be extended 
 plot_model(mod3, type = "pred", terms = c( "Petal.Width", "Species")) +
   theme_bw()
 ```
- 
+There are many factors you need to consider when displaying results, a few of them were listed here:
+
+(1) Include point estimate, 95% CI and p-value (not starts) for regression models. The new recommendation is to report 3 digits if p-value < 0.05 otherwise 2 digits. 
+
+(2) Do not report p-value when hypothesis testing is meaningless.  A perfect example is a correlation coefficient $\rho=0.08$ with p-value< 0.001 (see example below). 
+```{r}
+set.seed(123)
+a <- rnorm(1000)
+b <- rnorm(1000)
+cor.test(a,b)
+```
+
+(3) Include reference values. *tab_model* is currently having trouble to print out reference values. It is also difficult to configure custom settings and print LaTex table. The function below prints out linear regression model results and can be configured for different types of models and output requiements. 
+
+```{r}
+regre_table <- function(model,dta){
+  # Summarise coef 
+  Coef <- data.frame(coefficients(summary(model))) %>%
+    mutate(Variables  = rownames(.)) %>% 
+    as_tibble() %>% 
+    filter(Variables != "(Intercept)") %>% 
+    mutate(Coef = format(round(Estimate, digits = 2), nsmall = 2)) %>% 
+    mutate('95% CI' = paste0(format(round( Estimate - 1.96*`Std..Error` , digits = 2),nsmall = 2),", " ,
+                                 format(round( Estimate + 1.96*`Std..Error` , digits = 2),nsmall = 2))) %>% 
+    mutate('p-value' = `Pr...t..`) %>% 
+    mutate('p-value' = ifelse(`p-value` < 0.001, "<0.001",
+                                    ifelse(`p-value` < 0.05, format(round(`p-value`, digits = 3 ), nsmall = 3),
+                                           format(round(`p-value`, digits = 2 ), nsmall = 2)))) %>% 
+   select(Variables, Coef,`95% CI`,`p-value`)
+  
+  # categorical variables for left col 
+  if (length(model$xlevels) > 0){
+      levels <- reshape2::melt(model$xlevels)
+      levels <- levels %>% 
+        mutate(Variables = paste0(L1, value)) %>%  
+        group_by(L1) %>% 
+        mutate(level = seq(n())) 
+    } else{
+        levels <- data.frame(value = NA,  L1 = "" ,Variables = "", level = NA)
+    }
+  
+  #extract variable labels 
+  varlabels <- as.data.frame(Hmisc::label(dta[,attr(model$terms,"term.labels")])) 
+  names(varlabels) <- "label"
+  varlabels$L1 <- rownames(varlabels)
+  varlabels <- varlabels %>% 
+    mutate(label = ifelse(is.na(label) | as.character(label) == "",
+                          L1, as.character(label))) %>% 
+    mutate(listvar = seq(n()))
+  
+  #prepare first column  
+  tablelabel <- data.frame(Variables = names(model$coefficients)) %>% 
+    filter(Variables != "(Intercept)") %>% 
+    mutate(Variables = as.character(Variables)) %>% 
+    full_join(levels) %>%
+    mutate(L1 = ifelse(is.na(L1), as.character(Variables), as.character(L1))) %>% 
+    left_join(varlabels) %>% 
+    arrange(listvar,level) %>% 
+    dplyr::select(-listvar,-level, -L1) %>% 
+    group_by(label) %>% 
+    mutate(total = n(),order = seq(n())) %>% 
+    mutate(expend =ifelse(order == 1 & total > 1,2,1)) %>% 
+    uncount(expend) %>% 
+    mutate(order = seq(n())) %>% 
+    mutate(value =ifelse(is.na(value) | (total > 1 & order == 1), 
+                         as.character(label),as.character( value))) %>% 
+        mutate(Variables = ifelse(total > 1 & order == 1,NA,Variables)) %>% 
+        ungroup() %>% 
+        dplyr::select(Variables, value,total ) 
+    
+  #extract final table
+   finaltable <-tablelabel %>% 
+        full_join(Coef)  %>% 
+        mutate(Coef = ifelse(!is.na(Variables) & is.na(Coef), "Ref", Coef )) %>% 
+        replace(is.na(.), "")
+   # extract which row for indentation and top row name 
+   indent <- which(finaltable$Variables != "" & finaltable$total > 1)
+   
+   #print
+   print(finaltable %>% 
+      select(-Variables,-total) %>% 
+      rename(Predictors=value) %>% 
+      kable(align=c('l', rep('c', 3 )), booktabs = T, linesep = "") %>%
+        kable_styling(bootstrap_options = "striped",  full_width = F) %>% 
+        add_indent(indent)) 
+}
+```
+
+
+
+```{r,results='asis',warning=FALSE, message=FALSE}
+Hmisc::label(iris$Petal.Length) <- "Petal length"
+Hmisc::label(iris$Sepal.Width) <- "Sepal width"
+Hmisc::label(iris$Sepal.Length) <- "Sepal length"
+iris$Sepal.Length.Width <- iris$Sepal.Width*iris$Sepal.Length
+Hmisc::label(iris$Sepal.Length.Width) <- "Sepal length * width"
+mod <- lm(Petal.Width ~ Species + Petal.Length +Sepal.Width +Sepal.Length +Sepal.Length.Width , data = iris)
+regre_table(mod,iris)
+```
+
+
+(3) Use table + Figure representation if you need/can 
+
+```{r , echo=FALSE,fig.align="center",out.width="100%"}
+knitr::include_graphics(here::here("Graphics/table_figure.jpg"))
+```
+Source:https://www.sciencedirect.com/science/article/pii/S0160412020321966#f0015 
+
 
 ## Advanced topics
 
