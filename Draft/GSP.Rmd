@@ -1,10 +1,10 @@
 ---
 title: "Good Statistical Practice (GSP): guidence for using R for scientific publication"
 author:
-- name: Caroline X. Gao [1,2], Matthew Hamilton [3]
+- name: Caroline X. Gao [1,2,3], Matthew Hamilton [3], Sue Cotten [1,3]
   familyname: Gao
   othernames: Caroline X.
-  address: "No address"
+  address: "None"
 date: "[1] Centre for Youth Mental Health, University of Melbourne \\newline [2] School of Public Health and Preventive Medicine, Monash University \\newline [3] Orygen, Austrlia"
 output:
    bookdown::pdf_document2:
@@ -288,32 +288,24 @@ There is no comprehensive YAML guide exist. However, there is a nice package cal
 
 ```{r, eval=FALSE}
 ---
-title: "Good Statistical Practice (GSP) "
+title: "Good Statistical Practice (GSP)"
 author:
-- familyname: Gao
-  othernames: Caroline X.
-  address: Centre for Youth Mental Health, University of Melbourne; 
-  School of Public Health and Preventive Medicine, Monash University
-  email: caroline.gao@orygen.org.au
-- familyname: Hamilton
-  othernames: Matthew
-  address: Orygen, Melbourne, Australia
+- name: Caroline X. Gao [1,2], Matthew Hamilton [3]
 output:
    bookdown::pdf_document2:
      toc: yes
      number_sections: false
-     fig_caption: no
+     latex_engine: xelatex
      pandoc_args:
       - --template=template.tex
    bookdown::word_document2:
      toc: yes 
      number_sections: false
-     fig_caption: no
      reference_docx: "template.docx"
-date: "`r format(Sys.time(), '%B %d, %Y')`" 
 geometry: margin=1in
 fontsize: 11pt
 bibliography: GSP.bib 
+tables: yes
 header-includes:  
    \usepackage{float} 
    \floatplacement{figure}{H} 
@@ -415,16 +407,43 @@ dta
 
 Data frame is an easier understandable term, representing a flat data file with different columns having different variables with different format. However you might also hear [tibbles](https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html). It was designed as a modern version of data frame, it allows better print visualization, flexible variable names, no row names etc. Normally it is better to use tibble, however sometimes it gets into trouble, then you need to change back to data frame. 
 
-```{r}
+```{r,class.output = ".bordered"}
 as_tibble(dta)
 data.frame(dta)
 ```
 
 If you are using large datasets, you can also use [data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html). The coding style follows SQL. Although it takes some time to learn the coding style, it is generally over 10 times faster than operating with data.frame. I never had to move to data.table because most of my time consuming code/functions require data.frame as input : P 
 
+## Naming you variables properly!!!!!!!!
+
+Everytime when I saw variable names which look like "X1", "V2", "12345", "WWF111", "GGG222", "Don't use", "?", "Gender", "Gender1", "Gender2", "Gender3", "Gsp11229371",  "never_ending_name_but_do_not_know_what_it_means", or "theyusenamesthatjustruntogetherwithnocapitalsorunderscores"... I would turn into [Jeff Atwood](https://blog.codinghorror.com/). 
+
+```{r , echo=FALSE,fig.align="left",out.width="30%"}
+knitr::include_graphics(here::here("Graphics/coding.gif"))
+```
+Variable names have to be proper because they will make both you and your collaborator's work much easier. You will be able to find variables easily and communicate well with your code. So when you import your data, make sure that all variables have proper names (actually variable names have to be proper in the database). There are a many common naming systems:
+
+```{r,echo=FALSE}
+tabl <- "twoWords  | lower camel uase
+TwoWords	| upper uamel uase
+two_words	| 	snake case
+TWO_WORDS	| 	screaming snake case
+two_Words	| 	camel snake case
+Two_Words	| 	pascal snake_case
+"
+df <- read.delim2(textConnection(tabl), header = FALSE,sep = "|" , strip.white = TRUE, stringsAsFactors = FALSE )
+names(df) <- c("Analysis", "Function and package")
+knitr::kable( df, linesep = "", booktabs = T) %>% 
+  column_spec(1, width =  "5 cm") %>% 
+  column_spec(2, width =  "8 cm") 
+```
+Although snake case is mostly recommended, you can use any/all systems as long as you use them consistently. R allows you to use other special characters such as "." in variable names, but some other programming language may not allow you to do so (i.e. Stata do not allow "."). So stick with snake, camel or combined systems. 
+
+Generally, variable names should be nouns and function names should be verbs. You also need to name clusters of variables with similar yet specific names so they are easier to be referred to using *dplyr::starts_with()* or *dplyr::ends_with()*. For example, If you use "IESR_q1", "IESR_q2"..."IESR_q22" as IESR individual item names and IESR_total as IESR total scores. Then you can use *dplyr::starts_with("IESR_q")* to select individual items without the total items. If you name them as "IESR1", "IESR2"..."IESR22", "IESRTotal", *dplyr::starts_with("IESR")* will select all of them.
+
 ## Data orgnizing 
 
-In this stage, you will need to combine data from different sources to one or more datasets. In many cases, raw data were extracted from relational database into multiple flat data files, which will need to be merged first. R has many packages for merging the datasets. As I normally use [mutating joins](https://dplyr.tidyverse.org/reference/mutate-joins.html) from  *tidyverse*. An important thing to check is whether the *by* variable(s) can uniquely define a records before merging the data. If not, joins will create all possible pairs, so you are at risk of double up your records. A easier way of checking is to count the number of records before and other *join*.  
+In this stage, you will need to combine data from different sources to one or more datasets. In many cases, raw data were extracted from relational database into multiple flat data files, which will need to be merged first. R has many packages for merging the datasets. The most popular functions are [mutating joins](https://dplyr.tidyverse.org/reference/mutate-joins.html) from  *tidyverse*. An important thing to check is whether the *by* variable(s) can uniquely define one record before merging the data. If not, joins will create all possible pairs, so you might double up your records. A easier way of checking is to count the number of records before and other *join*.  
 
 ```{r , echo=FALSE,fig.align="center",out.width="100%" }
 knitr::include_graphics(here::here("Graphics/Join.png"))
@@ -434,11 +453,11 @@ Source: https://twitter.com/hadleywickham/status/68440762925952614
 
 \vspace{0.2 cm} 
 
-One important benefit of using R is that it allows you to open many datasets and process them simultaneously. This is the major difference compared with working with SPSS and Stata which allows one data file at a time. 
+One important benefit of using R is that it allows you to open many datasets and process them simultaneously. This is one of major differences compared to SPSS and Stata, which allow one data file at a time. 
 
-R also allows you to store many datasets in to one [list](https://towardsdatascience.com/introduction-to-lists-in-r-ff6469e6ca79). The benefit of list + data frame may not be trivial at this stage. But it is extremely powerful to make you code simple and efficient. 
- T
-```{r}
+R also allows you to store many datasets in to one [list](https://towardsdatascience.com/introduction-to-lists-in-r-ff6469e6ca79). The benefit of list + data frame may not be trivial at this stage. But it is extremely powerful to make you code simple and efficient we you work with repetitive operations with datasets having the same structure. 
+ 
+```{r,class.output = ".bordered"}
 data1 <- tibble(a = 1:4, b = 2:5)
 data2 <- tibble(c = 3:6, d = 4:7)
 ManyDatasets <- list(data1,data2)
@@ -451,16 +470,18 @@ ManyDatasets
 
 An important stage of pre-processing is to have a global understanding of your data: 
 
-* Is the number of observations of your data correct? 
+* Is the number of observations of your data correct? (sometimes it takes some efforts to finalize the total sample size particularly for longitudinal studies as participants may withdraw the study and request their data to be removed). 
 * Are factor variables stored as character or numeric ? 
-* Is the data file long or wide (longitudinal)? 
-* How is missing data coded?
-* What's the proportion of missing in different variables? 
+* Is the data file long or wide when there are multiple observations for one participant? 
+* How is missing data coded? 
+* What's the proportion of missing in different variables? Is there any variable with  substantial missing data? If so why it is the case? 
+* Are the nested variables correctly entered?  i.e. Drinking frequency vs whether drinks or not. 
 * Are date variables correct? 
+* Is the raw data matching the definitions in the data dictionary? 
 
-There are a few functions that are quite useful, including *summary()*, *str()*, *psych::describe()* ...  The function I used the most is *describe()* from *Hmisc* which is similar with the codebook command in Stata. 
+There are a few functions that are quite useful, including *summary()*, *str()*,  *psych::describe()*, *tibble::glimpse()* ...  The function I used the most is *describe()* from *Hmisc* which is similar with the codebook command in Stata. 
 
-```{r}
+```{r, class.output = ".bordered"}
 Hmisc::describe(iris)
 ```
 \vspace{5mm} 
@@ -474,6 +495,8 @@ summarytools::view(summarytools::dfSummary(iris))
 ```{r , echo=FALSE,fig.align="center",out.width="100%"}
 knitr::include_graphics(here::here("Graphics/Summary.png"))
 ```
+\vspace{0.2 cm} 
+
 You might also need to check multivariate associations briefly to check if there were any variables were coded in the wrong direction (i.e. some psychological instruments requires reverse coding). This can be achieved via simply checking, scatter plots and correlations.  
 
 ```{r,fig.height=8,fig.width=9,message=FALSE, warning=FALSE}
@@ -496,32 +519,420 @@ There are many other types of plots displaying multivariate associations, such a
 
 After the data is properly organised, you will need to start the data cleaning phase. The total workload depends on the type of source data received. If you are lucky that the data is collected using a more advanced tool such as Redcap (designed by a competent data manager), the process may not be substantially tedious. Still, generally data scientists and statisticians spend 60%-80% of their time in data cleaning and pre-processing. So be prepared!! 
 
-Another issue with data cleaning is that there is no clear definition of what is a "cleaned" data. This is my definition: 
+Another issue with data cleaning is that there is no clear definition of what is a "cleaned" data. Hadley Wickham provided more general definition of tidy vs messy data https://vita.had.co.nz/papers/tidy-data.pdf. This is my definition of cleaned data related to health studies: 
 
-*A cleaned data is one dataset with all fields (i) validated, (ii) clearly labeled, (iii) properly categorized (with clear labels), (iv) summary variables generated (i.e. total scores of psychological measurements), (v) and with the format that is ready for analysis (i.e. cross-sectional analysis requires wide version of data, whereas longitudinal analysis requires long version of data).*
+*A cleaned data is one dataset with (i) variables validated, ordered, clearly named and labeled, (ii) categorical variables properly categorized with clear labels, (iii) derived and transformed variables properly included, (iv) and the required format (by the analysis) established.*
 
-"Validated" refers to a range of expects including: consistency (male participants should not reported menstrual cramps in PHQ15), validity (poor quality tests sometimes needed to be excluded, should be coded as missing), variable type ( numeric variables should not include strings i.e. <5 ).
+"Validated" refers to a range of expects including: consistency (male participants should not reported menstrual cramps in PHQ15), validity (poor quality tests sometimes needed to be excluded, should be coded as missing, data out of range should not be included), variable type (numeric variables should not include strings i.e. <5 ), uniformity (using the same (unit of measure)
 
-More often your final "cleaned" data will change over time for most of larger studies due to issues identified when the study evolves, i.e. additional errors identified, more data collected etc. Hence you will need to create a version control system to capture these changes. A common practice is to store the "cleaned" versions of data with a time stamp, i.e.  "A_brilliant_study_cleaned_V1_03032012.rds". It will also be a good practice to write a data processing document to list all the decisions, changes and associated locations where datasets are stored. 
+It will be better to store related variables closer in the dataset so it is easier check. Sometimes variable naming can be problematic and confusing. For example, when individual items in K10 is named as K1, K2... K10, then the last item name is overlapping with the general understanding of K10, which represents the summary score of K10. 
 
-## Tidy-version data cleaning routine 
+Categorical variables are sometimes stored as numeric variables (1,2,3,999), which would need to be labeled as factor variables. Sometimes there is a "other" category which affiliate with a free-text field. Often what was entered will need to be re-evaluated and code back to existing categories. Categorical variables from source data are often includes much more detailed categories than needed for analysis. It's better to create consistent categorisations. For example, gender identity sometime can be collected as male, female, transgender, gender neutral, agender, pangender, genderqueer etc. Most of these categories would include very small numbers that cannot be use in the analysis. Then it will be a good practice to generate another shorter version of the gender identity variable in the cleaned data (i.e. male, female and non-binary). Then this variable can be used consistently across different analysis. 
 
+In psychology, lots of measures were conducted using instruments with multiple items. Hence derived variables (i.e. total scores, weighted scores) will need to be generated in the cleaned data. 
+
+The "format of the data" refers to the format of data required for different types of analysis,  i.e. cross-sectional analysis requires wide version of data (one row per person); longitudinal analysis requires long version of data (multiple rows per person with each row representing one observation with unique identifiers for each person or a  higher level of clustering group); survival analysis requires censored data (one or multiple rows per person depending on whether evaluating single outcome or recurrent outcomes with time scale and censoring status defined) . Sometimes you will need to have both the wide and long version of cleaned data stored.   
+
+More often your final "cleaned" data will change over time for most of larger studies due to issues identified when the study evolves, i.e. additional errors identified, more data collected etc. Hence you will need to create a version control system to capture these changes. A common practice is to store the "cleaned" versions of data with a time stamp, i.e.  "A_brilliant_study_cleaned_V1_03032012.rds". 
+
+
+## Tidyverse data cleaning routine 
+
+The data cleaning code pre Hadley Wickham era normally look like this: 
+
+```{r,, eval=FALSE}
+data$group <- as.factor(data$group)
+data$time <- as.factor(data$time)
+data$gender <- as.factor(data$gender)
+data$work_status <- as.factor(data$work_status)
+data$diagnosis <- as.factor(data$diagnosis)
+data$therapy <- as.factor(data$therapy)
+```
+
+The operation this chunk of code was trying to achieve was simply converting a few variables from string to factor.  When there are only a few variables to edit, this type of code is still readable. As the number of variables increase and number of operations increase, you code will soon be too hard to read and amend. Hadley introduced a game changing new philosophy: **tidyverse**. In this new philosophy defines not only what the tidy data should look like, but also what tidy code should look like. Using tidyverse grammar (using *dplyr* package), the above data cleaning code became:  
+
+```{r, eval=FALSE}
+data1 <- data %>% 
+  mutate_at(vars(group,time, gender, work_status, diagnosis, therapy),
+            as.factor)
+```
+
+How to read this is simple, I am manipulating 6 variables (changing them to factor variables) in the *data* dataset and store the new dataset in *data1*. The code is now much more concise and readable. The beauty of this new style also lie on the use of pipe operation %>% in building a series of operations on the same dataset. 
+
+```{r, eval=FALSE}
+data1 <- data %>% 
+  mutate_at(vars(group,time, gender, work_status, diagnosis, therapy),
+            as.factor) %>% 
+  mutate_at(vars(starts_with('k10_q')), as.numeric) %>% 
+  mutate(k10_total=rowSums(select(.,k10_q1:k10_q10)))
+```
+
+The above code change 6 variables to factor variables, change individual K10 items to numeric and then calculate total scores of K10 as the sum of items from k10_q1 to k10_q10.
+
+There are a range of useful functions in dplyr such as, group_by(), filter(), select(), summarize()... The detailed introduction on *dplyr* can be found in [Chapter 4 of Introduction to Data Science] (https://rafalab.github.io/dsbook/tidyverse.html) by Hadley and [*dplyr* cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf) If you are still using the traditional "hard" coding style, it is time to upgrade! 
+
+```{r , echo=FALSE,fig.align="center",out.width="70%"}
+knitr::include_graphics(here::here("Graphics/dplyr_schema.png"))
+```
+source: http://perso.ens-lyon.fr/lise.vaudor/dplyr/
+
+\vspace{0.2 cm} 
+
+## Re-shaping the data 
+
+It is common to have to work with both wide(or wider) and long(or longer) format of the data during your data cleaning process. You are also frequently required to change data between these two types, see example of reshaping using *gather()* and *spread()* from *tidyr* package below: 
+
+```{r , echo=FALSE,fig.align="center",out.width="100%"}
+knitr::include_graphics(here::here("Graphics/gather_spread.png"))
+```
+source: https://dannytabach.com/connecting-r-and-google-sheets.html
+
+\vspace{0.2 cm} 
+
+
+You can also use the [*reshape*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/reshape) function from *stats* package which can work with multiple columns.  Two new functions in *tidyr* can also work with mutiple columns and rows 
+
+```{r , echo=FALSE,fig.align="center",out.width="100%"}
+knitr::include_graphics(here::here("Graphics/pivot_wider_R.png"))
+knitr::include_graphics(here::here("Graphics/pivot_longer_R.png"))
+```
+source: https://ab604.github.io/docs/coding-together-2019/data-wrangle-2.html
+
+\vspace{0.2 cm} 
+
+## Other useful packages 
+
+String operation package [*stringr*](https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html)
+
+```{r , echo=FALSE,fig.align="center",out.width="100%"}
+knitr::include_graphics(here::here("Graphics/stringr.png"))
+```
+\vspace{0.2 cm} 
+
+
+Package working with date and time variables [*lubridate*](https://cran.r-project.org/web/packages/lubridate/lubridate.pdf).
+
+Apply family, see tutiral [here](https://www.datacamp.com/community/tutorials/r-tutorial-apply-family)
+```{r}
+apply(iris,2,table)
+```
+
+[*purrr*](https://purrr.tidyverse.org/index.html) for functional programming 
+
+```{r , echo=FALSE,fig.align="center",out.width="80%"}
+knitr::include_graphics(here::here("Graphics/purrr.jpg"))
+```
+Source: [*purrr* tutorial by Rebecca Barter](http://www.rebeccabarter.com/blog/2019-08-19_purrr/)
+
+
+\vspace{0.2 cm} 
 
 ## Notes for yourself and others
 
-## Validity checking 
+There is a famous quote about writing programming code
+
+*"When I wrote this code, only God and I understood what it did. Now only God knows"* 
+
+The quote was originally from *The Barretts of Wimpole Street* when Robert Browning was trying to work out what he meant in a poem. However it is the reality for a vast majority of programmers, data scientists and statisticians. 
+
+I have developed a respiratory infection transmission model during my PhD time as an early R user. It was only published in my PhD thesis not in scientific publications due to lack of interest in airborne disease transmission. Then COVID happened, and we thought it will be important to publish this work in a reproducible format. However, my code back then was so terrible that it took me half a year to figure out what I did in 3 months. I had excuses back then, i.e. stress to finish the work on time, difficulties in including equations in code comments... Now my code is slightly better with my following rules:
+
+* Always use R markdown (or R notebook) file for data cleaning
+* Document decisions in text field of the R markdown file 
+* Include specific code comments alongside the code
+
+The modern version of my data cleaning code looks like this: 
+
+
+Calculate total scores and obtain OASIS categories using cut-off value of >=8 following Moore et al 2015. 
+```{r,, eval=FALSE}
+OASIS <- OASIS %>% 
+    # calculate total score
+    mutate(oasis_total = rowSums(select(.,OASISq1:OASISq5))) %>% 
+    # define groups
+    mutate(oasis_total_group = cut(oasis_total, breaks = c(-1,7,Inf), 
+                                 labels = c("Absence of anxiety disorder ",
+                                            "Presence of anxiety disorder"))) %>% 
+    # remove useless columns 
+    select(- c(AxDate, status))  %>% 
+    # rename variables for consistency
+    setnames( old=paste0("OASISq",1:5), new=paste0("oasis_q",1:5)) 
+
+# check
+table(OASIS$oasis_total,OASIS$oasis_total_group,exclude = NULL ) 
+```
+
+## Code checking 
+
+It's important to cross check you data cleaning code. The common self-checking points are 
+
+
+* When a new variable is generated based on old variable, check whether it is correct via cross-tabulate it with the original variable. 
+* When performing merging datasets, always check if you have correctly matched records, weather the total number of rows is correct 
+* When calculate total scores, choose to eyeball a few records to see if it is correct.
+* Cross check you final data with raw data (look at the Hmisc::describe() of the raw data and the updated data side by side)
+* When change the data between long and wide data type, manually check if the number of rows are as expected (i.e. 1000 participants completed baseline survey and 500 completed follow-up, the long data should have 1500 rows). 
+* Whether nested variables are coded correctly. If you have a drinking quantity variable which was only asked when people reported drinking. Then you should code the quantity as 0 if they did not drink (unless you have a good reason not to). This is because sometimes you might accidentally exclude observations if these nested variables were coded as missing. Also if you use multiple imputation, coding them to missing (intentionally missing) will also cause problems.
+
 
 ## Common pitfalls 
 
+### Missing value 
+
+Missing values are coded as *NA* in R data. See instructions on dealing with R missing values [here](https://uc-r.github.io/missing_values) and [here](https://stats.idre.ucla.edu/r/faq/how-does-r-handle-missing-values/) When tabulate data always use *exclude=NULL*, or you can use tidyverse style function *tabyl* from *janitor* package which can also store cross-tabulate results in a data frame.
+
+```{r}
+data <- tibble(a = c(1,2,3,4), b = c(4,NA,5,6), c = c(7,8,9,NA))
+table(data$a,data$b, exclude = NULL)
+
+
+library(janitor)
+data %>% 
+  tabyl(a,b)
+
+```
+
+When using rowSums and rowMeans functions, you have to be mindfull of missing data, see following example.
+
+```{r}
+
+data %>%
+     mutate(sum = rowSums(., na.rm=FALSE),
+            mean = rowMeans(., na.rm=FALSE))
+
+data %>%
+     mutate(sum = rowSums(., na.rm=TRUE),
+            mean = rowMeans(., na.rm=TRUE))
+```
+### Duplication
+
+Sometimes there are duplicated records in the database or being created in the data pre-processing stage. This is perticularly problematic when you are working with large datasets from secondary source. You have to be mindful to keep track of number of observations through out the data cleaning code.  
+
+
+### The trap of white space
+
+R string fields sometimes include leading and trailing white spaces, which you cannot see when *View()* the data. However, this will cause issues when you are trying to categories data or merging the data, see following example  
+
+```{r}
+data1 <- tibble(key = c("a","b","c ","d"), number_1 = c(1,2,3,4))
+data2 <- tibble(key = c("a","b", "c"), number_2 = c(5,6,7))
+data1 %>% 
+  left_join(data2)
+
+```
+The *str_trim* function removes the leading and trailing white space, which will make sure the data can be joined correctly. 
+
+```{r}
+  
+data1 %>% 
+  mutate(key = str_trim(key)) %>% 
+  left_join(data2)
+
+```
+### Be mindfull of which function you are calling 
+
+One of the issue with R is that a few functions can have the same name. Here are the list of conflicts in my attached libraries. 
+
+```{r}
+library(conflicted)
+conflict_scout()
+```
+
+R’s default conflict resolution system gives precedence to the most recently loaded package. So when calling the functions, it will be better to refer to the package name ( *dplyr::summarize()* vs *Hmisc::summarize()*). 
+
+
+### Type stability 
+
+This is referred as the ["WAT" moment with R programming](https://rstudio.com/resources/rstudioconf-2019/vctrs-tools-for-making-size-and-type-consistent-functions/)
+
+```{r}
+# combining factors makes integers
+c(factor("a"), factor("b"))
+#> [1] 1 1
+ 
+# combing dates and date-times give incorrect values
+dt <- as.Date("2020-01-1")
+dttm <- as.POSIXct("2020-02-01 09:00", tz = "America/New_York")
+c(dt,dttm)
+c(dttm,dt)
+```
+
+```{r , echo=FALSE,fig.align="left",out.width="50%"}
+knitr::include_graphics(here::here("Graphics/what.png"))
+```
+Be careful with R's automatic coercion. 
+
 ## Documentation for the never ending data cleaning process 
 
-# Analysis 
+Documentation is the key to good data quality. Historically, studies are small and isolated. Once data cleaning is completed (mostly via eyeballing), you will conduct the analysis and the data files (on paper) will be sealed in a draw and no one will be looking at them. Nowadays, we often work with large and evolving datasets, i.e. longitudinal, administrative and registry data. Hence it is important to keep a good documentation that surmise important decisions, data errors identified, changes in data cleaning process, version history, and associated locations where datasets and historical data cleaning files are stored. I often use a separate word document to keep track of these issues. When there are multiple users using the "cleaned" data, it is also important to keep a data dictionary of the cleaned data, in which you note down, the time of the variable introduced to the dataset, any changes in coding and cleaning to the variable as well as other important notice that you would like your users to know. 
 
-## Exploratory phase 
+## Final remarks 
+
+There are a few additional key points need to be noted for data pre-processing : 
+
+* Backup files ( backup original data, intermediate "cleaned" versions of the data and cleaning files) frequently in reliable place(s) so you can uncover historical issues easily. You can zip the files to prevent people accidentally changing the files or store the backup files in locations with limited and authorised access. 
+* Establish a code auditing work flow. If possible, have all the code and final data reviewed by a second person. 
+
+# Statistical analysis with R
+
+R has over 20K indexed packages,  over 3M indexed functions and over 3m users worldwide. So R has explosive level of capacity and flexibility as well as a tremendous workforce. R is now equipped with all or most of functionalities of many other statistical/ML packages: Stata, SPSS, SAS, Mplus... ( Python is still irreplaceable in deep mining). 
+
+```{r , echo=FALSE,fig.align="center",out.width="70%"}
+knitr::include_graphics(here::here("Graphics/top_packages.png"))
+```
+Source: https://www.rdocumentation.org/trends
+
+\vspace{0.2 cm} 
+
+A few common analysis and packages are listed here 
+
+```{r,echo=FALSE}
+tabl <- "
+Linear regression |  stats::lm 
+Generlised linear regression | stats::glm 
+Generalized additive model | mgcv::gam 
+ARIMA (time series) | forecast::arima  
+Cox proportional hazards (survival analysis)  | survival::coxph 
+Linear mixed effect | lme4::lmer  
+Generalised linear mixed effect  | lme4::glmer  
+CFA/SEM | lavaan::cfa, lavaan::sem 
+Meta-regression | metafor::rma , meta::metareg 
+Clustering  | stats::hclust, stats::kmeans, cluster::pam 
+Principal component analysis  | stats::princomp 
+
+"
+df <- read.delim2(textConnection(tabl), header = FALSE,sep = "|" , strip.white = TRUE, stringsAsFactors = FALSE )
+names(df) <- c("Analysis", "Function and package")
+knitr::kable( df, linesep = "", booktabs = T) %>% 
+  column_spec(1, width =  "10 cm") %>% 
+  column_spec(2, width =  "6 cm") 
+```
+
+One of the best books for learning statistical methods using R is [An Introduction to Statistical Learning](https://www.statlearning.com/) by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani. The advanced version of this book is [The Elements of
+Statistical Learning](https://web.stanford.edu/~hastie/ElemStatLearn/) by Trevor Hastie, Robert Tibshirani and Jerome Friedman. However, both of the books are from more machine learning (ML) perspectives. A similar free book for psychology students is [Advanced Statistics Using R](https://advstats.psychstat.org/book/ZhangWang2017.pdf) by Zhiyong Zhang and Lijuan Wang. 
+[Discovering Statistics Using R](https://www.discoveringstatistics.com/books/discovering-statistics-using-r/) by Andy Field is also one of the best R statistical handbooks.  There are many content specific books that are quite interesting and useful: 
+
+* [An Introduction to Generalized Linear Models](https://www.amazon.com.au/Introduction-Generalized-Linear-Models-Third/dp/1584889500) by by Annette J. Dobson, Adrian G. Barnett. R code were given in some examples 
+* [Forecasting: Principles and Practice](https://otexts.com/fpp2/) by Rob J Hyndman and George Athanasopoulos for time-series analysis 
+* [Applied Survival Analysis Using R](https://www.amazon.com.au/Applied-Survival-Analysis-Using-Use-ebook/dp/B01FKDTW3W) by Dirk F. Moore 
+* [Statistical Rethinking A Bayesian Course with Examples in R and Stan](https://xcelab.net/rm/statistical-rethinking/) by Richard McElreath. Associated lectures can be found [here](https://github.com/rmcelreath/statrethinking_winter2019)
+* [Geocomputation with R](https://geocompr.robinlovelace.net/) by Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+* [Modern Psychometrics with R](https://link.springer.com/book/10.1007%2F978-3-319-93177-7) by Patrick Mair
+* [Multilevel Modeling Using R](https://www.taylorfrancis.com/books/multilevel-modeling-using-holmes-finch-jocelyn-bolin-ken-kelley/10.1201/b17096) by W. Holmes Finch, Jocelyn E. Bolin, Ken Kelley
+
+## Exploratory data analysis (EDA)
+
+Once your data is cleaned, you will normally start with the "exploratory" analysis phase. The "exploratory" here refers to evaluating variable properties, such as distribution, bivariate association and dimensionality, rather than explore "significant" results. More often exploratory results, such as distributions, will also need to be included in your report/thesis/paper. This process provides you with general ideas about your dataset, clues on appropriateness of models (Poisson regression vs negative binomial regression), check outliers, identify any inconsistencies with your understanding (I call this debugging your data). 
+
+[Exploratory Data Analysis with R](https://leanpub.com/exdata?utm_source=Homepage&utm_medium=PersonalWebsite&utm_campaign=Personal%20Website) by Roger Peng includes lots of useful examples.  The Chapter 7 of [R for Data Science](https://r4ds.had.co.nz/exploratory-data-analysis.html) also includes a nice intro to EDA. Importantly, you should not use EDA to generate research questions. Your research questions should be pre-defined and your analysis will need to be planed ahead. EDA can help you refine models, but you should **not** look too hard in to it, which might turn your years of work into another piece of "fished" or "hacked" results out of null-association (winner's curse). See a few interesting publications here:  [The Extent and Consequences of P-Hacking in Science](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002106) and [The garden of forking paths: Why multiple comparisons can be a problem,
+even when there is no “fishing expedition” or “p-hacking” and the research
+hypothesis was posited ahead of time](http://stat.columbia.edu/~gelman/research/unpublished/forking.pdf).
 
 ## Statistical modeling with R 
 
-## Extract results
+### Table 1
+
+Simple descriptive table, normally referred as the "Table 1", is where your data story start. In this table you will need to provide enough information about the data that was used in then analyses so your readers can have a over view of it's profiles. For most of health analysis, your reporting unit is participants and you would generally be required to report demographics characteristics and risk factors in this table. R has lots of existing packages that automatic generate table 1.  [*tableby*](https://www.rdocumentation.org/packages/arsenal/versions/3.5.0/topics/tableby) from  *arsenal* is very easy to use when you directly display your results. However, it is difficult to be extracted to tibble/data frame for further manipulations.   
+
+
+```{r,results='asis'}
+library(arsenal)
+my_controls <- tableby.control(
+  test = T,
+  total = F,
+  digits=1,
+  digits.pct=1,
+  digits.p=3,
+  numeric.test = "anova", cat.test = "chisq",
+  numeric.stats = c("meansd", "medianq1q3", "range", "Nmiss2"),
+  cat.stats = c("countpct", "Nmiss2"),
+  stats.labels = list(
+    meansd = "Mean (SD)",
+    medianq1q3 = "Median (Q1, Q3)",
+    range = "Min - Max",
+    Nmiss2 = "Missing"
+  )
+)
+table<- tableby( Species ~ Sepal.Length+ Sepal.Width+ Petal.Length + Petal.Width ,
+  data = iris,
+  control = my_controls
+)
+ 
+summary(table,
+  title = "Characteristics by species in iris data"
+)
+```
+
+Another useful Table 1 function is [*tbl_summary*](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) from *gtsummary* , which you can extract results as tibble.  
+
+```{r,results='asis'}
+library(gtsummary)
+tbl <- 
+    iris %>%
+    tbl_summary(
+        missing = "ifany",
+        statistic = where(is.numeric) ~ "{mean} ({sd})",
+        by= Species
+    ) %>%
+    bold_labels() %>%
+    add_p(test=list(all_numeric() ~ "aov"),
+          pvalue_fun = ~style_pvalue(.x, digits = 3))
+
+#printing results in Latex
+as_gt(tbl) %>% gt::as_latex()
+```
+
+*gtsummary* object can be extracted as tibble and further edited.
+
+```{r,results='asis'}
+tbl <- tbl %>% 
+    as_tibble() 
+
+#remove style
+names(tbl)<-str_replace_all(names(tbl),"\\**","")
+indent<-which(str_count(tbl$Characteristic,"__")==0)
+tbl$Characteristic<-str_replace_all(tbl$Characteristic,"__","")
+
+#change first row 
+tbl$Characteristic<-str_remove(tbl$Characteristic,"Sepal.")
+tbl$Characteristic<-str_remove(tbl$Characteristic,"Petal.")
+tbl<-tbl %>% 
+  add_row(Characteristic="Sepal",.before=1) %>% 
+  add_row(Characteristic="Petal",.before=4) 
+
+options(knitr.kable.NA = '')
+knitr::kable( tbl, booktabs = TRUE,linesep = "") %>% 
+    kable_styling(bootstrap_options = "striped") %>% 
+    add_indent(c(2,3,5,6))
+```
+
+### Extract results
+
+Although R can print analysis results, it often will not present results that can be directly reportable. You often required to programe your own code to store and process results and then assemble proper tables and figures. Luckily there are many third party packages available to extract results from common models. [*sjPlot*](https://cran.r-project.org/web/packages/sjPlot/sjPlot.pdf) is a useful package than can process many common model results. 
+
+
+```{r}
+library(sjPlot)
+mod1 <- lm(Petal.Length ~ Species, data=iris)
+mod2 <- lm(Petal.Length ~ Species + Petal.Width, data=iris)
+mod3 <- lm(Petal.Length ~ Species + Petal.Width + Species:Petal.Width, data=iris)
+```
+
+```{r, eval=FALSE}
+tab_model(mod1, mod2, mod3,file = "temp.html")
+```
+
+
+```{r , echo=FALSE,fig.align="center",out.width="100%"}
+knitr::include_graphics(here::here("Graphics/tab_model.png"))
+```
+Currently *tab_model* only support html output, which hopefully can be extended to latex in the future. *plot_model* from *jsplot* can be use to plot marginal effects of interaction models. More examples can be found [here](https://cran.r-project.org/web/packages/sjPlot/vignettes/plot_marginal_effects.html). 
+ 
+```{r,fig.width=8,fig.height=4}
+plot_model(mod3, type = "pred", terms = c( "Petal.Width", "Species")) +
+  theme_bw()
+```
+ 
 
 ## Advanced topics
 
@@ -530,6 +941,9 @@ More often your final "cleaned" data will change over time for most of larger st
 ### Functions 
 
 ### Render anlaysis results from different dataset with the same rmarkdown file
+
+# Data visulisation 
+
 
 
 # Reporting 
