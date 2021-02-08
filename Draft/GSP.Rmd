@@ -417,9 +417,9 @@ data.frame(dta)
 
 If you are using large datasets, you can also use [data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html). The coding style follows SQL. Although it takes some time to learn the coding style, it is generally over 10 times faster than operating with data.frame. I never had to move to data.table because most of my time consuming code/functions require data.frame as input : P 
 
-## Naming you variables properly!!!!!!!!
+## Name you variables properly!!!!!!!!
 
-Everytime when I saw variable names which look like "X1", "V2", "12345", "WWF111", "GGG222", "Don't use", "?", "Gender", "Gender1", "Gender2", "Gender3", "Gsp11229371",  "never_ending_name_but_do_not_know_what_it_means", or "theyusenamesthatjustruntogetherwithnocapitalsorunderscores"... I would turn into [Jeff Atwood](https://blog.codinghorror.com/). 
+Every time when I saw variable names such as "X1", "V2", "12345", "WWF111", "GGG222", "Don't use", "?", "Gender", "Gender1", "Gender2", "Gender3", "Gsp11229371",  "never_ending_name_but_do_not_know_what_it_means", or "theyusenamesthatjustruntogetherwithnocapitalsorunderscores", I would turn into [Jeff Atwood](https://blog.codinghorror.com/). 
 
 ```{r , echo=FALSE,fig.align="left",out.width="30%"}
 knitr::include_graphics(here::here("Graphics/coding.gif"))
@@ -922,13 +922,16 @@ mod1 <- lm(Petal.Length ~ Species + Sepal.Width*Sepal.Length, data=iris)
 summary(mod1)
 ```
 
-"Sepal.Width*Sepal.Length" is the interaction term. Most of regression models are easy to fit. The following lists are some of known issues for common models (some are not specific to R): 
+"Sepal.Width*Sepal.Length" is the interaction term. Most of regression models are easy to fit. The following lists are some of known issues and concerns for common models (some are not specific to R): 
 
 * Some GLMs, particularly Relative Risk regression also known as log-binomial regression (GLM with log link and binomial distribution model), have convergence problem [@Williamson_2013]. This is relate to parameter constraints at boundaries. For log-binomial regression, a package [*logbin*](https://cran.r-project.org/web/packages/logbin/logbin.pdf) was developed with advance convergence ability (use combinatorial EM to cycles through parameter space). For other GLMs, Bayesian models (i.e. using [*brms*](https://cran.r-project.org/web/packages/brms/vignettes/brms_overview.pdf)) can be used to overcome some of the convergence problems.
 * Linear mixed effect models sometimes have convergence issues too. You can test performance of different optimizers, see example [here](http://svmiller.com/blog/2018/06/mixed-effects-models-optimizer-checks/). 
 * Multinomial logistic regression model [*nnet::multinom*](nnet::multinom) requires predictors to be roughly scaled to [0,1] or the fit will be slow or may not converge at all. Normally this is fine, however when you have some large values (i.e. IRSAD scores which is around 1000), the model will stop working. Hence it will be better to standardise those predictors.
 * Sometimes there will be an error message "Error: no valid set of coefficients has been found: please supply starting values", this means the model is having trouble to initialize the optimization and require you to supply a set of starting values for intercept and predictors. I normally run a model with reduced number of predictors and use the coefs from the reduced model as starting values. 
+* Set seed for models require random sampling, i.e. bootstrap. 
+* It will be better to use splines (i.e. [*ns*](https://www.rdocumentation.org/packages/splines/versions/3.6.2/topics/ns)) instead of square and cube terms to evaluate non-linear associations, see a review by @Perperoglou_2019.
 * Different package will not necessary produce identical results, but they should generally agree with each other.  If not something is wrong: either a bug in your code or in the existing code libraries.
+
 
 
 
