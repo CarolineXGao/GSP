@@ -5,7 +5,7 @@ author:
   familyname: Gao
   othernames: Caroline X.
   address: "None"
-date: "[1] Centre for Youth Mental Health, University of Melbourne \\newline [2] School of Public Health and Preventive Medicine, Monash University \\newline [3] Orygen, Austrlia"
+date: "a " 
 output:
    bookdown::pdf_document2:
      toc: yes
@@ -988,7 +988,7 @@ cor.test(a,b)
 (3) Include reference values. *tab_model* is currently having trouble to print out reference values. It is also difficult to configure custom settings and print LaTex table. The function below prints out linear regression model results and can be configured for different types of models and output requiements. 
 
 ```{r}
-regre_table <- function(model,dta){
+reg_table <- function(model,dta){
   # Summarise coef 
   Coef <- data.frame(coefficients(summary(model))) %>%
     mutate(Variables  = rownames(.)) %>% 
@@ -1070,7 +1070,7 @@ Hmisc::label(iris$Sepal.Length) <- "Sepal length"
 iris$Sepal.Length.Width <- iris$Sepal.Width*iris$Sepal.Length
 Hmisc::label(iris$Sepal.Length.Width) <- "Sepal length * width"
 mod <- lm(Petal.Width ~ Species + Petal.Length +Sepal.Width +Sepal.Length +Sepal.Length.Width , data = iris)
-regre_table(mod,iris)
+reg_table(mod,iris)
 ```
 
 
@@ -1085,6 +1085,8 @@ Source:https://www.sciencedirect.com/science/article/pii/S0160412020321966#f0015
 ## Advanced topics
 
 ### Loops
+
+
 
 ### Functions 
 
