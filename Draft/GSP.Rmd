@@ -5,7 +5,7 @@ author:
   familyname: Gao
   othernames: Caroline X.
   address: "None"
-date: "a " 
+date: "[1] Centre for Youth Mental Health, University of Melbourne \\newline [2] School of Public Health and Preventive Medicine, Monash University \\newline [3] Orygen, Austrlia"
 output:
    bookdown::pdf_document2:
      toc: yes
@@ -387,22 +387,24 @@ A range of names were used to refer to the pre-processing stage of your data ana
 
 ## Importing data to R 
 
-R can import different types of source data (csv, excel, SPSS, Stata, SAS. SQL...). See the comprehensive guide [here](https://cran.r-project.org/doc/manuals/r-release/R-data.html). There are three packages frequently used for processing common external data: [foreign](https://cran.r-project.org/web/packages/foreign/foreign.pdf) , [haven](https://cran.r-project.org/web/packages/haven/haven.pdf), [Hmisc](https://cran.r-project.org/web/packages/Hmisc/Hmisc.pdf). *foreign* includes most of the importing and exporting functions, however *spss.get* from *Hmisc* provides additional enhanced features including applying proper labels, compress data etc. *haven* is also easy to work with which allows you to use the numeric values instead of directly import as factor variables.  
+R can import different types of source data (csv, excel, SPSS, Stata, SAS. SQL...). See the comprehensive guide [here](https://cran.r-project.org/doc/manuals/r-release/R-data.html). There are three packages frequently used for processing common external data: [foreign](https://cran.r-project.org/web/packages/foreign/foreign.pdf) , [haven](https://cran.r-project.org/web/packages/haven/haven.pdf), [Hmisc](https://cran.r-project.org/web/packages/Hmisc/Hmisc.pdf). *foreign* includes most of the importing and exporting functions, however *spss.get* from *Hmisc* provides additional enhanced features including applying proper labels, compress data etc. *haven* is also easy to work with which allows you to use the numeric values instead of directly import as factor variables.
+
+When working with spss, haven::read_sav() seems to be the most robust and convenient function. It rarely has any problems and is generally fast enough; it is also part of the *tidyverse*, which allows you to %m% individual functions together. 
 
 ```{r}
-dta <- haven::read_sav(here::here("Data","testdata.sav")) 
+dta <- haven::read_sav(here::here("Data", "testdata.sav"))
 dta
-dta<-as_factor(dta)
+dta <- as_factor(dta)
 dta
 ```
 
 
 ```{r}
-dta <- foreign::read.spss(here::here("Data","testdata.sav"),to.data.frame=TRUE) 
+dta <- foreign::read.spss(here::here("Data", "testdata.sav"), to.data.frame = TRUE)
 head(dta)
 ```
 ```{r}
-dta<-Hmisc::spss.get(here::here("Data","testdata.sav"), datevars=c("date")) 
+dta <- Hmisc::spss.get(here::here("Data", "testdata.sav"), datevars = c("date"))
 dta
 ```
 
@@ -434,11 +436,11 @@ TWO_WORDS	| 	screaming snake case
 two_Words	| 	camel snake case
 Two_Words	| 	pascal snake_case
 "
-df <- read.delim2(textConnection(tabl), header = FALSE,sep = "|" , strip.white = TRUE, stringsAsFactors = FALSE )
+df <- read.delim2(textConnection(tabl), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
 names(df) <- c("Analysis", "Function and package")
-knitr::kable( df, linesep = "", booktabs = T) %>% 
-  column_spec(1, width =  "5 cm") %>% 
-  column_spec(2, width =  "8 cm") 
+knitr::kable(df, linesep = "", booktabs = T) %>%
+  column_spec(1, width = "5 cm") %>%
+  column_spec(2, width = "8 cm")
 ```
 Although snake case is mostly recommended, you can use any/all systems as long as you use them consistently. R allows you to use other special characters such as "." in variable names, but some other programming language may not allow you to do so (i.e. Stata do not allow "."). So stick with snake, camel or combined systems. 
 
@@ -463,7 +465,7 @@ R also allows you to store many datasets in to one [list](https://towardsdatasci
 ```{r,class.output = ".bordered"}
 data1 <- tibble(a = 1:4, b = 2:5)
 data2 <- tibble(c = 3:6, d = 4:7)
-ManyDatasets <- list(data1,data2)
+ManyDatasets <- list(data1, data2)
 ManyDatasets
 ```
 
@@ -489,14 +491,33 @@ Hmisc::describe(iris)
 ```
 \vspace{5mm} 
 
-*dfSummary* from *summarytools* is a new function being developed which provides more comprehensive evaluations including distributions, distinct values and missing data. 
+*dfSummary* from [*summarytools*](https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html) is a new function being developed which provides more comprehensive evaluations including distributions, distinct values and missing data. 
 
 ```{r, eval=FALSE }
 summarytools::view(summarytools::dfSummary(iris))
 ```
 
+
+
 ```{r , echo=FALSE,fig.align="center",out.width="100%"}
 knitr::include_graphics(here::here("Graphics/Summary.png"))
+```
+\vspace{0.2 cm} 
+
+
+*view_df* from  [*sjPlot*](https://strengejacke.github.io/sjPlot/) also provide data summary, but more related to labels and factor choices. 
+
+```{r,eval=FALSE}
+haven::read_sav(here::here("Data", "testdata.sav")) %>%
+  as_factor() %>%
+  sjPlot::view_df()
+```
+
+
+
+
+```{r , echo=FALSE,fig.align="center",out.width="100%"}
+knitr::include_graphics(here::here("Graphics/view_df.png"))
 ```
 \vspace{0.2 cm} 
 
@@ -504,14 +525,16 @@ You might also need to check multivariate associations briefly to check if there
 
 ```{r,fig.height=8,fig.width=9,message=FALSE, warning=FALSE}
 library("PerformanceAnalytics")
-PerformanceAnalytics::chart.Correlation(iris[1:4], histogram=TRUE, pch=19)
+PerformanceAnalytics::chart.Correlation(iris[1:4], 
+                                        histogram = TRUE, 
+                                        pch = 19)
 ```
 
 *ggpairs* is an interesting library I found recently, which provides comined multivariate plots.
 
 ```{r,fig.height=8,fig.width=9,message=FALSE, warning=FALSE}
 library(GGally)
-GGally::ggpairs(iris, aes(color = Species))+ theme_bw()
+GGally::ggpairs(iris, aes(color = Species)) + theme_bw()
 ```
 
 There are many other types of plots displaying multivariate associations, such as heatmaps, mosaic plots, flow diagrams etc. Interested readers can find more examples in [Data Visualization with R](https://rkabacoff.github.io/datavis/) by Rob Kabacoff.
@@ -563,11 +586,13 @@ data1 <- data %>%
 How to read this is simple, I am manipulating 6 variables (changing them to factor variables) in the *data* dataset and store the new dataset in *data1*. The code is now much more concise and readable. The beauty of this new style also lie on the use of pipe operation %>% in building a series of operations on the same dataset. 
 
 ```{r, eval=FALSE}
-data1 <- data %>% 
-  mutate_at(vars(group,time, gender, work_status, diagnosis, therapy),
-            as.factor) %>% 
-  mutate_at(vars(starts_with('k10_q')), as.numeric) %>% 
-  mutate(k10_total=rowSums(select(.,k10_q1:k10_q10)))
+data1 <- data %>%
+  mutate_at(
+    vars(group, time, gender, work_status, diagnosis, therapy),
+    as.factor
+  ) %>%
+  mutate_at(vars(starts_with("k10_q")), as.numeric) %>%
+  mutate(k10_total = rowSums(select(., k10_q1:k10_q10)))
 ```
 
 The above code change 6 variables to factor variables, change individual K10 items to numeric and then calculate total scores of K10 as the sum of items from k10_q1 to k10_q10.
@@ -638,7 +663,7 @@ There is a famous quote about writing programming code
 
 The quote was originally from *The Barretts of Wimpole Street* when Robert Browning was trying to work out what he meant in a poem. However it is the reality for a vast majority of programmers, data scientists and statisticians. 
 
-I have developed a respiratory infection transmission model during my PhD time as an early R user. It was only published in my PhD thesis not in scientific publications due to lack of interest in airborne disease transmission. Then COVID happened, and we thought it will be important to publish this work in a reproducible format. However, my code back then was so terrible that it took me half a year to figure out what I did in 3 months. I had excuses back then, i.e. stress to finish the work on time, difficulties in including equations in code comments... Now my code is slightly better with my following rules:
+I have developed a respiratory infection transmission model during my PhD time as an early R user. It was only published in my PhD thesis not in scientific publications due to lack of interest in airborne disease transmission. Then COVID19 happened, and we thought it will be important to publish this work in a reproducible format. However, my code at that time was so terrible that it took me half a year to figure out what I did in 3 months. I had excuses back then, i.e. stress to finish the work on time, difficulties in including equations in code comments... Now my code is slightly better with my following rules:
 
 * Always use R markdown (or R notebook) file for data cleaning
 * Document decisions in text field of the R markdown file 
@@ -649,25 +674,29 @@ The modern version of my data cleaning code looks like this:
 
 Calculate total scores and obtain OASIS categories using cut-off value of >=8 following Moore et al 2015. 
 ```{r,, eval=FALSE}
-OASIS <- OASIS %>% 
-    # calculate total score
-    mutate(oasis_total = rowSums(select(.,OASISq1:OASISq5))) %>% 
-    # define groups
-    mutate(oasis_total_group = cut(oasis_total, breaks = c(-1,7,Inf), 
-                                 labels = c("Absence of anxiety disorder ",
-                                            "Presence of anxiety disorder"))) %>% 
-    # remove useless columns 
-    select(- c(AxDate, status))  %>% 
-    # rename variables for consistency
-    setnames( old=paste0("OASISq",1:5), new=paste0("oasis_q",1:5)) 
+OASIS <- OASIS %>%
+  # calculate total score
+  mutate(oasis_total = rowSums(select(., OASISq1:OASISq5))) %>%
+  # define groups
+  mutate(oasis_total_group = cut(oasis_total,
+    breaks = c(-1, 7, Inf),
+    labels = c(
+      "Absence of anxiety disorder ",
+      "Presence of anxiety disorder"
+    )
+  )) %>%
+  # remove useless columns
+  select(-c(AxDate, status)) %>%
+  # rename variables for consistency
+  setnames(old = paste0("OASISq", 1:5), new = paste0("oasis_q", 1:5))
 
 # check
-table(OASIS$oasis_total,OASIS$oasis_total_group,exclude = NULL ) 
+table(OASIS$oasis_total, OASIS$oasis_total_group, exclude = NULL)
 ```
 
 ## Code checking 
 
-It's important to cross check you data cleaning code. The common self-checking points are 
+It's important to cross check you data cleaning code. The common self-checking points are listed below:
 
 
 * When a new variable is generated based on old variable, check whether it is correct via cross-tabulate it with the original variable. 
@@ -685,28 +714,32 @@ It's important to cross check you data cleaning code. The common self-checking p
 Missing values are coded as *NA* in R data. See instructions on dealing with R missing values [here](https://uc-r.github.io/missing_values) and [here](https://stats.idre.ucla.edu/r/faq/how-does-r-handle-missing-values/) When tabulate data always use *exclude=NULL*, or you can use tidyverse style function *tabyl* from *janitor* package which can also store cross-tabulate results in a data frame.
 
 ```{r}
-data <- tibble(a = c(1,2,3,4), b = c(4,NA,5,6), c = c(7,8,9,NA))
-table(data$a,data$b, exclude = NULL)
+data <- tibble(a = c(1, 2, 3, 4), b = c(4, NA, 5, 6), c = c(7, 8, 9, NA))
+table(data$a, data$b, exclude = NULL)
 
 
 library(janitor)
-data %>% 
-  tabyl(a,b)
+data %>%
+  tabyl(a, b)
 
 ```
 
 When using rowSums and rowMeans functions, you have to be mindfull of missing data, see following example.
 
 ```{r}
+data %>%
+  mutate(
+    sum = rowSums(., na.rm = FALSE),
+    mean = rowMeans(., na.rm = FALSE)
+  )
 
 data %>%
-     mutate(sum = rowSums(., na.rm=FALSE),
-            mean = rowMeans(., na.rm=FALSE))
-
-data %>%
-     mutate(sum = rowSums(., na.rm=TRUE),
-            mean = rowMeans(., na.rm=TRUE))
+  mutate(
+    sum = rowSums(., na.rm = TRUE),
+    mean = rowMeans(., na.rm = TRUE)
+  )
 ```
+
 ### Duplication
 
 Sometimes there are duplicated records in the database or being created in the data pre-processing stage. This is perticularly problematic when you are working with large datasets from secondary source. You have to be mindful to keep track of number of observations through out the data cleaning code.  
@@ -717,19 +750,19 @@ Sometimes there are duplicated records in the database or being created in the d
 R string fields sometimes include leading and trailing white spaces, which you cannot see when *View()* the data. However, this will cause issues when you are trying to categories data or merging the data, see following example  
 
 ```{r}
-data1 <- tibble(key = c("a","b","c ","d"), number_1 = c(1,2,3,4))
-data2 <- tibble(key = c("a","b", "c"), number_2 = c(5,6,7))
-data1 %>% 
+data1 <- tibble(key = c("a", "b", "c ", "d"), number_1 = c(1, 2, 3, 4))
+data2 <- tibble(key = c("a", "b", "c"), number_2 = c(5, 6, 7))
+data1 %>%
   left_join(data2)
 
 ```
 The *str_trim* function removes the leading and trailing white space, which will make sure the data can be joined correctly. 
 
 ```{r}
-  
-data1 %>% 
-  mutate(key = str_trim(key)) %>% 
-  left_join(data2)
+
+data1 %>%
+    mutate(key = str_trim(key)) %>%
+    left_join(data2)
 
 ```
 ### Be mindfull of which function you are calling 
@@ -751,19 +784,23 @@ This is referred as the ["WAT" moment with R programming](https://rstudio.com/re
 ```{r}
 # combining factors makes integers
 c(factor("a"), factor("b"))
-#> [1] 1 1
- 
+# > [1] 1 1
+
 # combing dates and date-times give incorrect values
 dt <- as.Date("2020-01-1")
 dttm <- as.POSIXct("2020-02-01 09:00", tz = "America/New_York")
-c(dt,dttm)
-c(dttm,dt)
+c(dt, dttm)
+c(dttm, dt)
 ```
 
 ```{r , echo=FALSE,fig.align="left",out.width="50%"}
 knitr::include_graphics(here::here("Graphics/what.png"))
 ```
 Be careful with R's automatic coercion. 
+
+## Data integrity checking
+
+Data integrity refers to the reliability and trustworthiness of data. There are many reasons that could cause data integrity issues, such as human errors in data entry, issues with data collection platform, and errors in data cleaning process. It's important to check the data validity and integrity before analysing the data.      
 
 ## Documentation for the never ending data cleaning process 
 
@@ -804,11 +841,11 @@ Clustering  | stats::hclust, stats::kmeans, cluster::pam
 Principal component analysis  | stats::princomp 
 
 "
-df <- read.delim2(textConnection(tabl), header = FALSE,sep = "|" , strip.white = TRUE, stringsAsFactors = FALSE )
+df <- read.delim2(textConnection(tabl), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
 names(df) <- c("Analysis", "Function and package")
-knitr::kable( df, linesep = "", booktabs = T) %>% 
-  column_spec(1, width =  "10 cm") %>% 
-  column_spec(2, width =  "6 cm") 
+knitr::kable(df, linesep = "", booktabs = T) %>%
+  column_spec(1, width = "10 cm") %>%
+  column_spec(2, width = "6 cm")
 ```
 
 One of the best books for learning statistical methods using R is [An Introduction to Statistical Learning](https://www.statlearning.com/) by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani. The advanced version of this book is [The Elements of
@@ -841,9 +878,9 @@ library(arsenal)
 my_controls <- tableby.control(
   test = T,
   total = F,
-  digits=1,
-  digits.pct=1,
-  digits.p=3,
+  digits = 1,
+  digits.pct = 1,
+  digits.p = 3,
   numeric.test = "anova", cat.test = "chisq",
   numeric.stats = c("meansd", "medianq1q3", "range", "Nmiss2"),
   cat.stats = c("countpct", "Nmiss2"),
@@ -854,11 +891,11 @@ my_controls <- tableby.control(
     Nmiss2 = "Missing"
   )
 )
-table<- tableby( Species ~ Sepal.Length+ Sepal.Width+ Petal.Length + Petal.Width ,
+table <- tableby(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
   data = iris,
   control = my_controls
 )
- 
+
 summary(table,
   title = "Characteristics by species in iris data"
 )
@@ -869,16 +906,18 @@ Another useful Table 1 function is [*tbl_summary*](http://www.danieldsjoberg.com
 
 ```{r,results="hide"}
 library(gtsummary)
-tbl <- 
-    iris %>%
-    tbl_summary(
-        missing = "ifany",
-        statistic = where(is.numeric) ~ "{mean} ({sd})",
-        by= Species
-    ) %>%
-    bold_labels() %>%
-    add_p(test=list(all_numeric() ~ "aov"),
-          pvalue_fun = ~style_pvalue(.x, digits = 3))
+tbl <-
+  iris %>%
+  tbl_summary(
+    missing = "ifany",
+    statistic = where(is.numeric) ~ "{mean} ({sd})",
+    by = Species
+  ) %>%
+  bold_labels() %>%
+  add_p(
+    test = list(all_numeric() ~ "aov"),
+    pvalue_fun = ~ style_pvalue(.x, digits = 3)
+  )
 
 tbl
 ```
@@ -891,25 +930,25 @@ as_gt(tbl) %>% gt::as_latex()
 *gtsummary* object can be extracted as tibble and further edited.
 
 ```{r,results='asis'}
-tbl <- tbl %>% 
-    as_tibble() 
+tbl <- tbl %>%
+  as_tibble()
 
-#remove style
-names(tbl)<-str_replace_all(names(tbl),"\\**","")
-indent<-which(str_count(tbl$Characteristic,"__")==0)
-tbl$Characteristic<-str_replace_all(tbl$Characteristic,"__","")
+# remove style
+names(tbl) <- str_replace_all(names(tbl), "\\**", "")
+indent <- which(str_count(tbl$Characteristic, "__") == 0)
+tbl$Characteristic <- str_replace_all(tbl$Characteristic, "__", "")
 
-#change first row 
-tbl$Characteristic<-str_remove(tbl$Characteristic,"Sepal.")
-tbl$Characteristic<-str_remove(tbl$Characteristic,"Petal.")
-tbl<-tbl %>% 
-  add_row(Characteristic="Sepal",.before=1) %>% 
-  add_row(Characteristic="Petal",.before=4) 
+# change first row
+tbl$Characteristic <- str_remove(tbl$Characteristic, "Sepal.")
+tbl$Characteristic <- str_remove(tbl$Characteristic, "Petal.")
+tbl <- tbl %>%
+  add_row(Characteristic = "Sepal", .before = 1) %>%
+  add_row(Characteristic = "Petal", .before = 4)
 
-options(knitr.kable.NA = '')
-knitr::kable( tbl, booktabs = TRUE,linesep = "") %>% 
-    kable_styling(bootstrap_options = "striped") %>% 
-    add_indent(c(2,3,5,6))
+options(knitr.kable.NA = "")
+knitr::kable(tbl, booktabs = TRUE, linesep = "") %>%
+  kable_styling(bootstrap_options = "striped") %>%
+  add_indent(c(2, 3, 5, 6))
 ```
 ## Regression models
 
@@ -918,7 +957,7 @@ Regression model follows very similar style of coding:
 function( y~ x1 + x2 + x3, data=data, additional specifications)
 
 ```{r}
-mod1 <- lm(Petal.Length ~ Species + Sepal.Width*Sepal.Length, data=iris)
+mod1 <- lm(Petal.Length ~ Species + Sepal.Width * Sepal.Length, data = iris)
 summary(mod1)
 ```
 
@@ -938,13 +977,14 @@ summary(mod1)
 
 ```{r,message=FALSE,warning=FALSE}
 library(logbin)
-iris$Versicolor = as.numeric(iris$Species == "versicolor")
-mod1 <- glm(Versicolor~ Sepal.Length ,
-            family = binomial(link = "log"), data = iris)
-mod2 <- logbin::logbin(formula(mod1), data = iris,method = "cem", trace = TRUE)
+iris$Versicolor <- as.numeric(iris$Species == "versicolor")
+mod1 <- glm(Versicolor ~ Sepal.Length,
+  family = binomial(link = "log"), data = iris
+)
+mod2 <- logbin::logbin(formula(mod1), data = iris, method = "cem", trace = TRUE)
 
-coefficients( summary(mod1))
-coefficients( summary(mod2))
+coefficients(summary(mod1))
+coefficients(summary(mod2))
 ```
 
 ## Extract results
@@ -954,9 +994,9 @@ Although R can print analysis results, it often will not present results that ca
 
 ```{r}
 library(sjPlot)
-mod1 <- lm(Petal.Length ~ Species , data=iris)
-mod2 <- lm(Petal.Length ~ Species + Petal.Width, data=iris)
-mod3 <- lm(Petal.Length ~ Species + Petal.Width + Species:Petal.Width, data=iris)
+mod1 <- lm(Petal.Length ~ Species, data = iris)
+mod2 <- lm(Petal.Length ~ Species + Petal.Width, data = iris)
+mod3 <- lm(Petal.Length ~ Species + Petal.Width + Species:Petal.Width, data = iris)
 ```
 
 ```{r, eval=FALSE}
@@ -988,76 +1028,82 @@ cor.test(a,b)
 (3) Include reference values. *tab_model* is currently having trouble to print out reference values. It is also difficult to configure custom settings and print LaTex table. The function below prints out linear regression model results and can be configured for different types of models and output requiements. 
 
 ```{r}
-reg_table <- function(model,dta){
-  # Summarise coef 
+reg_table <- function(model, dta) {
+  # Summarise coef
   Coef <- data.frame(coefficients(summary(model))) %>%
-    mutate(Variables  = rownames(.)) %>% 
-    as_tibble() %>% 
-    filter(Variables != "(Intercept)") %>% 
-    mutate(Coef = format(round(Estimate, digits = 2), nsmall = 2)) %>% 
-    mutate('95% CI' = paste0(format(round( Estimate - 1.96*`Std..Error` , digits = 2),nsmall = 2),", " ,
-                                 format(round( Estimate + 1.96*`Std..Error` , digits = 2),nsmall = 2))) %>% 
-    mutate('p-value' = `Pr...t..`) %>% 
-    mutate('p-value' = ifelse(`p-value` < 0.001, "<0.001",
-                                    ifelse(`p-value` < 0.05, format(round(`p-value`, digits = 3 ), nsmall = 3),
-                                           format(round(`p-value`, digits = 2 ), nsmall = 2)))) %>% 
-   select(Variables, Coef,`95% CI`,`p-value`)
-  
-  # categorical variables for left col 
-  if (length(model$xlevels) > 0){
-      levels <- reshape2::melt(model$xlevels)
-      levels <- levels %>% 
-        mutate(Variables = paste0(L1, value)) %>%  
-        group_by(L1) %>% 
-        mutate(level = seq(n())) 
-    } else{
-        levels <- data.frame(value = NA,  L1 = "" ,Variables = "", level = NA)
-    }
-  
-  #extract variable labels 
-  varlabels <- as.data.frame(Hmisc::label(dta[,attr(model$terms,"term.labels")])) 
+    mutate(Variables = rownames(.)) %>%
+    as_tibble() %>%
+    filter(Variables != "(Intercept)") %>%
+    mutate(Coef = format(round(Estimate, digits = 2), nsmall = 2)) %>%
+    mutate("95% CI" = paste0(
+      format(round(Estimate - 1.96 * `Std..Error`, digits = 2), nsmall = 2), ", ",
+      format(round(Estimate + 1.96 * `Std..Error`, digits = 2), nsmall = 2)
+    )) %>%
+    mutate("p-value" = `Pr...t..`) %>%
+    mutate("p-value" = ifelse(`p-value` < 0.001, "<0.001",
+      ifelse(`p-value` < 0.05, format(round(`p-value`, digits = 3), nsmall = 3),
+        format(round(`p-value`, digits = 2), nsmall = 2)
+      )
+    )) %>%
+    select(Variables, Coef, `95% CI`, `p-value`)
+
+  # categorical variables for left col
+  if (length(model$xlevels) > 0) {
+    levels <- reshape2::melt(model$xlevels)
+    levels <- levels %>%
+      mutate(Variables = paste0(L1, value)) %>%
+      group_by(L1) %>%
+      mutate(level = seq(n()))
+  } else {
+    levels <- data.frame(value = NA, L1 = "", Variables = "", level = NA)
+  }
+
+  # extract variable labels
+  varlabels <- as.data.frame(Hmisc::label(dta[, attr(model$terms, "term.labels")]))
   names(varlabels) <- "label"
   varlabels$L1 <- rownames(varlabels)
-  varlabels <- varlabels %>% 
+  varlabels <- varlabels %>%
     mutate(label = ifelse(is.na(label) | as.character(label) == "",
-                          L1, as.character(label))) %>% 
+      L1, as.character(label)
+    )) %>%
     mutate(listvar = seq(n()))
-  
-  #prepare first column  
-  tablelabel <- data.frame(Variables = names(model$coefficients)) %>% 
-    filter(Variables != "(Intercept)") %>% 
-    mutate(Variables = as.character(Variables)) %>% 
+
+  # prepare first column
+  tablelabel <- data.frame(Variables = names(model$coefficients)) %>%
+    filter(Variables != "(Intercept)") %>%
+    mutate(Variables = as.character(Variables)) %>%
     full_join(levels) %>%
-    mutate(L1 = ifelse(is.na(L1), as.character(Variables), as.character(L1))) %>% 
-    left_join(varlabels) %>% 
-    arrange(listvar,level) %>% 
-    dplyr::select(-listvar,-level, -L1) %>% 
-    group_by(label) %>% 
-    mutate(total = n(),order = seq(n())) %>% 
-    mutate(expend =ifelse(order == 1 & total > 1,2,1)) %>% 
-    uncount(expend) %>% 
-    mutate(order = seq(n())) %>% 
-    mutate(value =ifelse(is.na(value) | (total > 1 & order == 1), 
-                         as.character(label),as.character( value))) %>% 
-        mutate(Variables = ifelse(total > 1 & order == 1,NA,Variables)) %>% 
-        ungroup() %>% 
-        dplyr::select(Variables, value,total ) 
-    
-  #extract final table
-   finaltable <-tablelabel %>% 
-        full_join(Coef)  %>% 
-        mutate(Coef = ifelse(!is.na(Variables) & is.na(Coef), "Ref", Coef )) %>% 
-        replace(is.na(.), "")
-   # extract which row for indentation and top row name 
-   indent <- which(finaltable$Variables != "" & finaltable$total > 1)
-   
-   #print
-   print(finaltable %>% 
-      select(-Variables,-total) %>% 
-      rename(Predictors=value) %>% 
-      kable(align=c('l', rep('c', 3 )), booktabs = T, linesep = "") %>%
-        kable_styling(bootstrap_options = "striped",  full_width = F) %>% 
-        add_indent(indent)) 
+    mutate(L1 = ifelse(is.na(L1), as.character(Variables), as.character(L1))) %>%
+    left_join(varlabels) %>%
+    arrange(listvar, level) %>%
+    dplyr::select(-listvar, -level, -L1) %>%
+    group_by(label) %>%
+    mutate(total = n(), order = seq(n())) %>%
+    mutate(expend = ifelse(order == 1 & total > 1, 2, 1)) %>%
+    uncount(expend) %>%
+    mutate(order = seq(n())) %>%
+    mutate(value = ifelse(is.na(value) | (total > 1 & order == 1),
+      as.character(label), as.character(value)
+    )) %>%
+    mutate(Variables = ifelse(total > 1 & order == 1, NA, Variables)) %>%
+    ungroup() %>%
+    dplyr::select(Variables, value, total)
+
+  # extract final table
+  finaltable <- tablelabel %>%
+    full_join(Coef) %>%
+    mutate(Coef = ifelse(!is.na(Variables) & is.na(Coef), "Ref", Coef)) %>%
+    replace(is.na(.), "")
+  # extract which row for indentation and top row name
+  indent <- which(finaltable$Variables != "" & finaltable$total > 1)
+
+  # print
+  print(finaltable %>%
+    select(-Variables, -total) %>%
+    rename(Predictors = value) %>%
+    kable(align = c("l", rep("c", 3)), booktabs = T, linesep = "") %>%
+    kable_styling(bootstrap_options = "striped", full_width = F) %>%
+    add_indent(indent))
 }
 ```
 
@@ -1067,10 +1113,10 @@ reg_table <- function(model,dta){
 Hmisc::label(iris$Petal.Length) <- "Petal length"
 Hmisc::label(iris$Sepal.Width) <- "Sepal width"
 Hmisc::label(iris$Sepal.Length) <- "Sepal length"
-iris$Sepal.Length.Width <- iris$Sepal.Width*iris$Sepal.Length
+iris$Sepal.Length.Width <- iris$Sepal.Width * iris$Sepal.Length
 Hmisc::label(iris$Sepal.Length.Width) <- "Sepal length * width"
-mod <- lm(Petal.Width ~ Species + Petal.Length +Sepal.Width +Sepal.Length +Sepal.Length.Width , data = iris)
-reg_table(mod,iris)
+mod <- lm(Petal.Width ~ Species + Petal.Length + Sepal.Width + Sepal.Length + Sepal.Length.Width, data = iris)
+reg_table(mod, iris)
 ```
 
 
@@ -1084,23 +1130,101 @@ Source:https://www.sciencedirect.com/science/article/pii/S0160412020321966#f0015
 
 ## Advanced topics
 
-### Loops
+The benefit of using a full programming language instead of a statistical package for analysis is that you have unlimited potential to extend your analysis, i.e. develop new methods, web scraping, generate interactive graphics, establish website, draft full paper etc.  There are some basic skills that could facilitate these advanced techniques, which require some attention. 
 
+
+### Control flow 
+
+The control flow in R is similar to other programming languages including choices (i.e. if/else, switch) and loops (i.e. for loop).  The for loop will probably be one of your most frequently used control flow in analysis as we frequently need to repeat operations. You can loop over a vector or a list. 
+
+```{r}
+list <- list(2, 3)
+
+# loop version 1
+for (p in list) {
+  print(p)
+}
+
+for (i in 1:length(list)) {
+  print(list[[i]])
+}
+
+```
+One thing to notice is that comparing with vectorized operations, using loop will slow down your code. This is a more severe issue for Python compared with R, using R with simple operations you probably will not notice any differences. However, when your work envolve with samplping, simulation or large datasets, the reduction in speed can be substentiall. 
+
+
+```{r}
+system.time(print(apply(iris[1:4], 2, median)))
+system.time(for (i in 1:4) {
+  print(median(iris[, i]))
+})
+```
+
+This doesn't mean that you are not recommended to use loop. Actually compared with repetitively typing analysis code, using a function + loop is much more reliable and easy to maintain. A few rules to remember when using the loop are listed here:
+
+* Use vectorized operations as much as possible 
+* Always pre-define and fill the object and avoid grow the object (R automatically create copies of a object when you try to add undefined element(s), i.e. a new row). 
+* Avoid creating new objects within the loop. 
 
 
 ### Functions 
 
-### Render anlaysis results from different dataset with the same rmarkdown file
+
+
+
+### Environments
+
+The operating environment is a slightly complicated concept to explain to non-programmers. Detailed description can be found in the [Advanced R by Hardley Wickham](https://adv-r.hadley.nz/environments.html). You are using the environment every time when you use R even you do not realize it. Essentially  you can think the environment as a name list of all the data, variables, libraries, functions and other objects. The name list links a name with a part of memory on your computer. Every name must be unique in an Environment. 
+
+```{r}
+a <- 1
+a <- 2
+a
+```
+
+Some times there are confusions. See the example below:
+
+```{r}
+mean
+mean <- 1
+mean
+mean(1:3)
+```
+Now what is the object 'mean', is it a variable with a value of 1 or a function calculate the mean? The answer is both.  This relates to the current(local) and global environment. The variable 'mean' belongs to the current or local environment and the function 'mean' belongs the the global environment. R program will search for the object first in the current environments and then the global environment to find matching names. When you call the function mean, R will fail to find any function in the current environment and move up to the global environment to find a matching name.
+
+```{r}
+mean <- function(x) 1
+mean(1:5)
+mean(1:10)
+```
+ 
+Now I have defined a local function 'mean' and R will use my local function, unless I specify the environment that the 'mean' function that I want to call from. Here the 'mean' function is a part of the base library. 
+
+```{r}
+base::mean(1:5)
+```
+
+
+### Scoping Rules 
+
+Scoping rules are closely related to environment, it determines how values are assigned to free variables. An advanced introduction is provided in [R Programming for Data Science by Roger Peng](https://bookdown.org/rdpeng/rprogdatascience/scoping-rules-of-r.html). R uses lexical scoping which means that it will search the values of free variables or object are searched for in the environment in which the function was defined. The order of the r search start from the local environment first, next to the parent environments and then to the global environment. Although R does this searching all the time, you may not notice any issues unless the objects with the same name were defined from different environments, i.e. same variable names in the nested functions. The recommendation is try to avoid using the same name for different variables/objects. 
+
+
+### Dynamic variable naming 
+
+
 
 # Data visulisation 
 
+
+# 
 
 
 # Reporting 
 
 ## One-stop shop 
 
-## A good graph takes forever  
+
 
 ## Write up of the analysis results
 
@@ -1130,11 +1254,33 @@ Source:https://www.sciencedirect.com/science/article/pii/S0160412020321966#f0015
 
 * Provide all analysis code either as an Appendix or in open repositories such as Github
 
-## Advanced topics
 
-### Write a paper using R
+## Latex with Rmarkdown  
 
-### Advanced Latex 
+
+# Robust coding 
+
+## Develop a "coding style" that is compaliable with others
+
+## Avoid repeating
+
+## Balance between function coding and hard coding
+
+## Defensive programing 
+
+assert 
+
+
+# Protocal for code check and reviewing 
+
+## Is the statsitcal method appropriate
+
+## Are the assumptions met or can be safely ignored? 
+
+## Sample 
+
+# Reference system 
+
 
 # Version control 
 
@@ -1144,6 +1290,7 @@ Source:https://www.sciencedirect.com/science/article/pii/S0160412020321966#f0015
 
 https://swcarpentry.github.io/git-novice/
 
-# Publication 
 
-# Reference
+
+
+
