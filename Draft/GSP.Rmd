@@ -1,11 +1,11 @@
 ---
-title: "Good Statistical Practice (GSP): guidence for using R for scientific publication"
+title: "Good Statistical Practice (GSP): guidance for using R for scientific publication"
 author:
-- name: Caroline X. Gao [1,2,3], Matthew Hamilton [3], Sue Cotten [1,3]
+- name: Caroline X. Gao
   familyname: Gao
   othernames: Caroline X.
   address: "None"
-date: "a " 
+date: " Centre for Youth Mental Health, University of Melbourne \\newline  School of Public Health and Preventive Medicine, Monash University \\newline  Orygen, Australia"
 output:
    bookdown::pdf_document2:
      toc: yes
@@ -20,6 +20,7 @@ output:
 geometry: margin=1in
 fontsize: 11pt
 bibliography: GSP.bib 
+always_allow_html: true
 tables: yes
 header-includes:  
    \usepackage{float} 
@@ -42,23 +43,23 @@ conflicted::conflict_prefer("select","dplyr")
 
 # Preface
 
-This short practice guidance is designed based on a few guidelines and practice principles, books and jounal articles, including: 
+This short practice guidance is designed based on a few guidelines and practice principles, books and journal articles, including: 
 
 * [ASA "Ethical Guidelines for Statistical Practice"](https://www.amstat.org/ASA/Your-Career/Ethical-Guidelines-for-Statistical-Practice.aspx)
 * [Reproducible Research with R and R Studio](https://englianhu.files.wordpress.com/2016/01/reproducible-research-with-r-and-studio-2nd-edition.pdf)
 * [Efficient R programming](https://csgillespie.github.io/efficientR/)
 
-The aim of this guidance is to promote accountability, reproducibility and integrity of statistical practice in Orygen health service and outcome research team.  The guidance is divided into four parts: 1) planning for analysis, 2) data cleaning, 3) analysis, and 4) reporting.  
+The aim of this guidance is to promote accountability, reproducibility and integrity of statistical practice in the  Health Service and Outcome Research (HSOR) team at Orygen, Centre for Youth Mental Health, University of Melbourne. The guidance is divided into four parts: 1) planning for analysis, 2) data cleaning, 3) analysis, and 4) reporting.  
 
-Important note: **the authors do not give permission for you to print this resource on papers, unless you are experimenting magical ink that disappears after 3 months (you are considered to have net-zero carbon emissions in this case).**  If you are thinking about reading this on paper before going to sleep, you are too opportunistic for your study plan : P 
+Important note: **the authors do not give permission for you to print this resource on papers, unless you are experimenting with magical ink that disappears after 3 months (you are considered to have net-zero carbon emissions in this case).**  If you are thinking about reading this on paper before going to sleep, you are too opportunistic for your study plan : P 
 
 Have fun ~~ 
 
-# Planning for anlaysis 
+# Planning for analysis 
 
-## Dafting the anlaysis plan
+## Drafting the analysis plan
 
-The analysis will need to be planed before you touch the data. Your analysis may deviate from the analysis plan to some degrees, which may relate to data integrity of the variable selected, model fitting factors (i.e. multicollinearity, heteroscedasticity etc) and change of research questions. However, unless your aim is purely exploratory (i.e. identify latent clusters) or predictive, your analysis should be guided by the analysis plan to prevent "fishing" results. Remember "If you torture the data long enough, it will confess to anything - Ronald H. Coase", which is really against the scientific principle. The scientific evidence is  based on a collection of studies and findings rather than a single paper. If you have a negative finding, you are obligated to publish it !!! 
+The analysis will need to be planned before you touch the data. Your analysis may deviate from the analysis plan to some degree, which may relate to data integrity of the variable selected, model fitting factors (e.g.,. multicollinearity, heteroscedasticity etc) and change of research questions. However, unless your aim is purely exploratory (e.g., identify latent clusters) or predictive, your analysis should be guided by the analysis plan to prevent "fishing" results. Remember "If you torture the data long enough, it will confess to anything - Ronald H. Coase", which is really against the scientific principle. The scientific evidence is  based on a collection of studies and findings rather than a single paper. If you have a negative finding, you are obligated to publish it!
 
 ## Less is more
 
@@ -68,15 +69,15 @@ knitr::include_graphics(here::here("Graphics/quote.jpeg"))
 ```
 
 
-The famous quote is not by Confucius (it is from the New Book of Tang published about 1500 years after his death), and it is not well translated, but you get the idea. We often find it easier to face a complex problem than a simple one, and often feel that a complex solution must be better than an easier one. However this is often not true in applied statistics. 
+The famous quote is not by Confucius (it is from the New Book of Tang published about 1500 years after his death), and it is not well translated, but you get the idea. We often find it easier to face a complex problem than a simple one, and often feel that a complex solution must be better than an easier one. However, this is often not true in applied statistics. 
 
-More often than not, ingenious statistical designs are surprisingly simple. An famous example is the Cox model for survival analysis, which simplifies the needs to describe the baseline hazard function with proportional hazard assumption. Another example, Dijkstra's algorithm (algorithm for finding the shortest paths between nodes in a graph), the author, Edsger Dijkstra, once said "One of the reasons that it is so nice was that I designed it without pencil and paper. I learned later that one of the advantages of designing without pencil and paper is that you are almost forced to avoid all avoidable complexities." 
+More often than not, ingenious statistical designs are surprisingly simple. A famous example is the Cox model for survival analysis, which simplifies the need to describe the baseline hazard function with proportional hazard assumption. Another example, Dijkstra's algorithm (algorithm for finding the shortest paths between nodes in a graph), the author, Edsger Dijkstra, once said "One of the reasons that it is so nice was that I designed it without pencil and paper. I learned later that one of the advantages of designing without pencil and paper is that you are almost forced to avoid all avoidable complexities." 
 
-This is the same with your analysis, always force yourself to avoid complexities if you could achieve what you need with a simpler model. There are numerous benefits for simpler models, i.e. less likely to over-fitting with your model, easier to communicate with your audience, less likely to make mistakes etc. If a logistic regression works, there is no need to use a structure equation model. 
+This is the same with your analysis, always force yourself to avoid complexities if you could achieve what you need with a simpler model. There are numerous benefits for simpler models, e.g., less likely to over-fitting with your model, easier to communicate with your audience, less likely to make mistakes etc. If a logistic regression works, there is no need to use a structural equation model. 
 
 ## Officially certified plans
 
-Get your analysis plan approved or reviewed. I think we all do this to some degrees. Some studies have strict protocols on who and when the analysis plan will need to be approved together with other ethical requirements. Other studies will only require you to discuss with your supervisors. Regardless, it will be better to have a written analysis plan with review and/or approval and avoids confusions down the track. Sometimes you might want or need to [preregister](https://www.apa.org/science/about/psa/2015/08/pre-registration) your study, which is considered as a part of the open science practice. 
+It is important to get your analysis plan approved or reviewed. Some studies have strict protocols on who and when the analysis plan will need to be approved together with other ethical requirements. Other studies will only require you to discuss with your supervisors. Regardless, it will be better to have a written analysis plan with review and/or approval and avoid confusion down the track. Sometimes you might want or need to [preregister](https://www.apa.org/science/about/psa/2015/08/pre-registration) your study, which is considered as a part of the open science practice. 
 
 
 # Use R
@@ -84,7 +85,7 @@ Get your analysis plan approved or reviewed. I think we all do this to some degr
 
 ## Why R?
 
-The essential skill set in the modern analytical community is the ability to use one or more script languages, SPSS doesn't count here. It's often critical for the success of your publications. More often then not, you might face challenges from the reviewer to do something that SPSS is not capable of. If you have already started your analysis in SPSS, please abandoned it ASAP. If R is in its early adolescent years, SPSS is a toddler and it suffers from the Peter Pan Syndrome (it will never grow up). 
+The essential skill set in the modern analytical community is the ability to use one or more script languages, SPSS doesn't count here. It's often critical for the success of your publications. More often than not, you might face challenges from the reviewer to do something that SPSS is not capable of. If you have already started your analysis in SPSS, please abandoned it ASAP. If R is in its early adolescent years, SPSS is a toddler and it suffers from the Peter Pan Syndrome (it will never grow up). 
 
 ```{r pressure, echo=FALSE, out.width = '100%'}
 knitr::include_graphics(here::here("Graphics/R_illustration.jpg"))
@@ -94,12 +95,12 @@ Source: unknown
 
 \vspace{0.2 cm}
 
-Sorry for being a bit offensive, but the reality is the industry and scientific community are gradually moving away from SPSS to other languages for many reasons, cost, capacity, flexibility, reporducibility etc. So to avoid the long term pain, change to R (Stata is also good, since this is a practice guide for R, I won't touch too much on Stata). 
+Sorry for being a bit offensive, but the reality is the industry and scientific community are gradually moving away from SPSS to other languages for many reasons, cost, capacity, flexibility, reproducibility etc. So to avoid the long term pain, change to R (Stata is also good since this is a practice guide for R, I won't touch on Stata). 
 
 
 ## Learn to use R
 
-"R being hard to learn" mostly exists in our fears. Once you get on to it the challenges are mostly "feeling a bit confused", there are so many packages, so many ways to do the same thing, so much typing needed, so many materials everywhere... So the best way to learn R is to learn by using it. You can start with a short intensive introduction course (one or two days) to build up your confidence. Start using it in a small project, and then gradually roll out to more parts of your analysis tasks. You can also start by learning your collaborator's code (communicate with the author and create a separate environment so that you won't break anything).
+"R being hard to learn" mostly exists in our fears. Once you get on to it the challenges are mostly "feeling a bit confused", there are so many packages, so many ways to do the same thing, so much typing needed, so many materials everywhere... So the best way to learn R is to learn by using it. You can start with a short intensive introduction course (one or two days) to build up your confidence. Start using it in a small project, and then gradually roll it out to more parts of your analysis tasks. You can also start by learning your collaborator's code (communicate with the author and create a separate environment so that you won't break anything).
 
 There are lots of good online training materials for R:
 
@@ -109,18 +110,19 @@ There are lots of good online training materials for R:
 * [R for Data Science](https://r4ds.had.co.nz/). 
 
 
-Almost all R users are still learning R!! So you have no excuse not to ~~ 
+Almost all R users are still learning R, so you have no excuse not to.
 
-# R setup and project managment
+# R setup and project management
 
-## Setup R on your computer
+## Set up R on your computer
 
-One thing that you have to remember: R is a fast evolving language. It has a new version every few months (sometimes two versions in one months), with funny names : ) 
+One thing that you have to remember: R is a fast evolving-language. It has a new version every few months (sometimes two versions in one month), with funny names.
+
 ```{r}
 library(rversions)
 tail(r_versions())
 ```
-Although R kept on updating, you do not need to re-install R all the time. But I tend to update my R half-yearly. It doesn't take a long time to update everything now a days. The first thing that you need to do after installing R is to install your commonly used packages. A good way to install + load packages is to use the [*pacman*](https://cran.r-project.org/web/packages/pacman/index.html) package, which is much faster than typing install.package() and library(). I normally store the names of my commonly used packages somewhere. So when I need to re-install R, I will call *pacman* to install all of those packages for me at once (only takes about 10 minutes). 
+Although R kept on updating, you do not need to re-install R all the time. But I tend to update my R half-yearly. It doesn't take a long time to update everything nowadays. The first thing that you need to do after installing R is to install your commonly used packages. A good way to install + load packages is to use the [*pacman*](https://cran.r-project.org/web/packages/pacman/index.html) package, which is much faster than typing install.package() and library().
 
 ```{r,eval=FALSE}
 #load libraries 
@@ -129,14 +131,12 @@ p_load("dplyr", "tidyr", "ggplot2")
 ```
 
 
-*install.package()* and *pacman* install packages from R CRAN. However, the authors may have additional update on Github which is not loaded to CRAN. You can install the most resent package from Github using *devtools*.
+*install.package()* and *pacman* install packages from R CRAN. However, the authors may have additional update on Github which is not loaded to CRAN. If you come across a problem that seems to be a software "bug", you can install the most resent package from Github using *install_github*. You can also check whether your issue was being reported on Github (e.g., https://github.com/rstudio/bookdown/issues).
 
 ```{r, eval=F}
 library(devtools)
 install_github('rstudio/bookdown')
 ```
-
-To get start with things, just install packages from R CRAN. If you come across with a problem which seems to be a software "bug", you can update your package using *install_github*. You can also check whether your issue was being reported on Github (i.e. https://github.com/rstudio/bookdown/issues).
 
 ## Customizing RStudio 
 
@@ -152,11 +152,11 @@ I also like to turn on a few diagnostics including "Check usage of <- in functio
 
 ## Keep tracking of R and package versions
 
-For all your analysis, you need to keep track of the R environment, this includes R version, platform and all package versions that were loaded in your current analysis environment. R environment information can be easily summarised using *sessionInfo*.
+For all your analysis, you need to keep track of the R environment, this includes the R version, platform and all package versions that were loaded in your current analysis environment. R environment information can be easily summarised using *sessionInfo*.
 ```{r}
 sessionInfo()
 ```
-In fact, it might also be a good idea to include a R package version table in the appendix of your paper. 
+In fact, it might also be a good idea to include an R package version table in the appendix of your paper. 
 
 ```{r,results='asis'}
 my_session_info <- sessionInfo()
@@ -187,7 +187,7 @@ knitr::kable( info_table, booktabs = TRUE,linesep = "") %>%
 ```
 
 
-This is crucial as packages or R updates may make your code fail or your results differ. This sounds scary than it really is. All analysis packages will have this issue. It's slightly complected with R because updates of R and affiliated packages are not synchronized. For my 13 years of using R, I haven't found this particularly challenging for a few reasons. The packages update rates were not as fast as we are seeing today. Most of my projects were in isolated environments so I rarely need to re-run the analysis a few years later and will need to produce exactly the same results. If I need to re-run the analysis, I will mostly update the analysis code and make sure it adhere to the current best practice. Occasionally, some of my package updates will cause problems with my current analysis code. As I keep track of my R environment, I will be able to figure out the problem quickly and re-install the older version back. 
+This is crucial as packages or R updates may make your code fail or your results differ. This sounds scarier than it really is. All analysis packages will have this issue. It's slightly complected with R because updates of R and affiliated packages are not synchronised. For my 15 years of using R, I haven't found this particularly challenging for a few reasons. The packages update rates were not as fast as we are seeing today. Most of my projects were in isolated environments so I rarely need to re-run the analysis a few years later and will need to produce exactly the same results. If I need to re-run the analysis, I will mostly update the analysis code and make sure it adheres to the current best practice. Occasionally, some of my package updates will cause problems with my current analysis code. As I keep track of my R environment, I will be able to figure out the problem quickly and re-install the older version back. 
 
 ```{r, eval=F}
 require(devtools)
@@ -195,30 +195,30 @@ install_version("bookdown", version = "0.20",
                 repos = "http://cran.us.r-project.org")
 ```
 
-If you are in the area that requires 100% reproducibility all the time, you can use [**Microsoft R open**](https://mran.microsoft.com/open) together with *checkpoint* which lock down the set of packages in your project environment, so package updates will not impact your code. There are a few other alternatives, but you can get other benefits from **Microsoft R open** without too much trouble, so it seems to be a wise choice at the current stage. If you need to install lots of things from Github and work on package development, it may not be a good choice. 
+If you are in an area that requires 100% reproducibility all the time, you can use [**Microsoft R open**](https://mran.microsoft.com/open) together with *checkpoint* which locks down the set of packages in your project environment, so package updates will not impact your code. There are a few other alternatives, but you can get other benefits from **Microsoft R open** without too much trouble, so it seems to be a wise choice at the current stage. If you need to install lots of things from Github and work on package development, it may not be a good choice. 
 
-## Project managment with R
+## Project management with R
 
-Over the years of being a programmer and biostatistician, I have learned many things in a painful way. One of them is the importance of good project management with your data, analysis, documentation and drafts. I had to spent a long time to remember what I did, where I save things and also lots of detective work on whether anyone have touched my 'cheese' (with files stored on network drives). When I am lucky I can request IT to restore a backup at specific time to find the lost treasure. But in many cases, this doesn't work as either I was stupid enough not to save things on the network drive, or the network drive deletes backups automatically. 
+Over the years of being a programmer and biostatistician, I have learned many things in a painful way. One of them is the importance of good project management with your data, analysis, documentation and drafts. I had to spend a long time to remember what I did, where I save things and also lots of detective work on whether anyone have touched my 'cheese' (with files stored on network drives). When I am lucky, I can request IT to restore a backup at a specific time to find the lost treasure. But in many cases, this doesn't work as either I was stupid enough not to save things on the network drive, or the network drive deletes backups automatically. 
 
-Project management became more critical when I had to change my work between computers, laptops and servers as well as swap frequently between Windows and Mac. Managing file versions, backups and file paths became additional burdens. However, all of these things became much more easier with RStudio + Github. It's also more user friendly with people who are not familiar with Git.
+Project management became more critical when I had to change my work between computers, laptops and servers as well as swap frequently between Windows and Mac. Managing file versions, backups and file paths became additional burdens. However, all of these things became much easier with RStudio + Github. It's also more user friendly with people who are not familiar with Git.
 
-Essentially the idea is that you can create an independent project environment for isolated task or tasks that shares common data source. This can be a specific analysis for a paper or a range of analysis base on the same dataset. When there are multiple users, it's always the best to use separate project environment for individual analysis, so users do not load the same project file on the network drive.
+Essentially the idea is that you can create an independent project environment for isolated task or tasks that share a common data source. This can be a specific analysis for a paper or a range of analyses based on the same dataset. When there are multiple users, it's always best to use a separate project environment for individual analysis, so users do not load the same project file on the network drive.
 
-The method for setting up projects are described [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects). There are many benefits using projects:
+The method for setting up projects are described [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects). There are many benefits of using projects:
 
-* No need to type the long path directory in the project environment because it is using relative file path. 
-* You can use [here](https://github.com/jennybc/here_here) package when working with Rmarkdown files within the project environment. The default file path in Rmarkdown is the Rmarkdown file location, using here package, it always point to the project directory. So you have your path directory consistent when using console and Knit (see Rmarkdown in the next session).
+* No need to type the long path directory in the project environment because it is using a relative file path. 
+* You can use the [here](https://github.com/jennybc/here_here) package when working with R Markdown files within the project environment. The default file path in R Markdown is the R Markdown file location, using here package, it always points to the project directory. So you have your path directory consistent when using console and Knit (see R Markdown in the next session).
 * Access all files in the project environment easily 
 * Easy to communicate with Github
 
-You can setup a rule for organising sub-folders and files. I like to separate code, data and results. However, it is slightly complicated to split analysis code and results when you are using Rmarkdown. Regardless, it would be better to have sub-folder structure in placed so you can find files easily.
+You can set up a rule for organising sub-folders and files. I like to separate code, data and results. However, it is slightly complicated to split analysis code and results when you are using R Markdown Regardless, it would be better to have a sub-folder structure in place so you can find files easily.
 
 
 
-# State-of-art Rmarkdown/Rnotebook paractice
+# State-of-art R Markdown/R Notebook practice
 
-The idea of Markdown practice was originated from [Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth). Donald  believed that programmers should think of programs as works of literature and introduced a new programming paradigm called ["Literate programming"](https://en.wikipedia.org/wiki/Literate_programming).  He then developed TeX to facilitate this paradigm of coding, which is the typesetting system that LaTex is based. The idea behind it is simple, combining the text and code for human to read not computers. In the end, scientific discoveries are for humans to interpret, replicate and extend, and not for computers. 
+The idea of Markdown practice was originated from [Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth). Donald  believed that programmers should think of programs as works of literature and introduced a new programming paradigm called ["Literate programming"](https://en.wikipedia.org/wiki/Literate_programming).  He then developed TeX to facilitate this paradigm of coding, which is the typesetting system that LaTex is based. The idea behind it is simple, combining the text and code for humans to read not computers. In the end, scientific discoveries are for humans to interpret, replicate and extend, and not for computers. 
 
 Although this is a fascinating idea, it had been hard to achieve for many reasons. Academic publications mostly only allow words, tables, figures but not computer code, so there is no obvious momentum from the academic communities. Software developers and computer science engineers mostly focused on the end product and not so much on displaying the process in between. Technically it is also difficult to achieve as this approach will need to be implemented within or closely connected to one or multiple programming environments.
 
@@ -230,7 +230,7 @@ Source: http://geek-and-poke.com/geekandpoke/2009/7/25/the-art-of-programming-pa
 
 \vspace{0.2 cm}
 
-However, the sudden boom of data science brought in new challenges. As software engineers move towards data science, the community gradually realised that the traditional coding style (i.e. modular programming, black-box approach) became barriers instead of advantages. Each step of the programming code, from cleaning variables to running algorithm, suddenly became all important. Hence there is an immediate need to communicate regarding every step of the process. This needs drove the birth of many interactive computational notebooks (IPython, SageMath, Beaker, Jupyter, Apache Zeppelin and Rmarkdown). R markdown became the most successful computational notebooks for R users. Why? Probably for the same reason as why R has been successful, simplicity, flexibility, open source etc.  
+However, the sudden boom of data science brought in new challenges. As software engineers move towards data science, the community gradually realised that the traditional coding style (e.g., modular programming, black-box approach) became barriers instead of advantages. Each step of the programming code, from cleaning variables to running algorithm, suddenly became very important. Hence there is an immediate need to communicate regarding every step of the process. This needs drove the birth of many interactive computational notebooks (IPython, SageMath, Beaker, Jupyter, Apache Zeppelin and R Markdown). R Markdown became the most successful computational notebooks for R users. Why? Probably for the same reason as to why R has been successful, simplicity, flexibility, open source etc.  
 
 ```{r , echo=FALSE,fig.align="center",out.width="90%"}
 knitr::include_graphics(here::here("Graphics/rmarkdown_workflow.png"))
@@ -239,23 +239,24 @@ Source: http://applied-r.com/project-reporting-template/
 
 \vspace{0.2 cm}
 
-R markdown is a system that integrate narrative, analysis, code and output to create a production quality document. The code and text were implemented via R in a *.Rmd file, which will be knit to Markdown file and then convert to file type of choice via Pandoc. There are a few important features that makes it one of R's "killer" feature 
+R Markdown is a system that integrates narrative, analysis, code and output to create a production quality document. The code and text were implemented via R in a *.Rmd file, which will be knit to Markdown file and then convert to file type of choice via Pandoc. There are a few important feature that makes it one of R's "killer" feature 
 
-* Reproducibility. You are no longer required to live in the copying and pasting world. All the analysis, results can be easily reproduced with changes in source data, cleaning routine and analyses. There are different degrees of implementing R markdown, from basic including notes for your data cleaning process to write a whole paper in one markdown file. Regardless of where you are at, using R markdown will significantly reduced you workload of having to find and copying and pasting results to the final paper. So you won't need to panic when your cohorts said one person is missing from the data set, and the 12 large tables in your paper will need to be updated. 
+* Reproducibility and transparency. All data processes can be integrated in to one central location to allow the work being reproduced and/or published easily. You are no longer required to live in the copying and pasting world. All analyses and results can be easily reproduced with changes in source data, cleaning routine and analyses. There are different degrees of implementing R Markdown (e.g., save data cleaning code, produce interactive tables and plots, write the full paper). Regardless of where you are at, using R Markdown will significantly reduce your workload, avoid copying and pasting error, and improve the reproducibility and transparency. There is no need to panic when the data manage has identified one person is missing from the data set and all analysis will need to be repeated.
 
-* Easy progress tracking and debugging. Before the age of R markdown, R users will need to store all the code into a plain text file or R file and execute the code one by one to see the results. When the code file is getting very long, it gets harder to maintain the code and changes. Then coders will use split system to break long code into modules to make the progress tracking and debugging easier. However this will no longer be the case with R markdown, because you will see the code and results together and you can also tag the section of your code and use hyperlinks to quickly find things. 
 
-* Communication. You can integrate narrative, code and results together. This is quite crucial in the communication in data analysis, because it avoid all the efforts of reading segregated code comments, switching between documents to find results and maintaining separate documentations. All this process can be integrated into one system. 
+* Easy progress tracking and debugging. Before the age of R Markdown, R users will need to store all the code into a plain text file or R file and execute the code one by one to see the results. When the code file is getting very long, it gets harder to maintain the code and changes. Then coders will use a split system to break long code into modules to make the progress tracking and debugging easier. However, this will no longer be the case with R Markdown. All code can be execute when you "Knit" the file and errors will be reported.You can also headers to indexing sections of your code and use hyperlinks to quickly locate to different sections. 
 
-* Very nice for equations. If you need to type lots equations, then R markdown is also your friend. The standard LaTeX equations works with all types of outputs (when your equations are getting complicated, sometimes word doesn't work)
+* Communication. You can integrate narrative, code and results together. This is quite crucial in the communication in data analysis because it avoids all the efforts of reading segregated code comments, switching between documents to find results and maintaining separate documentation. All these process can be integrated into one system. 
 
-* Extension. R markdown system provides you will limitless extension capacities, such as integrating multiple languages (I can combine python, Stan and R in the same file now), producing multiple types of documents (word, html, pdf, slides, books, shiny app etc), displaying [interactive plots](https://www.r-graph-gallery.com/interactive-charts.html)
+* Very nice for equations. If you need to type lots equations, then R Markdown is also your friend. The standard LaTeX equations works with all types of outputs (when your equations are getting complicated, sometimes word doesn't work)
 
-J.J. Allaire gave an excellent introduction presentation, [Notebooks with R Markdown](https://channel9.msdn.com/Events/useR-international-R-User-conference/useR2016/Notebooks-with-R-Markdown), in useR conference in 2016. I hope I have convinced you to move to R markdown. 
+* Extension. R Markdown system provides you will limitless extension capacities, such as integrating multiple languages (I can combine python, Stan and R in the same file now), producing multiple types of documents (word, html, pdf, slides, books, shiny app etc), displaying [interactive plots](https://www.r-graph-gallery.com/interactive-charts.html)
+
+J.J. Allaire gave an excellent introduction presentation, [Notebooks with R Markdown](https://channel9.msdn.com/Events/useR-international-R-User-conference/useR2016/Notebooks-with-R-Markdown), in the 2016 useR conference. I hope I have convinced you to move to R Markdown. 
 
 Here are some practical point.
 
-## Learn to use R markdown 
+## Learn to use R Markdown 
 
 There are many good online introductions on using R markdown:
 
@@ -319,27 +320,27 @@ header-includes:
 ---
 ```
 
-You may notice that I have used template documents, "template.tex" and  "template.docx". The LaTex template was inherited from [Prof Rob hyndman](https://robjhyndman.com/)'s [MonashEBSTemplates](https://github.com/robjhyndman/MonashEBSTemplates) with minor modifications. "template.docx" is simply a Word document with defined fonts. "Header-includes" contains the additional latex command that I want to use in the documents, i.e. "lscape" package is for the landscape pdf page and "beginsupplement" is for setting supplementary table and figure captions (starts from Table S1 and Figure S1) .  
+You may notice that I have used template documents, "template.tex" and  "template.docx". The LaTex template was inherited from [Prof Rob Hyndman](https://robjhyndman.com/)'s [MonashEBSTemplates](https://github.com/robjhyndman/MonashEBSTemplates) with minor modifications. "template.docx" is simply a Word document with defined fonts. "Header-includes" contains the additional latex command that I want to use in the documents, e.g., "lscape" package is for the landscape pdf page and "beginsupplement" is for setting supplementary table and figure captions (starts from Table S1 and Figure S1) .  
 
 
-## Using R markdown 
+## Using R Markdown 
 
-R markdown is very easy to use. Code will need to be included as code chunk and everthing else outside of code chunks will be treated as formatted text, which includes, headings, lists, standard text and equations, see [R Markdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf) for details. Code chunk include varies of definitions, such as code type (R, Python, Stan ...), chunk name, whether to display code, figure size, table options etc. * [R Markdown Reference Guide](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf?_ga=2.27162299.765406861.1611275642-1346409885.1598176219) provides very detailed information about this. 
+R Markdown is very easy to use. Code will need to be included as code chunks and everything else outside of code chunks will be treated as formatted text, which includes, headings, lists, standard text and equations, see [R Markdown cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf) for details. Code chunks include various definitions, such as code type (R, Python, Stan ...), chunk name, whether to display code, figure size, table options etc. * [R Markdown Reference Guide](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf?_ga=2.27162299.765406861.1611275642-1346409885.1598176219) provides very detailed information about this. 
 
 
 ## Knit document
 
-To create html, word or pdf file requires to Knit the Rmd document. 
+To create html, word or PDF file requires to Knit the Rmd document. 
 
 ```{r , echo=FALSE,fig.align="center",out.width="100%"}
 knitr::include_graphics(here::here("Graphics/Knit.png"))
 ```
 
-You also need to install LaTex (https://www.latex-project.org/get/). However, LaTex is really a large monster to work with. So Yihui Xie has developed [TinyTeX](https://yihui.name/tinytex/) for R users, which is much smaller. You can install additional LaTex packages easily if needed. 
+You also need to install LaTex (https://www.latex-project.org/get/) if you would like to Knit to PDF files. However, LaTex is a large monster to work with. So Yihui Xie has developed [TinyTeX](https://yihui.name/tinytex/) for R users, which require much low resources. You can install additional LaTex packages easily if needed. 
 
-## Citation in R markdown. 
+## Citation in R Markdown 
 
-Another advantage of using R markdown is that you can finally give up using Endnote (the monster crashes your computer and word all the time). R markdown can work with the many citation management file types. The commonly used one is the LaTeX bibliography management system BibTeX, in which the references were stored as plain text like this: 
+Another advantage of using R Markdown is that you can finally give up using Endnote (the monster crashes your computer and word all the time). R Markdown can work with the many citation management file types. The commonly used one is the LaTeX bibliography management system BibTeX, in which the references were stored as plain text like this: 
 
 ```{r, eval=FALSE}
 @article{Xu_2020,
@@ -359,13 +360,13 @@ Another advantage of using R markdown is that you can finally give up using Endn
 }
 ```
 
-Most journals provide direct download of the BibTex of articles. You can also export the Endnote library to a bib file. What I like to use is the Google Scholar BibTex Citation. However, it does not include doi of the paper.
+Most journals provide direct download of the BibTex of articles. You can also export the Endnote library to a bib file. You can also use Google Scholar to download BibTex citation. However, it does not include the doi of the paper, which is frequesntly required in journal article submission. 
 
 ```{r , echo=FALSE,fig.align="center",out.width="100%"}
 knitr::include_graphics(here::here("Graphics/Google_bib.png"))
 ```
 
-When using the BibTeX, you need to first store the reference in a *.bib file and specify the name of the file in the YAML header. Then you can reference all your code in the text  using @ followed by the id of the reference with either \@Xu_2020 which generates author (year) or [\@Xu_2020] which generates (author, year). By default Pandoc uses Chicago author-date CSL format for citations and references. You can specify the style according to the journal's requirements. Most of journals' csl styles can be found [here](https://github.com/citation-style-language/styles). All features will be automatic including whether the numbers will be included before or after punctuation. 
+When using BibTeX, you need to first store the reference in a *.bib file and specify the name of the file in the YAML header. Then you can reference all your code in the text  using @ followed by the id of the reference with either \@Xu_2020 which generates author (year) or [\@Xu_2020] which generates (author, year). By default, Pandoc uses the Chicago author-date CSL format for citations and references. You can specify the style according to the journal's requirements. Most of the journals' csl styles can be found [here](https://github.com/citation-style-language/styles). All citation features can be automated including citation before or after punctuation. 
 
 ```{r, eval=FALSE}
 ---
@@ -382,40 +383,43 @@ csl: biomed-central.csl
 
 # Data pre-processing
 
-A range of names were used to refer to the pre-processing stage of your data analysis: data cleaning, data cleansing,  data wrangling, data mungling... This is a stage that you organize, validate, and prepare data for further analysis. 
+A range of terms were used to refer to the pre-processing stage of your data analysis, e.g., data cleaning, data cleansing,  data wrangling, data mungling etc. This is a stage that you organize, validate, and prepare data for further analysis.
 
 
 ## Importing data to R 
 
-R can import different types of source data (csv, excel, SPSS, Stata, SAS. SQL...). See the comprehensive guide [here](https://cran.r-project.org/doc/manuals/r-release/R-data.html). There are three packages frequently used for processing common external data: [foreign](https://cran.r-project.org/web/packages/foreign/foreign.pdf) , [haven](https://cran.r-project.org/web/packages/haven/haven.pdf), [Hmisc](https://cran.r-project.org/web/packages/Hmisc/Hmisc.pdf). *foreign* includes most of the importing and exporting functions, however *spss.get* from *Hmisc* provides additional enhanced features including applying proper labels, compress data etc. *haven* is also easy to work with which allows you to use the numeric values instead of directly import as factor variables.  
+R can import different types of source data (csv, excel, SPSS, Stata, SAS. SQL...). See the comprehensive guide [*here*](https://cran.r-project.org/doc/manuals/r-release/R-data.html). There are three packages frequently used for processing common external data: [*foreign*](https://cran.r-project.org/web/packages/foreign/foreign.pdf), [*haven*](https://cran.r-project.org/web/packages/haven/haven.pdf), and  [*Hmisc*](https://cran.r-project.org/web/packages/Hmisc/Hmisc.pdf). *foreign* includes most of the importing and exporting functions, however *spss.get* from *Hmisc* provides additional enhanced features including applying proper labels, compress data etc. *haven* is also easy to work with which allows you to use the numeric values instead of directly import as factor variables.
+
+When working with spss, *haven::read_sav()* seems to be the most robust and convenient function. It rarely has any problems and is generally fast enough; it is also part of the *tidyverse*, which allows you to %m% individual functions together. 
 
 ```{r}
-dta <- haven::read_sav(here::here("Data","testdata.sav")) 
+dta <- haven::read_sav(here::here("Data", "testdata.sav"))
 dta
-dta<-as_factor(dta)
+dta <- as_factor(dta)
 dta
 ```
 
 
 ```{r}
-dta <- foreign::read.spss(here::here("Data","testdata.sav"),to.data.frame=TRUE) 
+dta <- foreign::read.spss(here::here("Data", "testdata.sav"), to.data.frame = TRUE)
 head(dta)
 ```
+
 ```{r}
-dta<-Hmisc::spss.get(here::here("Data","testdata.sav"), datevars=c("date")) 
+dta <- Hmisc::spss.get(here::here("Data", "testdata.sav"), datevars = c("date"))
 dta
 ```
 
 ##  Working with data.frame, tibble and data.table 
 
-Data frame is an easier understandable term, representing a flat data file with different columns having different variables with different format. However you might also hear [tibbles](https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html). It was designed as a modern version of data frame, it allows better print visualization, flexible variable names, no row names etc. Normally it is better to use tibble, however sometimes it gets into trouble, then you need to change back to data frame. 
+Data frame is an easier understandable term, representing a flat data file with different columns having different variables with different formats. However, you might also hear [tibbles](https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html). It was designed as a modern version of data frame, it allows better print visualization, flexible variable names, no row names etc. Normally it is better to use tibble, however sometimes it gets into trouble, then you need to change back to data frame. 
 
 ```{r,class.output = ".bordered"}
 as_tibble(dta)
 data.frame(dta)
 ```
 
-If you are using large datasets, you can also use [data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html). The coding style follows SQL. Although it takes some time to learn the coding style, it is generally over 10 times faster than operating with data.frame. I never had to move to data.table because most of my time consuming code/functions require data.frame as input : P 
+If you are using large datasets, you can also use [data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html). The coding style follows SQL. Although it takes some time to learn the coding style, it is suggested to be over 10 times faster than operating with data.frame. 
 
 ## Name you variables properly!!!!!!!!
 
@@ -424,7 +428,7 @@ Every time when I saw variable names such as "X1", "V2", "12345", "WWF111", "GGG
 ```{r , echo=FALSE,fig.align="left",out.width="30%"}
 knitr::include_graphics(here::here("Graphics/coding.gif"))
 ```
-Variable names have to be proper because they will make both you and your collaborator's work much easier. You will be able to find variables easily and communicate well with your code. So when you import your data, make sure that all variables have proper names (actually variable names have to be proper in the database). There are a many common naming systems:
+Variable names have to be proper because they will make both you and your collaborator's work much easier. You will be able to find variables easily and communicate well with your code. So when you import your data, make sure that all variables have proper names (actually variable names have to be proper in the database). There are many common naming systems:
 
 ```{r,echo=FALSE}
 tabl <- "twoWords  | lower camel uase
@@ -434,19 +438,19 @@ TWO_WORDS	| 	screaming snake case
 two_Words	| 	camel snake case
 Two_Words	| 	pascal snake_case
 "
-df <- read.delim2(textConnection(tabl), header = FALSE,sep = "|" , strip.white = TRUE, stringsAsFactors = FALSE )
+df <- read.delim2(textConnection(tabl), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
 names(df) <- c("Analysis", "Function and package")
-knitr::kable( df, linesep = "", booktabs = T) %>% 
-  column_spec(1, width =  "5 cm") %>% 
-  column_spec(2, width =  "8 cm") 
+knitr::kable(df, linesep = "", booktabs = T) %>%
+  column_spec(1, width = "5 cm") %>%
+  column_spec(2, width = "8 cm")
 ```
-Although snake case is mostly recommended, you can use any/all systems as long as you use them consistently. R allows you to use other special characters such as "." in variable names, but some other programming language may not allow you to do so (i.e. Stata do not allow "."). So stick with snake, camel or combined systems. 
+Although snake case is mostly recommended, you can use any/all systems as long as you use them consistently. R allows you to use other special characters such as "." in variable names, but some other programming language may not allow you to do so (e.g., Stata do not allow "."). So stick with snake, camel or combined systems. 
 
 Generally, variable names should be nouns and function names should be verbs. You also need to name clusters of variables with similar yet specific names so they are easier to be referred to using *dplyr::starts_with()* or *dplyr::ends_with()*. For example, If you use "IESR_q1", "IESR_q2"..."IESR_q22" as IESR individual item names and IESR_total as IESR total scores. Then you can use *dplyr::starts_with("IESR_q")* to select individual items without the total items. If you name them as "IESR1", "IESR2"..."IESR22", "IESRTotal", *dplyr::starts_with("IESR")* will select all of them.
 
-## Data orgnizing 
+## Organising data 
 
-In this stage, you will need to combine data from different sources to one or more datasets. In many cases, raw data were extracted from relational database into multiple flat data files, which will need to be merged first. R has many packages for merging the datasets. The most popular functions are [mutating joins](https://dplyr.tidyverse.org/reference/mutate-joins.html) from  *tidyverse*. An important thing to check is whether the *by* variable(s) can uniquely define one record before merging the data. If not, joins will create all possible pairs, so you might double up your records. A easier way of checking is to count the number of records before and other *join*.  
+In this stage, you will need to combine data from different sources into one or more datasets. In many cases, raw data were extracted from a relational database into multiple flat data files, which will need to be merged first. R has many packages for merging the datasets. The most popular functions are [mutating joins](https://dplyr.tidyverse.org/reference/mutate-joins.html) from  *tidyverse*. An important thing to check is whether the *by* variable(s) can uniquely define one record before merging the data. If not, joins will create all possible pairs, so you might double up your records. An easier way of checking is to count the number of records before and other *join*.  
 
 ```{r , echo=FALSE,fig.align="center",out.width="100%" }
 knitr::include_graphics(here::here("Graphics/Join.png"))
@@ -456,14 +460,14 @@ Source: https://twitter.com/hadleywickham/status/68440762925952614
 
 \vspace{0.2 cm} 
 
-One important benefit of using R is that it allows you to open many datasets and process them simultaneously. This is one of major differences compared to SPSS and Stata, which allow one data file at a time. 
+One important benefit of using R is that it allows you to open many datasets and process them simultaneously. This is one of the major differences compared to SPSS and Stata, which allow one data file at a time. 
 
-R also allows you to store many datasets in to one [list](https://towardsdatascience.com/introduction-to-lists-in-r-ff6469e6ca79). The benefit of list + data frame may not be trivial at this stage. But it is extremely powerful to make you code simple and efficient we you work with repetitive operations with datasets having the same structure. 
+R also allows you to store many datasets into one [list](https://towardsdatascience.com/introduction-to-lists-in-r-ff6469e6ca79). The benefit of list + data frame may not be trivial at this stage. But it is extremely powerful to make your code simple and efficient we you work with repetitive operations with datasets having the same structure. 
  
 ```{r,class.output = ".bordered"}
 data1 <- tibble(a = 1:4, b = 2:5)
 data2 <- tibble(c = 3:6, d = 4:7)
-ManyDatasets <- list(data1,data2)
+ManyDatasets <- list(data1, data2)
 ManyDatasets
 ```
 
@@ -473,12 +477,12 @@ ManyDatasets
 
 An important stage of pre-processing is to have a global understanding of your data: 
 
-* Is the number of observations of your data correct? (sometimes it takes some efforts to finalize the total sample size particularly for longitudinal studies as participants may withdraw the study and request their data to be removed). 
-* Are factor variables stored as character or numeric ? 
+* Is the number of observations of your data correct? (sometimes, it takes some effort to finalise the total sample size, particularly for longitudinal studies as participants may withdraw the study and request their data to be removed). 
+* Are factor variables stored as a character or numeric? 
 * Is the data file long or wide when there are multiple observations for one participant? 
 * How is missing data coded? 
-* What's the proportion of missing in different variables? Is there any variable with  substantial missing data? If so why it is the case? 
-* Are the nested variables correctly entered?  i.e. Drinking frequency vs whether drinks or not. 
+* What's the proportion of missing in different variables? Is there any variable with  substantial missing data? If so why is the case? 
+* Are the nested variables correctly entered?  e.g., Drinking frequency vs whether drinks or not. 
 * Are date variables correct? 
 * Is the raw data matching the definitions in the data dictionary? 
 
@@ -489,29 +493,51 @@ Hmisc::describe(iris)
 ```
 \vspace{5mm} 
 
-*dfSummary* from *summarytools* is a new function being developed which provides more comprehensive evaluations including distributions, distinct values and missing data. 
+*dfSummary* from [*summarytools*](https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html) is a new function being developed which provides more comprehensive evaluations including distributions, distinct values and missing data. 
 
 ```{r, eval=FALSE }
 summarytools::view(summarytools::dfSummary(iris))
 ```
+
+
 
 ```{r , echo=FALSE,fig.align="center",out.width="100%"}
 knitr::include_graphics(here::here("Graphics/Summary.png"))
 ```
 \vspace{0.2 cm} 
 
-You might also need to check multivariate associations briefly to check if there were any variables were coded in the wrong direction (i.e. some psychological instruments requires reverse coding). This can be achieved via simply checking, scatter plots and correlations.  
+
+*view_df* from  [*sjPlot*](https://strengejacke.github.io/sjPlot/) also provide data summary, but more related to labels and factor choices. 
+
+```{r,eval=FALSE}
+haven::read_sav(here::here("Data", "testdata.sav")) %>%
+  as_factor() %>%
+  sjPlot::view_df()
+```
+
+
+
+
+```{r , echo=FALSE,fig.align="center",out.width="100%"}
+knitr::include_graphics(here::here("Graphics/view_df.png"))
+```
+\vspace{0.2 cm} 
+
+You might also need to check multivariate associations briefly to check if there were any variables were coded in the wrong direction (e.g., some psychological instruments requires reverse coding). This can be achieved via simply checking, scatter plots and correlations.  
 
 ```{r,fig.height=8,fig.width=9,message=FALSE, warning=FALSE}
 library("PerformanceAnalytics")
-PerformanceAnalytics::chart.Correlation(iris[1:4], histogram=TRUE, pch=19)
+PerformanceAnalytics::chart.Correlation(iris[1:4],
+  histogram = TRUE,
+  pch = 19
+)
 ```
 
-*ggpairs* is an interesting library I found recently, which provides comined multivariate plots.
+*ggpairs* is an interesting library I found recently, which provides combined multivariate plots.
 
 ```{r,fig.height=8,fig.width=9,message=FALSE, warning=FALSE}
 library(GGally)
-GGally::ggpairs(iris, aes(color = Species))+ theme_bw()
+GGally::ggpairs(iris, aes(color = Species)) + theme_bw()
 ```
 
 There are many other types of plots displaying multivariate associations, such as heatmaps, mosaic plots, flow diagrams etc. Interested readers can find more examples in [Data Visualization with R](https://rkabacoff.github.io/datavis/) by Rob Kabacoff.
@@ -522,21 +548,21 @@ There are many other types of plots displaying multivariate associations, such a
 
 After the data is properly organised, you will need to start the data cleaning phase. The total workload depends on the type of source data received. If you are lucky that the data is collected using a more advanced tool such as Redcap (designed by a competent data manager), the process may not be substantially tedious. Still, generally data scientists and statisticians spend 60%-80% of their time in data cleaning and pre-processing. So be prepared!! 
 
-Another issue with data cleaning is that there is no clear definition of what is a "cleaned" data. Hadley Wickham provided more general definition of tidy vs messy data https://vita.had.co.nz/papers/tidy-data.pdf. This is my definition of cleaned data related to health studies: 
+Another issue with data cleaning is that there is no clear definition of what is a "cleaned" data. Hadley Wickham provided a more general definition of tidy vs messy data https://vita.had.co.nz/papers/tidy-data.pdf. This is my definition of cleaned data related to health studies: 
 
-*A cleaned data is one dataset with (i) variables validated, ordered, clearly named and labeled, (ii) categorical variables properly categorized with clear labels, (iii) derived and transformed variables properly included, (iv) and the required format (by the analysis) established.*
+*A cleaned data is one dataset with (i) variables validated, ordered, clearly named and labelled, (ii) categorical variables properly categorized with clear labels, (iii) derived and transformed variables properly included, (iv) and the required format (by the analysis) established.*
 
-"Validated" refers to a range of expects including: consistency (male participants should not reported menstrual cramps in PHQ15), validity (poor quality tests sometimes needed to be excluded, should be coded as missing, data out of range should not be included), variable type (numeric variables should not include strings i.e. <5 ), uniformity (using the same (unit of measure)
+"Validated" refers to a range of aspect including: consistency (male participants should not report menstrual cramps in PHQ15), validity (poor quality tests sometimes needed to be excluded, should be coded as missing, data out of range should not be included), variable type (numeric variables should not include strings e.g., <5 ), uniformity (using the same (unit of measure)
 
-It will be better to store related variables closer in the dataset so it is easier check. Sometimes variable naming can be problematic and confusing. For example, when individual items in K10 is named as K1, K2... K10, then the last item name is overlapping with the general understanding of K10, which represents the summary score of K10. 
+It will be better to store related variables closer in the dataset so it is easier to check. Sometimes variable naming can be problematic and confusing. For example, when individual items in K10 is named as K1, K2... K10, then the last item name is overlapping with the general understanding of K10, which represents the summary score of K10. 
 
-Categorical variables are sometimes stored as numeric variables (1,2,3,999), which would need to be labeled as factor variables. Sometimes there is a "other" category which affiliate with a free-text field. Often what was entered will need to be re-evaluated and code back to existing categories. Categorical variables from source data are often includes much more detailed categories than needed for analysis. It's better to create consistent categorisations. For example, gender identity sometime can be collected as male, female, transgender, gender neutral, agender, pangender, genderqueer etc. Most of these categories would include very small numbers that cannot be use in the analysis. Then it will be a good practice to generate another shorter version of the gender identity variable in the cleaned data (i.e. male, female and non-binary). Then this variable can be used consistently across different analysis. 
+Categorical variables are sometimes stored as numeric variables (1,2,3,999), which would need to be labelled as factor variables. Sometimes there is an "other" category that affiliate with a free-text field. Often what was entered will need to be re-evaluated and coded back to existing categories. Categorical variables from source data often includes much more detailed categories than needed for analysis. It's better to create consistent categorisations. For example, gender identity can sometimes be collected as male, female, transgender, gender neutral, agender, pangender, genderqueer etc. Most of these categories would include very small numbers that cannot be used in the analysis. Then it will be a good practice to generate another shorter version of the gender identity variable in the cleaned data (e.g., male, female and non-binary). Then this variable can be used consistently across different analyses. 
 
-In psychology, lots of measures were conducted using instruments with multiple items. Hence derived variables (i.e. total scores, weighted scores) will need to be generated in the cleaned data. 
+In psychology, lots of measures were conducted using instruments with multiple items. Hence derived variables (e.g., total scores, weighted scores) will need to be generated in the cleaned data. 
 
-The "format of the data" refers to the format of data required for different types of analysis,  i.e. cross-sectional analysis requires wide version of data (one row per person); longitudinal analysis requires long version of data (multiple rows per person with each row representing one observation with unique identifiers for each person or a  higher level of clustering group); survival analysis requires censored data (one or multiple rows per person depending on whether evaluating single outcome or recurrent outcomes with time scale and censoring status defined) . Sometimes you will need to have both the wide and long version of cleaned data stored.   
+The "format of the data" refers to the format of data required for different types of analysis,  e.g., cross-sectional analysis requires a wide version of data (one row per person); longitudinal analysis requires a long version of data (multiple rows per person with each row representing one observation with unique identifiers for each person or a  higher level of clustering group); survival analysis requires censored data (one or multiple rows per person depending on whether evaluating single outcome or recurrent outcomes with time scale and censoring status defined). Sometimes you will need to have both the wide and long version of cleaned data stored.   
 
-More often your final "cleaned" data will change over time for most of larger studies due to issues identified when the study evolves, i.e. additional errors identified, more data collected etc. Hence you will need to create a version control system to capture these changes. A common practice is to store the "cleaned" versions of data with a time stamp, i.e.  "A_brilliant_study_cleaned_V1_03032012.rds". 
+More often your final "cleaned" data will change over time for most of larger studies due to issues identified when the study evolves, e.g., additional errors identified, more data collected etc. Hence you will need to create a version control system to capture these changes. A common practice is to store the "cleaned" versions of data with a timestamp, e.g.,  "A_brilliant_study_cleaned_V1_03032012.rds". 
 
 
 ## Tidyverse data cleaning routine 
@@ -552,27 +578,31 @@ data$diagnosis <- as.factor(data$diagnosis)
 data$therapy <- as.factor(data$therapy)
 ```
 
-The operation this chunk of code was trying to achieve was simply converting a few variables from string to factor.  When there are only a few variables to edit, this type of code is still readable. As the number of variables increase and number of operations increase, you code will soon be too hard to read and amend. Hadley introduced a game changing new philosophy: **tidyverse**. In this new philosophy defines not only what the tidy data should look like, but also what tidy code should look like. Using tidyverse grammar (using *dplyr* package), the above data cleaning code became:  
+The operation this chunk of code was trying to achieve was simply converting a few variables from string to factor.  When there are only a few variables to edit, this type of code is still readable. As the number of variables and operations increases, you code will soon be too hard to read and amend. Hadley introduced a game-changing new philosophy: **tidyverse**. This new philosophy defines not only what the tidy data should look like, but also what tidy code should look like. Using tidyverse grammar (using *dplyr* package), the above data cleaning code became:  
 
 ```{r, eval=FALSE}
-data1 <- data %>% 
-  mutate_at(vars(group,time, gender, work_status, diagnosis, therapy),
-            as.factor)
+data1 <- data %>%
+  mutate_at(
+    vars(group, time, gender, work_status, diagnosis, therapy),
+    as.factor
+  )
 ```
 
 How to read this is simple, I am manipulating 6 variables (changing them to factor variables) in the *data* dataset and store the new dataset in *data1*. The code is now much more concise and readable. The beauty of this new style also lie on the use of pipe operation %>% in building a series of operations on the same dataset. 
 
 ```{r, eval=FALSE}
-data1 <- data %>% 
-  mutate_at(vars(group,time, gender, work_status, diagnosis, therapy),
-            as.factor) %>% 
-  mutate_at(vars(starts_with('k10_q')), as.numeric) %>% 
-  mutate(k10_total=rowSums(select(.,k10_q1:k10_q10)))
+data1 <- data %>%
+  mutate_at(
+    vars(group, time, gender, work_status, diagnosis,therapy),
+    as.factor
+  ) %>%
+  mutate_at(vars(starts_with("k10_q")), as.numeric) %>%
+  mutate(k10_total = rowSums(select(., k10_q1:k10_q10)))
 ```
 
-The above code change 6 variables to factor variables, change individual K10 items to numeric and then calculate total scores of K10 as the sum of items from k10_q1 to k10_q10.
+The above code change 6 variables to factor variables, change individual K10 items to numeric and then calculate the total score of K10.
 
-There are a range of useful functions in dplyr such as, group_by(), filter(), select(), summarize()... The detailed introduction on *dplyr* can be found in [Chapter 4 of Introduction to Data Science] (https://rafalab.github.io/dsbook/tidyverse.html) by Hadley and [*dplyr* cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf) If you are still using the traditional "hard" coding style, it is time to upgrade! 
+There are a range of useful functions in dplyr such as, group_by(), filter(), select(),and summarize(). The detailed introduction on *dplyr* can be found in [Chapter 4 of Introduction to Data Science] (https://rafalab.github.io/dsbook/tidyverse.html) by Hadley and [*dplyr* cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf) If you are still using the traditional "hard" coding style, it is time to upgrade! 
 
 ```{r , echo=FALSE,fig.align="center",out.width="70%"}
 knitr::include_graphics(here::here("Graphics/dplyr_schema.png"))
@@ -583,7 +613,7 @@ source: http://perso.ens-lyon.fr/lise.vaudor/dplyr/
 
 ## Re-shaping the data 
 
-It is common to have to work with both wide(or wider) and long(or longer) format of the data during your data cleaning process. You are also frequently required to change data between these two types, see example of reshaping using *gather()* and *spread()* from *tidyr* package below: 
+It is common to have to work with both wide(or wider) and long(or longer) formats of the data during your data cleaning process. You are also frequently required to change data between these two types, see an example of reshaping using *gather()* and *spread()* from *tidyr* package below: 
 
 ```{r , echo=FALSE,fig.align="center",out.width="100%"}
 knitr::include_graphics(here::here("Graphics/gather_spread.png"))
@@ -593,7 +623,7 @@ source: https://dannytabach.com/connecting-r-and-google-sheets.html
 \vspace{0.2 cm} 
 
 
-You can also use the [*reshape*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/reshape) function from *stats* package which can work with multiple columns.  Two new functions in *tidyr* can also work with mutiple columns and rows 
+You can also use the [*reshape*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/reshape) function from the *stats* package which can work with multiple columns.  Two new functions in *tidyr* can also work with multiple columns and rows. 
 
 ```{r , echo=FALSE,fig.align="center",out.width="100%"}
 knitr::include_graphics(here::here("Graphics/pivot_wider_R.png"))
@@ -610,23 +640,18 @@ String operation package [*stringr*](https://cran.r-project.org/web/packages/str
 ```{r , echo=FALSE,fig.align="center",out.width="100%"}
 knitr::include_graphics(here::here("Graphics/stringr.png"))
 ```
+Source: [Manipuler des strings avec R](https://perso.ens-lyon.fr/lise.vaudor/manipuler-des-strings-avec-r/)
+
 \vspace{0.2 cm} 
 
 
-Package working with date and time variables [*lubridate*](https://cran.r-project.org/web/packages/lubridate/lubridate.pdf).
+Package working with date and time variables [*lubridate*](https://cran.r-project.org/web/packages/lubridate/lubridate.pdf). See tutoria [here](https://blog.rsquaredacademy.com/handling-date-and-time-in-r/)
 
-Apply family, see tutiral [here](https://www.datacamp.com/community/tutorials/r-tutorial-apply-family)
-```{r}
-apply(iris,2,table)
-```
+Apply family, see tutorial [here](https://www.datacamp.com/community/tutorials/r-tutorial-apply-family)
 
-[*purrr*](https://purrr.tidyverse.org/index.html) for functional programming 
+[*purrr*](https://purrr.tidyverse.org/index.html) for functional programming
 
-```{r , echo=FALSE,fig.align="center",out.width="80%"}
-knitr::include_graphics(here::here("Graphics/purrr.jpg"))
-```
-Source: [*purrr* tutorial by Rebecca Barter](http://www.rebeccabarter.com/blog/2019-08-19_purrr/)
-
+[*janitor*](https://cran.r-project.org/web/packages/janitor/vignettes/janitor.html) package  assist with data cleaning 
 
 \vspace{0.2 cm} 
 
@@ -638,10 +663,10 @@ There is a famous quote about writing programming code
 
 The quote was originally from *The Barretts of Wimpole Street* when Robert Browning was trying to work out what he meant in a poem. However it is the reality for a vast majority of programmers, data scientists and statisticians. 
 
-I have developed a respiratory infection transmission model during my PhD time as an early R user. It was only published in my PhD thesis not in scientific publications due to lack of interest in airborne disease transmission. Then COVID happened, and we thought it will be important to publish this work in a reproducible format. However, my code back then was so terrible that it took me half a year to figure out what I did in 3 months. I had excuses back then, i.e. stress to finish the work on time, difficulties in including equations in code comments... Now my code is slightly better with my following rules:
+I have developed a respiratory infection transmission model during my PhD time as an early R user. It was only published in my PhD thesis not in scientific publications due to lack of interest in airborne disease transmission. Then COVID19 happened, and we thought it will be important to publish this work in a reproducible format. However, my code at that time was so terrible that it took me half a year to figure out what I did in 3 months. I had excuses back then, e.g., stress to finish the work on time, difficulties in including equations in code comments... Now my code is slightly better with my following rules:
 
-* Always use R markdown (or R notebook) file for data cleaning
-* Document decisions in text field of the R markdown file 
+* Always use R Markdown (or R Notebook) file for data cleaning
+* Document decisions in text field of the R Markdown file 
 * Include specific code comments alongside the code
 
 The modern version of my data cleaning code looks like this: 
@@ -649,87 +674,94 @@ The modern version of my data cleaning code looks like this:
 
 Calculate total scores and obtain OASIS categories using cut-off value of >=8 following Moore et al 2015. 
 ```{r,, eval=FALSE}
-OASIS <- OASIS %>% 
-    # calculate total score
-    mutate(oasis_total = rowSums(select(.,OASISq1:OASISq5))) %>% 
-    # define groups
-    mutate(oasis_total_group = cut(oasis_total, breaks = c(-1,7,Inf), 
-                                 labels = c("Absence of anxiety disorder ",
-                                            "Presence of anxiety disorder"))) %>% 
-    # remove useless columns 
-    select(- c(AxDate, status))  %>% 
-    # rename variables for consistency
-    setnames( old=paste0("OASISq",1:5), new=paste0("oasis_q",1:5)) 
+OASIS <- OASIS %>%
+  # calculate total score
+  mutate(oasis_total = rowSums(select(., OASISq1:OASISq5))) %>%
+  # define groups
+  mutate(oasis_total_group = cut(oasis_total,
+    breaks = c(-1, 7, Inf),
+    labels = c(
+      "Absence of anxiety disorder ",
+      "Presence of anxiety disorder"
+    )
+  )) %>%
+  # remove useless columns
+  select(-c(AxDate, status)) %>%
+  # rename variables for consistency
+  setnames(old = paste0("OASISq", 1:5), new = paste0("oasis_q", 1:5))
 
 # check
-table(OASIS$oasis_total,OASIS$oasis_total_group,exclude = NULL ) 
+table(OASIS$oasis_total, OASIS$oasis_total_group, exclude = NULL)
 ```
 
 ## Code checking 
 
-It's important to cross check you data cleaning code. The common self-checking points are 
+It's important to cross-check your data cleaning code. The common self-checking points are listed below:
 
 
-* When a new variable is generated based on old variable, check whether it is correct via cross-tabulate it with the original variable. 
-* When performing merging datasets, always check if you have correctly matched records, weather the total number of rows is correct 
-* When calculate total scores, choose to eyeball a few records to see if it is correct.
+* When a new variable is generated based on an old variable, check whether it is correct via cross-tabulate it with the original variable. 
+* When performing merging datasets, always check if you have correctly matched records, whether the total number of rows is correct 
+* When calculating  total scores, choose to eyeball a few records to see if it is correct.
 * Cross check you final data with raw data (look at the Hmisc::describe() of the raw data and the updated data side by side)
-* When change the data between long and wide data type, manually check if the number of rows are as expected (i.e. 1000 participants completed baseline survey and 500 completed follow-up, the long data should have 1500 rows). 
-* Whether nested variables are coded correctly. If you have a drinking quantity variable which was only asked when people reported drinking. Then you should code the quantity as 0 if they did not drink (unless you have a good reason not to). This is because sometimes you might accidentally exclude observations if these nested variables were coded as missing. Also if you use multiple imputation, coding them to missing (intentionally missing) will also cause problems.
+* When changing the data between long and wide data types, manually check if the number of rows is as expected (e.g., 1000 participants completed a baseline survey and 500 completed a follow-up, the long data should have 1500 rows). 
+* Whether nested variables are coded correctly. If you have a drinking quantity variable that was only asked when people reported drinking. Then you should code the quantity as 0 if they did not drink (unless you have a good reason not to). This is because sometimes you might accidentally exclude observations if these nested variables were coded as missing. Also if you use multiple imputation, coding them to missing (intentionally missing) will also cause problems.
 
 
 ## Common pitfalls 
 
 ### Missing value 
 
-Missing values are coded as *NA* in R data. See instructions on dealing with R missing values [here](https://uc-r.github.io/missing_values) and [here](https://stats.idre.ucla.edu/r/faq/how-does-r-handle-missing-values/) When tabulate data always use *exclude=NULL*, or you can use tidyverse style function *tabyl* from *janitor* package which can also store cross-tabulate results in a data frame.
+Missing values are coded as *NA* in R data. See instructions on dealing with R missing values [here](https://uc-r.github.io/missing_values) and [here](https://stats.idre.ucla.edu/r/faq/how-does-r-handle-missing-values/) When tabulating data always use *exclude=NULL*, or you can use tidyverse style function *tabyl* from *janitor* package which can also store cross-tabulate results in a data frame.
 
 ```{r}
-data <- tibble(a = c(1,2,3,4), b = c(4,NA,5,6), c = c(7,8,9,NA))
-table(data$a,data$b, exclude = NULL)
-
+data <- tibble(a = c(1, 2, 3, 4), b = c(4, NA, 5, 6), c = c(7, 8, 9, NA))
+table(data$a, data$b, exclude = NULL)
 
 library(janitor)
-data %>% 
-  tabyl(a,b)
+data %>%
+  tabyl(a, b)
 
 ```
 
 When using rowSums and rowMeans functions, you have to be mindfull of missing data, see following example.
 
 ```{r}
+data %>%
+  mutate(
+    sum = rowSums(., na.rm = FALSE),
+    mean = rowMeans(., na.rm = FALSE)
+  )
 
 data %>%
-     mutate(sum = rowSums(., na.rm=FALSE),
-            mean = rowMeans(., na.rm=FALSE))
-
-data %>%
-     mutate(sum = rowSums(., na.rm=TRUE),
-            mean = rowMeans(., na.rm=TRUE))
+  mutate(
+    sum = rowSums(., na.rm = TRUE),
+    mean = rowMeans(., na.rm = TRUE)
+  )
 ```
+
 ### Duplication
 
-Sometimes there are duplicated records in the database or being created in the data pre-processing stage. This is perticularly problematic when you are working with large datasets from secondary source. You have to be mindful to keep track of number of observations through out the data cleaning code.  
+Sometimes there are duplicated records in the database or being created in the data pre-processing stage. This is particularly problematic when you are working with large datasets from a secondary source. You have to be mindful to keep track of the number of observations throughout the data cleaning code.  
 
 
 ### The trap of white space
 
-R string fields sometimes include leading and trailing white spaces, which you cannot see when *View()* the data. However, this will cause issues when you are trying to categories data or merging the data, see following example  
+R string fields sometimes include leading and trailing white spaces, which you cannot see when *View()* the data. However, this will cause issues when you are trying to categorise  or merge the data, see following example  
 
 ```{r}
-data1 <- tibble(key = c("a","b","c ","d"), number_1 = c(1,2,3,4))
-data2 <- tibble(key = c("a","b", "c"), number_2 = c(5,6,7))
-data1 %>% 
+data1 <- tibble(key = c("a", "b", "c ", "d"), number_1 = c(1, 2, 3, 4))
+data2 <- tibble(key = c("a", "b", "c"), number_2 = c(5, 6, 7))
+data1 %>%
   left_join(data2)
 
 ```
 The *str_trim* function removes the leading and trailing white space, which will make sure the data can be joined correctly. 
 
 ```{r}
-  
-data1 %>% 
-  mutate(key = str_trim(key)) %>% 
-  left_join(data2)
+
+data1 %>%
+    mutate(key = str_trim(key)) %>%
+    left_join(data2)
 
 ```
 ### Be mindfull of which function you are calling 
@@ -751,13 +783,8 @@ This is referred as the ["WAT" moment with R programming](https://rstudio.com/re
 ```{r}
 # combining factors makes integers
 c(factor("a"), factor("b"))
-#> [1] 1 1
- 
-# combing dates and date-times give incorrect values
-dt <- as.Date("2020-01-1")
-dttm <- as.POSIXct("2020-02-01 09:00", tz = "America/New_York")
-c(dt,dttm)
-c(dttm,dt)
+# > [1] 1 1
+
 ```
 
 ```{r , echo=FALSE,fig.align="left",out.width="50%"}
@@ -765,20 +792,24 @@ knitr::include_graphics(here::here("Graphics/what.png"))
 ```
 Be careful with R's automatic coercion. 
 
-## Documentation for the never ending data cleaning process 
+## Data integrity checking
 
-Documentation is the key to good data quality. Historically, studies are small and isolated. Once data cleaning is completed (mostly via eyeballing), you will conduct the analysis and the data files (on paper) will be sealed in a draw and no one will be looking at them. Nowadays, we often work with large and evolving datasets, i.e. longitudinal, administrative and registry data. Hence it is important to keep a good documentation that surmise important decisions, data errors identified, changes in data cleaning process, version history, and associated locations where datasets and historical data cleaning files are stored. I often use a separate word document to keep track of these issues. When there are multiple users using the "cleaned" data, it is also important to keep a data dictionary of the cleaned data, in which you note down, the time of the variable introduced to the dataset, any changes in coding and cleaning to the variable as well as other important notice that you would like your users to know. 
+Data integrity refers to the reliability and trustworthiness of data. There are many reasons that could cause data integrity issues, such as human errors in data entry, issues with data collection platform, and errors in data cleaning process. It's important to check the data validity and integrity before analysing the data.      
+
+## Documentation for the never-ending data cleaning process 
+
+Documentation is the key to good data quality. Historically, studies are small and isolated. Once data cleaning is completed (mostly via eyeballing), you will conduct the analysis and the data files (on paper) will be sealed in a draw and no one will be looking at them. Nowadays, we often work with large and evolving datasets, e.g., longitudinal, administrative and registry data. Hence it is important to keep good documentation that summarises important decisions, data errors identified, changes in the data cleaning process, version history, and associated locations where datasets and historical data cleaning files are stored. I often use a separate word document to keep track of these issues. When there are multiple users using the "cleaned" data, it is also important to keep a data dictionary of the cleaned data, in which you note down, the time of the variable introduced to the dataset, any changes in coding and cleaning to the variable as well as other important notice that you would like your users to know. 
 
 ## Final remarks 
 
-There are a few additional key points need to be noted for data pre-processing : 
+There are a few additional key points that need to be noted for data pre-processing: 
 
-* Backup files ( backup original data, intermediate "cleaned" versions of the data and cleaning files) frequently in reliable place(s) so you can uncover historical issues easily. You can zip the files to prevent people accidentally changing the files or store the backup files in locations with limited and authorised access. 
-* Establish a code auditing work flow. If possible, have all the code and final data reviewed by a second person. 
+* Store backup files (backup original data, intermediate "cleaned" versions of the data and cleaning files) frequently in reliable place(s) so you can uncover historical issues easily. You can zip the files to prevent people from accidentally changing the files or store the backup files in locations with limited and authorised access. 
+* Establish a code auditing workflow. If possible, have all the code and final data reviewed by a second person. 
 
 # Statistical analysis with R
 
-R has over 20K indexed packages,  over 3M indexed functions and over 3m users worldwide. So R has explosive level of capacity and flexibility as well as a tremendous workforce. R is now equipped with all or most of functionalities of many other statistical/ML packages: Stata, SPSS, SAS, Mplus... ( Python is still irreplaceable in deep mining). 
+R has over 20K indexed packages,  over 3M indexed functions and over 3m users worldwide. So R has an explosive level of capacity and flexibility as well as a tremendous workforce. R is now equipped with all or most of the functionalities of many other statistical/ML packages: Stata, SPSS, SAS, Mplus etc (Python is still irreplaceable in ML/deep learning). 
 
 ```{r , echo=FALSE,fig.align="center",out.width="70%"}
 knitr::include_graphics(here::here("Graphics/top_packages.png"))
@@ -787,7 +818,7 @@ Source: https://www.rdocumentation.org/trends
 
 \vspace{0.2 cm} 
 
-A few common analysis and packages are listed here 
+A few common analyses and packages are listed here 
 
 ```{r,echo=FALSE}
 tabl <- "
@@ -804,18 +835,18 @@ Clustering  | stats::hclust, stats::kmeans, cluster::pam
 Principal component analysis  | stats::princomp 
 
 "
-df <- read.delim2(textConnection(tabl), header = FALSE,sep = "|" , strip.white = TRUE, stringsAsFactors = FALSE )
+df <- read.delim2(textConnection(tabl), header = FALSE, sep = "|", strip.white = TRUE, stringsAsFactors = FALSE)
 names(df) <- c("Analysis", "Function and package")
-knitr::kable( df, linesep = "", booktabs = T) %>% 
-  column_spec(1, width =  "10 cm") %>% 
-  column_spec(2, width =  "6 cm") 
+knitr::kable(df, linesep = "", booktabs = T) %>%
+  column_spec(1, width = "10 cm") %>%
+  column_spec(2, width = "6 cm")
 ```
 
 One of the best books for learning statistical methods using R is [An Introduction to Statistical Learning](https://www.statlearning.com/) by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani. The advanced version of this book is [The Elements of
 Statistical Learning](https://web.stanford.edu/~hastie/ElemStatLearn/) by Trevor Hastie, Robert Tibshirani and Jerome Friedman. However, both of the books are from more machine learning (ML) perspectives. A similar free book for psychology students is [Advanced Statistics Using R](https://advstats.psychstat.org/book/ZhangWang2017.pdf) by Zhiyong Zhang and Lijuan Wang. 
-[Discovering Statistics Using R](https://www.discoveringstatistics.com/books/discovering-statistics-using-r/) by Andy Field is also one of the best R statistical handbooks.  There are many content specific books that are quite interesting and useful: 
+[Discovering Statistics Using R](https://www.discoveringstatistics.com/books/discovering-statistics-using-r/) by Andy Field is also one of the best R statistical handbooks.  There are many content-specific books that are quite interesting and useful: 
 
-* [An Introduction to Generalized Linear Models](https://www.amazon.com.au/Introduction-Generalized-Linear-Models-Third/dp/1584889500) by by Annette J. Dobson, Adrian G. Barnett. R code were given in some examples 
+* [An Introduction to Generalized Linear Models](https://www.amazon.com.au/Introduction-Generalized-Linear-Models-Third/dp/1584889500) by Annette J. Dobson, Adrian G. Barnett. R code were given in some examples 
 * [Forecasting: Principles and Practice](https://otexts.com/fpp2/) by Rob J Hyndman and George Athanasopoulos for time-series analysis 
 * [Applied Survival Analysis Using R](https://www.amazon.com.au/Applied-Survival-Analysis-Using-Use-ebook/dp/B01FKDTW3W) by Dirk F. Moore 
 * [Statistical Rethinking A Bayesian Course with Examples in R and Stan](https://xcelab.net/rm/statistical-rethinking/) by Richard McElreath. Associated lectures can be found [here](https://github.com/rmcelreath/statrethinking_winter2019)
@@ -825,25 +856,24 @@ Statistical Learning](https://web.stanford.edu/~hastie/ElemStatLearn/) by Trevor
 
 ## Exploratory data analysis (EDA)
 
-Once your data is cleaned, you will normally start with the "exploratory" analysis phase. The "exploratory" here refers to evaluating variable properties, such as distribution, bivariate association and dimensionality, rather than explore "significant" results. More often exploratory results, such as distributions, will also need to be included in your report/thesis/paper. This process provides you with general ideas about your dataset, clues on appropriateness of models (Poisson regression vs negative binomial regression), check outliers, identify any inconsistencies with your understanding (I call this debugging your data). 
+Once your data is cleaned, you will normally start with the "exploratory" analysis phase. The "exploratory" here refers to evaluating variable properties, such as distribution, bivariate association and dimensionality, rather than exploring "significant" results. More often exploratory results, such as distributions, will also need to be included in your report/thesis/paper. This process provides you with general ideas about your dataset, clues on appropriateness of models (Poisson regression vs negative binomial regression), check outliers, identify any inconsistencies with your understanding (I call this debugging your data). 
 
-[Exploratory Data Analysis with R](https://leanpub.com/exdata?utm_source=Homepage&utm_medium=PersonalWebsite&utm_campaign=Personal%20Website) by Roger Peng includes lots of useful examples.  The Chapter 7 of [R for Data Science](https://r4ds.had.co.nz/exploratory-data-analysis.html) also includes a nice intro to EDA. Importantly, you should not use EDA to generate research questions. Your research questions should be pre-defined and your analysis will need to be planed ahead. EDA can help you refine models, but you should **not** look too hard in to it, which might turn your years of work into another piece of "fished" or "hacked" results out of null-association (winner's curse). See a few interesting publications here:  [The Extent and Consequences of P-Hacking in Science](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002106) and [The garden of forking paths: Why multiple comparisons can be a problem,
+[Exploratory Data Analysis with R](https://leanpub.com/exdata?utm_source=Homepage&utm_medium=PersonalWebsite&utm_campaign=Personal%20Website) by Roger Peng includes lots of useful examples. Chapter 7 of [R for Data Science](https://r4ds.had.co.nz/exploratory-data-analysis.html) also includes a nice intro to EDA. Importantly, you should not use EDA to generate research questions. Your research questions should be pre-defined and your analysis will need to be planned ahead. EDA can help you refine models, but you should **not** look too hard into it, which might turn your years of work into another piece of "fished" or "hacked" results out of null association (winner's curse). See a few interesting publications here:  [The Extent and Consequences of P-Hacking in Science](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002106) and [The garden of forking paths: Why multiple comparisons can be a problem,
 even when there is no “fishing expedition” or “p-hacking” and the research
 hypothesis was posited ahead of time](http://stat.columbia.edu/~gelman/research/unpublished/forking.pdf).
 
 ## Table 1
 
-Simple descriptive table, normally referred as the "Table 1", is where your data story start. In this table you will need to provide enough information about the data that was used in then analyses so your readers can have a over view of it's profiles. For most of health analysis, your reporting unit is participants and you would generally be required to report demographics characteristics and risk factors in this table. R has lots of existing packages that automatic generate table 1.  [*tableby*](https://www.rdocumentation.org/packages/arsenal/versions/3.5.0/topics/tableby) from  *arsenal* is very easy to use when you directly display your results. However, it is difficult to be extracted to tibble/data frame for further manipulations.   
-
+A simple descriptive table, normally referred to as “Table 1”, is where your data story start. In this table, you will need to provide enough information about the data that was used in then analyses so your readers can have an overview of its profiles. For most of the health analysis, your reporting unit is participants and you would generally be required to report demographic characteristics and risk factors in this table. R has lots of existing packages that automatically generate table 1.  [*tableby*](https://www.rdocumentation.org/packages/arsenal/versions/3.5.0/topics/tableby) from  *arsenal* is very easy to use when you directly display your results. However, it is difficult to be extracted to tibble/data frame for further manipulations.   
 
 ```{r,results='asis'}
 library(arsenal)
 my_controls <- tableby.control(
   test = T,
   total = F,
-  digits=1,
-  digits.pct=1,
-  digits.p=3,
+  digits = 1,
+  digits.pct = 1,
+  digits.p = 3,
   numeric.test = "anova", cat.test = "chisq",
   numeric.stats = c("meansd", "medianq1q3", "range", "Nmiss2"),
   cat.stats = c("countpct", "Nmiss2"),
@@ -854,13 +884,13 @@ my_controls <- tableby.control(
     Nmiss2 = "Missing"
   )
 )
-table<- tableby( Species ~ Sepal.Length+ Sepal.Width+ Petal.Length + Petal.Width ,
+table <- tableby(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
   data = iris,
   control = my_controls
 )
- 
+
 summary(table,
-  title = "Characteristics by species in iris data"
+  title = "Characteristics by species in %>% data"
 )
 ```
 
@@ -869,16 +899,17 @@ Another useful Table 1 function is [*tbl_summary*](http://www.danieldsjoberg.com
 
 ```{r,results="hide"}
 library(gtsummary)
-tbl <- 
-    iris %>%
-    tbl_summary(
-        missing = "ifany",
-        statistic = where(is.numeric) ~ "{mean} ({sd})",
-        by= Species
-    ) %>%
-    bold_labels() %>%
-    add_p(test=list(all_numeric() ~ "aov"),
-          pvalue_fun = ~style_pvalue(.x, digits = 3))
+tbl <- iris %>%
+  tbl_summary(
+    missing = "ifany",
+    statistic = where(is.numeric) ~ "{mean} ({sd})",
+    by = Species
+  ) %>%
+  bold_labels() %>%
+  add_p(
+    test = list(all_numeric() ~ "aov"),
+    pvalue_fun = ~ style_pvalue(.x, digits = 3)
+  )
 
 tbl
 ```
@@ -891,25 +922,25 @@ as_gt(tbl) %>% gt::as_latex()
 *gtsummary* object can be extracted as tibble and further edited.
 
 ```{r,results='asis'}
-tbl <- tbl %>% 
-    as_tibble() 
+tbl <- tbl %>%
+  as_tibble()
 
-#remove style
-names(tbl)<-str_replace_all(names(tbl),"\\**","")
-indent<-which(str_count(tbl$Characteristic,"__")==0)
-tbl$Characteristic<-str_replace_all(tbl$Characteristic,"__","")
+# remove style
+names(tbl) <- str_replace_all(names(tbl), "\\**", "")
+indent <- which(str_count(tbl$Characteristic, "__") == 0)
+tbl$Characteristic <- str_replace_all(tbl$Characteristic, "__", "")
 
-#change first row 
-tbl$Characteristic<-str_remove(tbl$Characteristic,"Sepal.")
-tbl$Characteristic<-str_remove(tbl$Characteristic,"Petal.")
-tbl<-tbl %>% 
-  add_row(Characteristic="Sepal",.before=1) %>% 
-  add_row(Characteristic="Petal",.before=4) 
+# change first row
+tbl$Characteristic <- str_remove(tbl$Characteristic, "Sepal.")
+tbl$Characteristic <- str_remove(tbl$Characteristic, "Petal.")
+tbl <- tbl %>%
+  add_row(Characteristic = "Sepal", .before = 1) %>%
+  add_row(Characteristic = "Petal", .before = 4)
 
-options(knitr.kable.NA = '')
-knitr::kable( tbl, booktabs = TRUE,linesep = "") %>% 
-    kable_styling(bootstrap_options = "striped") %>% 
-    add_indent(c(2,3,5,6))
+options(knitr.kable.NA = "")
+knitr::kable(tbl, booktabs = TRUE, linesep = "") %>%
+  kable_styling(bootstrap_options = "striped") %>%
+  add_indent(c(2, 3, 5, 6))
 ```
 ## Regression models
 
@@ -918,19 +949,21 @@ Regression model follows very similar style of coding:
 function( y~ x1 + x2 + x3, data=data, additional specifications)
 
 ```{r}
-mod1 <- lm(Petal.Length ~ Species + Sepal.Width*Sepal.Length, data=iris)
+mod1 <- lm(Petal.Length ~ Species + Sepal.Width * Sepal.Length, data = iris)
 summary(mod1)
+# "Sepal.Width*Sepal.Length" is the interaction term.
 ```
 
-"Sepal.Width*Sepal.Length" is the interaction term. Most of regression models are easy to fit. The following lists are some of known issues and concerns for common models (some are not specific to R): 
 
-* Some GLMs, particularly Relative Risk regression also known as log-binomial regression (GLM with log link and binomial distribution model), have convergence problem [@Williamson_2013]. This is relate to parameter constraints at boundaries. For log-binomial regression, a package [*logbin*](https://cran.r-project.org/web/packages/logbin/logbin.pdf) was developed with advance convergence ability (use combinatorial EM to cycles through parameter space). For other GLMs, Bayesian models (i.e. using [*brms*](https://cran.r-project.org/web/packages/brms/vignettes/brms_overview.pdf)) can be used to overcome some of the convergence problems.
-* Linear mixed effect models sometimes have convergence issues too. You can test performance of different optimizers, see example [here](http://svmiller.com/blog/2018/06/mixed-effects-models-optimizer-checks/). 
-* Multinomial logistic regression model [*nnet::multinom*](nnet::multinom) requires predictors to be roughly scaled to [0,1] or the fit will be slow or may not converge at all. Normally this is fine, however when you have some large values (i.e. IRSAD scores which is around 1000), the model will stop working. Hence it will be better to standardise those predictors.
-* Sometimes there will be an error message "Error: no valid set of coefficients has been found: please supply starting values", this means the model is having trouble to initialize the optimization and require you to supply a set of starting values for intercept and predictors. I normally run a model with reduced number of predictors and use the coefs from the reduced model as starting values. 
-* Set seed for models require random sampling, i.e. bootstrap. 
-* It will be better to use splines (i.e. [*ns*](https://www.rdocumentation.org/packages/splines/versions/3.6.2/topics/ns)) instead of square and cube terms to evaluate non-linear associations, see a review by @Perperoglou_2019.
-* Different package will not necessary produce identical results, but they should generally agree with each other.  If not something is wrong: either a bug in your code or in the existing code libraries.
+Most of the regression models are easy to fit. The following lists are some of known issues and concerns for common models (some are not specific to R): 
+
+* Some GLMs, particularly Relative Risk regression also known as log-binomial regression (GLM with log link and binomial distribution model), have convergence problems [@Williamson_2013]. This is related to parameter constraints at boundaries. For log-binomial regression, a package [*logbin*](https://cran.r-project.org/web/packages/logbin/logbin.pdf) was developed with advanced convergence ability (use combinatorial EM to cycles through parameter space). For other GLMs, Bayesian models (e.g., using [*brms*](https://cran.r-project.org/web/packages/brms/vignettes/brms_overview.pdf)) can be used to overcome some of the convergence problems.
+* Linear mixed-effect models sometimes have convergence issues too. You can test the performance of different optimisers, see the example  [here](http://svmiller.com/blog/2018/06/mixed-effects-models-optimizer-checks/). 
+* Multinomial logistic regression model [*nnet::multinom*](nnet::multinom) requires predictors to be roughly scaled to [0,1] or the fit will be slow or may not converge at all. Normally this is fine, however, when you have some large values (e.g., IRSAD scores which is around 1000), the model will stop working. Hence it will be better to standardise those predictors.
+* Sometimes there will be an error message "Error: no valid set of coefficients has been found: please supply starting values", this means the model is having trouble  initialising the optimization and require you to supply a set of starting values for intercept and predictors. I normally run a model with a reduced number of predictors and use the coefs from the reduced model as starting values. 
+* Set seed for models requires random sampling, e.g., bootstrap. 
+* It will be better to use splines (e.g., [*ns*](https://www.rdocumentation.org/packages/splines/versions/3.6.2/topics/ns)) instead of square and cube terms to evaluate non-linear associations, see a review by @Perperoglou_2019.
+* Different packages will not necessarily produce identical results, but they should generally agree with each other.  If not something is wrong: either a bug in your code or in the existing code libraries.
 
 
 
@@ -938,25 +971,102 @@ summary(mod1)
 
 ```{r,message=FALSE,warning=FALSE}
 library(logbin)
-iris$Versicolor = as.numeric(iris$Species == "versicolor")
-mod1 <- glm(Versicolor~ Sepal.Length ,
-            family = binomial(link = "log"), data = iris)
-mod2 <- logbin::logbin(formula(mod1), data = iris,method = "cem", trace = TRUE)
+iris$Versicolor <- as.numeric(iris$Species == "versicolor")
+mod1 <- glm(Versicolor ~ Sepal.Length,
+  family = binomial(link = "log"), data = iris
+)
+mod2 <- logbin::logbin(formula(mod1), data = iris, method = "cem", trace = TRUE)
 
-coefficients( summary(mod1))
-coefficients( summary(mod2))
+coefficients(summary(mod1))
+coefficients(summary(mod2))
 ```
+
+## Check assumptions 
+
+All models have different types of assumptions and it is the user's responsibility to identify whether their model is suitable or not. For linear regression, the modeling assumptions can be evaluated using diagnostic plots.
+
+```{r}
+mod1 <- lm(Petal.Length ~ Species + Sepal.Width * Sepal.Length, data = iris)
+par(mfrow = c(2, 2))
+plot(mod1)
+```
+A slightly more attractive version can be implemented using the user defined function *diagPlot* below. 
+
+```{r}
+library(ggpubr)
+
+
+diagPlot<-function(model){
+  
+    p1<-ggplot(model, aes(.fitted, .resid))+
+      geom_point() +
+      stat_smooth(method="loess")+
+      geom_hline(yintercept=0, col="red", linetype="dashed")+
+      xlab("Fitted values")+ylab("Residuals")+
+      ggtitle("Residual vs Fitted Plot") +
+      theme_bw()
+    
+    p2<-ggplot(model, aes(qqnorm(.stdresid)[[1]], .stdresid)) +
+      geom_point(na.rm = TRUE) +
+      geom_abline(intercept = 0,colour="blue") +
+      xlab("Theoretical Quantiles")+ylab("Standardized Residuals")+
+      ggtitle("Normal Q-Q")+
+      theme_bw()
+    
+    p3<-ggplot(model, aes(.fitted, sqrt(abs(.stdresid)))) +
+      geom_point(na.rm=TRUE) +
+      stat_smooth(method="loess", na.rm = TRUE)+xlab("Fitted Value")+
+      ylab(expression(sqrt("|Standardized residuals|")))+
+      ggtitle("Scale-Location") +
+      theme_bw()
+    
+    p4<-ggplot(model, aes(seq_along(.cooksd), .cooksd))+
+      geom_bar(stat="identity", position="identity") + 
+      xlab("Obs. Number") +ylab("Cook's distance")+
+      ggtitle("Cook's distance")+
+      theme_bw()
+    
+    p5<-ggplot(model, aes(.hat, .stdresid))+
+      geom_point(aes(size=.cooksd), na.rm=TRUE) +
+      stat_smooth(method="loess", na.rm=TRUE)+
+      xlab("Leverage")+ylab("Standardized Residuals")+
+      ggtitle("Residual vs Leverage Plot")+
+      scale_size_continuous("Cook's Distance", range=c(1,5))+
+      theme_bw()+
+      theme(legend.position="bottom")
+    
+    p6<-ggplot(model, aes(.hat, .cooksd)) +
+      geom_point(na.rm=TRUE)+
+      stat_smooth(method="loess", na.rm=TRUE) +
+      xlab("Leverage hii")+ylab("Cook's Distance") +
+      ggtitle("Cook's dist vs Leverage hii/(1-hii)") +
+      geom_abline(slope=seq(0,3,0.5), color="gray", linetype="dashed")+
+      theme_bw()
+    
+    combine_plot<- ggarrange(p1, p2, p3, p4, p5, p6 ,  ncol=3, nrow=2) 
+    return(combine_plot)
+}
+# source:https://rpubs.com/therimalaya/43190 
+```
+
+\blandscape
+```{r,fig.height=5,fig.width=10,message=FALSE, warning=FALSE}
+plot<-diagPlot(mod1)
+plot
+```
+
+\elandscape
 
 ## Extract results
 
-Although R can print analysis results, it often will not present results that can be directly reportable. You often required to programe your own code to store and process results and then assemble proper tables and figures. Luckily there are many third party packages available to extract results from common models. [*sjPlot*](https://cran.r-project.org/web/packages/sjPlot/sjPlot.pdf) is a useful package which can process many common model results. 
+Although R can print analysis results, it often will not present results that can be directly reportable. You are often required to program your own code to store and process results and then assemble proper tables and figures. Luckily there are many third-party packages available to extract results from common models. [*sjPlot*](https://cran.r-project.org/web/packages/sjPlot/sjPlot.pdf) is a useful package that can process many common model results. 
 
 
 ```{r}
 library(sjPlot)
-mod1 <- lm(Petal.Length ~ Species , data=iris)
-mod2 <- lm(Petal.Length ~ Species + Petal.Width, data=iris)
-mod3 <- lm(Petal.Length ~ Species + Petal.Width + Species:Petal.Width, data=iris)
+mod1 <- lm(Petal.Length ~ Species, data = iris)
+mod2 <- lm(Petal.Length ~ Species + Petal.Width, data = iris)
+mod3 <- lm(Petal.Length ~ Species + Petal.Width + Species:Petal.Width, data = iris)
 ```
 
 ```{r, eval=FALSE}
@@ -977,7 +1087,7 @@ There are many factors you need to consider when displaying results, a few of th
 
 (1) Include point estimate, 95% CI and p-value (not starts) for regression models. The new recommendation is to report 3 digits if p-value < 0.05 otherwise 2 digits. 
 
-(2) Do not report p-value when hypothesis testing is meaningless.  A perfect example is a correlation coefficient $\rho=0.08$ with p-value< 0.001 (see example below). 
+(2) Do not report the p-value when hypothesis testing is meaningless.  A perfect example is a correlation coefficient $\rho=0.08$ with a p-value< 0.001 (see example below). 
 ```{r}
 set.seed(123)
 a <- rnorm(1000)
@@ -985,79 +1095,85 @@ b <- rnorm(1000)
 cor.test(a,b)
 ```
 
-(3) Include reference values. *tab_model* is currently having trouble to print out reference values. It is also difficult to configure custom settings and print LaTex table. The function below prints out linear regression model results and can be configured for different types of models and output requiements. 
+(3) Include reference values. *tab_model* is currently having trouble printing out reference values. It is also difficult to configure custom settings and print LaTex table. The function below prints out linear regression model results and can be configured for different types of models and output requirements. 
 
 ```{r}
-reg_table <- function(model,dta){
-  # Summarise coef 
+reg_table <- function(model, dta) {
+  # Summarise coef
   Coef <- data.frame(coefficients(summary(model))) %>%
-    mutate(Variables  = rownames(.)) %>% 
-    as_tibble() %>% 
-    filter(Variables != "(Intercept)") %>% 
-    mutate(Coef = format(round(Estimate, digits = 2), nsmall = 2)) %>% 
-    mutate('95% CI' = paste0(format(round( Estimate - 1.96*`Std..Error` , digits = 2),nsmall = 2),", " ,
-                                 format(round( Estimate + 1.96*`Std..Error` , digits = 2),nsmall = 2))) %>% 
-    mutate('p-value' = `Pr...t..`) %>% 
-    mutate('p-value' = ifelse(`p-value` < 0.001, "<0.001",
-                                    ifelse(`p-value` < 0.05, format(round(`p-value`, digits = 3 ), nsmall = 3),
-                                           format(round(`p-value`, digits = 2 ), nsmall = 2)))) %>% 
-   select(Variables, Coef,`95% CI`,`p-value`)
-  
-  # categorical variables for left col 
-  if (length(model$xlevels) > 0){
-      levels <- reshape2::melt(model$xlevels)
-      levels <- levels %>% 
-        mutate(Variables = paste0(L1, value)) %>%  
-        group_by(L1) %>% 
-        mutate(level = seq(n())) 
-    } else{
-        levels <- data.frame(value = NA,  L1 = "" ,Variables = "", level = NA)
-    }
-  
-  #extract variable labels 
-  varlabels <- as.data.frame(Hmisc::label(dta[,attr(model$terms,"term.labels")])) 
+    mutate(Variables = rownames(.)) %>%
+    as_tibble() %>%
+    filter(Variables != "(Intercept)") %>%
+    mutate(Coef = format(round(Estimate, digits = 2), nsmall = 2)) %>%
+    mutate("95% CI" = paste0(
+      format(round(Estimate - 1.96 * `Std..Error`, digits = 2), nsmall = 2), ", ",
+      format(round(Estimate + 1.96 * `Std..Error`, digits = 2), nsmall = 2)
+    )) %>%
+    mutate("p-value" = `Pr...t..`) %>%
+    mutate("p-value" = ifelse(`p-value` < 0.001, "<0.001",
+      ifelse(`p-value` < 0.05, format(round(`p-value`, digits = 3), nsmall = 3),
+        format(round(`p-value`, digits = 2), nsmall = 2)
+      )
+    )) %>%
+    select(Variables, Coef, `95% CI`, `p-value`)
+
+  # categorical variables for left col
+  if (length(model$xlevels) > 0) {
+    levels <- reshape2::melt(model$xlevels)
+    levels <- levels %>%
+      mutate(Variables = paste0(L1, value)) %>%
+      group_by(L1) %>%
+      mutate(level = seq(n()))
+  } else {
+    levels <- data.frame(value = NA, L1 = "", Variables = "", level = NA)
+  }
+
+  # extract variable labels
+  varlabels <- as.data.frame(Hmisc::label(dta[, attr(model$terms, "term.labels")]))
   names(varlabels) <- "label"
   varlabels$L1 <- rownames(varlabels)
-  varlabels <- varlabels %>% 
+  varlabels <- varlabels %>%
     mutate(label = ifelse(is.na(label) | as.character(label) == "",
-                          L1, as.character(label))) %>% 
+      L1, as.character(label)
+    )) %>%
     mutate(listvar = seq(n()))
-  
-  #prepare first column  
-  tablelabel <- data.frame(Variables = names(model$coefficients)) %>% 
-    filter(Variables != "(Intercept)") %>% 
-    mutate(Variables = as.character(Variables)) %>% 
+
+  # prepare first column
+  tablelabel <- data.frame(Variables = names(model$coefficients)) %>%
+    filter(Variables != "(Intercept)") %>%
+    mutate(Variables = as.character(Variables)) %>%
     full_join(levels) %>%
-    mutate(L1 = ifelse(is.na(L1), as.character(Variables), as.character(L1))) %>% 
-    left_join(varlabels) %>% 
-    arrange(listvar,level) %>% 
-    dplyr::select(-listvar,-level, -L1) %>% 
-    group_by(label) %>% 
-    mutate(total = n(),order = seq(n())) %>% 
-    mutate(expend =ifelse(order == 1 & total > 1,2,1)) %>% 
-    uncount(expend) %>% 
-    mutate(order = seq(n())) %>% 
-    mutate(value =ifelse(is.na(value) | (total > 1 & order == 1), 
-                         as.character(label),as.character( value))) %>% 
-        mutate(Variables = ifelse(total > 1 & order == 1,NA,Variables)) %>% 
-        ungroup() %>% 
-        dplyr::select(Variables, value,total ) 
-    
-  #extract final table
-   finaltable <-tablelabel %>% 
-        full_join(Coef)  %>% 
-        mutate(Coef = ifelse(!is.na(Variables) & is.na(Coef), "Ref", Coef )) %>% 
-        replace(is.na(.), "")
-   # extract which row for indentation and top row name 
-   indent <- which(finaltable$Variables != "" & finaltable$total > 1)
-   
-   #print
-   print(finaltable %>% 
-      select(-Variables,-total) %>% 
-      rename(Predictors=value) %>% 
-      kable(align=c('l', rep('c', 3 )), booktabs = T, linesep = "") %>%
-        kable_styling(bootstrap_options = "striped",  full_width = F) %>% 
-        add_indent(indent)) 
+    mutate(L1 = ifelse(is.na(L1), as.character(Variables), as.character(L1))) %>%
+    left_join(varlabels) %>%
+    arrange(listvar, level) %>%
+    dplyr::select(-listvar, -level, -L1) %>%
+    group_by(label) %>%
+    mutate(total = n(), order = seq(n())) %>%
+    mutate(expend = ifelse(order == 1 & total > 1, 2, 1)) %>%
+    uncount(expend) %>%
+    mutate(order = seq(n())) %>%
+    mutate(value = ifelse(is.na(value) | (total > 1 & order == 1),
+      as.character(label), as.character(value)
+    )) %>%
+    mutate(Variables = ifelse(total > 1 & order == 1, NA, Variables)) %>%
+    ungroup() %>%
+    dplyr::select(Variables, value, total)
+
+  # extract final table
+  finaltable <- tablelabel %>%
+    full_join(Coef) %>%
+    mutate(Coef = ifelse(!is.na(Variables) & is.na(Coef), "Ref", Coef)) %>%
+    replace(is.na(.), "")
+  # extract which row for indentation and top row name
+  indent <- which(finaltable$Variables != "" & finaltable$total > 1)
+
+  # print
+  print(finaltable %>%
+    select(-Variables, -total) %>%
+    rename(Predictors = value) %>%
+    kable(align = c("l", rep("c", 3)), booktabs = T, linesep = "") %>%
+    kable_styling(bootstrap_options = "striped", full_width = F) %>%
+    add_indent(indent))
 }
 ```
 
@@ -1067,10 +1183,10 @@ reg_table <- function(model,dta){
 Hmisc::label(iris$Petal.Length) <- "Petal length"
 Hmisc::label(iris$Sepal.Width) <- "Sepal width"
 Hmisc::label(iris$Sepal.Length) <- "Sepal length"
-iris$Sepal.Length.Width <- iris$Sepal.Width*iris$Sepal.Length
+iris$Sepal.Length.Width <- iris$Sepal.Width * iris$Sepal.Length
 Hmisc::label(iris$Sepal.Length.Width) <- "Sepal length * width"
-mod <- lm(Petal.Width ~ Species + Petal.Length +Sepal.Width +Sepal.Length +Sepal.Length.Width , data = iris)
-reg_table(mod,iris)
+mod <- lm(Petal.Width ~ Species + Petal.Length + Sepal.Width + Sepal.Length + Sepal.Length.Width, data = iris)
+reg_table(mod, iris)
 ```
 
 
@@ -1082,17 +1198,143 @@ knitr::include_graphics(here::here("Graphics/table_figure.jpg"))
 Source:https://www.sciencedirect.com/science/article/pii/S0160412020321966#f0015 
 
 
-## Advanced topics
+# Advanced topics
 
-### Loops
+The benefit of using a full programming language instead of a statistical package for analysis is that you have unlimited potential to extend your analysis, e.g., develop new methods, web scraping, generate interactive graphics, establish a website, draft full paper etc.  There are some basic skills that could facilitate these advanced techniques, which require some attention. 
+
+
+## Control flow 
+
+The control flow in R is similar to other programming languages including choices (e.g.,. if/else, switch) and loops (e.g., for loop).  The for loop will probably be one of your most frequently used control flow in the analysis as we frequently need to repeat operations. You can loop over a vector or a list. 
+
+```{r}
+list <- list(2, 3)
+
+# loop version 1
+for (p in list) {
+  print(p)
+}
+
+for (i in 1:length(list)) {
+  print(list[[i]])
+}
+```
+
+One thing to notice is that compared with vectorized operations, using loops can down your code. This is a more severe issue for Python compared with R. You probably will not notice any differences when using R with simple operations However, when your work involve sampling, simulation or large datasets, the reduction in speed can be substantial. 
+
+
+```{r}
+system.time(print(apply(iris[1:4], 2, median)))
+system.time(for (i in 1:4) {
+  print(median(iris[, i]))
+})
+```
+
+This doesn't mean that you are not recommended to use loops. Actually compared with repetitively typing analysis code, using a function + loop is much more reliable and easy to maintain. A few rules to remember when using the loop are listed here:
+
+* Use vectorized operations as much as possible 
+* Always pre-define and fill the object and avoid growing the object (R automatically create copies of an object when you try to add undefined elements, e.g., a new row). 
+* Avoid creating new objects within the loop. 
+
+## Functions 
+
+Advance programming in R always requires you to be familiar with functions, as R essentially is a functional programming language. The motivation behind applying functions is that your code needs to be flexible, reusable and easily maintainable. If you find yourself having to copy-and-paste code, it's time to update your code with functions. A function is normally specified as follow: 
+
+```{r, eval=FALSE}
+function_name <- function(arg_1, arg_2, ...) {
+   Function body 
+}
+```
+
+A function can be named or anonymous. The general rule of function is that it should be small in general programming (less than 100 lines of code). However in practice when your aim was not to distribute your function, you may use slightly longer functions. The easiest example of a function is provided below. 
+
+```{r,out.width="20%"}
+Dalek<-function(text=""){
+  if (text== "Exterminate") {
+    knitr::include_graphics(here::here("Graphics/Dalek.png"))
+  } else {
+    print("Exterminate")
+  }
+}
+Dalek("Hello")
+Dalek()
+Dalek("Exterminate")
+```
 
 
 
-### Functions 
+## Environments
 
-### Render anlaysis results from different dataset with the same rmarkdown file
+The operating environment is a slightly complicated concept to explain to non-programmers. Detailed description can be found in the [Advanced R by Hardley Wickham](https://adv-r.hadley.nz/environments.html). You are using the environment every time you use R even you do not realize it. Essentially  you can think of the environment as a name list of all the data, variables, libraries, functions and other objects. The name list links a name with a part of memory on your computer. Every name must be unique in an Environment. 
+
+```{r}
+a <- 1
+a <- 1:5
+a
+```
+
+Sometimes there can be confusion. See the example below:
+
+```{r}
+mean
+mean <- 1
+mean
+mean(1:3)
+```
+Now, what is the object 'mean'? Is it a variable with a value of 1 or a function that calculates the mean? The answer is both. This relates to the current(local) and global environment. The variable 'mean' belongs to the current or local environment and the function 'mean' belongs the global environment. R program will search for the object first in the current environments and then the global environment to find matching names. When you call the function mean, R will fail to find any function in the current environment and move up to the global environment to find a matching name.
+
+```{r}
+mean <- function(x) 1
+mean(1:5)
+mean(1:10)
+```
+ 
+Now I have defined a local function 'mean' and R will use my local function, unless I specify the environment that the 'mean' function that I want to call from. Here the 'mean' function is a part of the base library. 
+
+```{r}
+base::mean(1:5)
+```
+
+
+## Scoping Rules 
+
+Scoping rules are closely related to environment, it determines how values are assigned to free variables. An advanced introduction is provided in [R Programming for Data Science by Roger Peng](https://bookdown.org/rdpeng/rprogdatascience/scoping-rules-of-r.html). R uses lexical scoping which means that it will search the values of free variables or objects are searched for in the environment in which the function was defined. The order of the R search starts from the local environment first, next to the parent environments and then to the global environment. Although R does this searching all the time, you may not notice any issues unless the objects with the same name were defined from different environments, e.g., same variable names in the nested functions. The recommendation is try to avoid using the same name for different variables/objects. 
+
+## Funcitonal programming
+
+R is not just a functional programming tool, it has many extended toolkit that can facilitate functional programming. An important one is the [*purrr*](https://purrr.tidyverse.org/) package. *purrr* provides a range of functions (e.g., *map* ) that functionalise for loops (similar to apply family but with greater flexibility), see details in [Chapter 9 of Advanced R]( https://adv-r.hadley.nz/functionals.html).
+
+The map family functions provide extended tools to allow better implementation of functional operations with lists, vectors and tibbles. 
+
+See the following example that we wanted to regress the "Species" (fifth variable ) on each of the  petal and sepal length and width variables (first four variables). Results were saved in a list. 
+
+```{r}
+regess_on <- function(y,x,data) {
+  lm( as.formula( paste(  names(data)[y], " ~ ", names(data)[x] )) , data = data)
+}
+results<-map(1:4, regess_on, x=5, data = iris) 
+summary(results[[1]])
+```
+
+In another example, here we first split the data by species, fit a model to each species, compute the summary, then extract the R2.
+```{r}
+iris %>%
+  split(.$Species) %>% 
+  map(~ lm(Sepal.Length ~ Petal.Length, data = .)) %>%
+  map(summary) %>%
+  map_dbl("r.squared")
+```
+
 
 # Data visulisation 
+
+Cleveland’s five principles of graphical excellence.
+
+Principle 1: Show the data clearly
+Principle 2: Use simplicity in design
+Principle 3: Use good alignment on a common scale for quantities to be compared.
+Principle 4: Keep the visual encoding transparent.
+Principle 5: Use graphical forms consistent with Principles 1 to 4.
 
 
 
@@ -1100,11 +1342,17 @@ Source:https://www.sciencedirect.com/science/article/pii/S0160412020321966#f0015
 
 ## One-stop shop 
 
-## A good graph takes forever  
+Rmarkdown is a great tool for integrating all data procedures in to isolated environments to allows for better reproducibility, higher level of transparency and easier project management. Here we recommend a two-stage process: 
+
+* Stage 1: generic data cleaning. Conduct data cleaning that is associated with one specific project using one R Markdown document. Store all cleaned data in a data file(s).
+
+* Stage 2: conduct paper or report specific data cleaning and data analysis. All analysis should be included into one R Markdown per paper/report. 
+
+
 
 ## Write up of the analysis results
 
-* Report the nature and source of the data, validity of instrument and data collection process ( i.e. response rate and any possible bias).
+* Report the nature and source of the data, validity of instrument and data collection process (e.g., response rate and any possible bias).
 
 * Report any data editing procedures, including any imputation and missing data mechanisms 
 
@@ -1130,20 +1378,4 @@ Source:https://www.sciencedirect.com/science/article/pii/S0160412020321966#f0015
 
 * Provide all analysis code either as an Appendix or in open repositories such as Github
 
-## Advanced topics
-
-### Write a paper using R
-
-### Advanced Latex 
-
-# Version control 
-
-## Version control framework
-
-## Github 
-
-https://swcarpentry.github.io/git-novice/
-
-# Publication 
-
-# Reference
+# Version control
