@@ -100,9 +100,9 @@ Sorry for being a bit offensive, but the reality is the industry and scientific 
 
 ## Learn to use R
 
-"R being hard to learn" mostly exists in our fears. Once you get on to it the challenges are mostly "feeling a bit confused", there are so many packages, so many ways to do the same thing, so much typing needed, so many materials everywhere... So the best way to learn R is to learn by using it. You can start with a short intensive introduction course (one or two days) to build up your confidence. Start using it in a small project, and then gradually roll it out to more parts of your analysis tasks. You can also start by learning your collaborator's code (communicate with the author and create a separate environment so that you won't break anything).
+R some times can feel "too hard to learn". However, it is only our fear of the unknowns. Once you get on to it, the challenges are mostly "feeling a bit confused", as there are so many packages, so many ways to do the same thing, so much typing needed, so many materials everywhere... So the best way to learn R is to learn by using it. You can start with a short intensive introduction course (one or two days) to build up your confidence. Then start using it in a small project, and then gradually roll it out to more parts of your analysis tasks. You can also start by learning your collaborator's code (communicate with the author and create a separate environment so that you won't break anything).
 
-There are lots of good online training materials for R:
+There are many good online training materials for R:
 
 * [R for Reproducible Scientific Analysis from Software Carpentry ](https://swcarpentry.github.io/r-novice-gapminder/)
 * [R Programming on Coursera by Roger Peng](https://www.coursera.org/learn/r-programming),
@@ -116,7 +116,7 @@ Almost all R users are still learning R, so you have no excuse not to.
 
 ## Set up R on your computer
 
-One thing that you have to remember: R is a fast evolving-language. It has a new version every few months (sometimes two versions in one month), with funny names.
+One thing that you have to remember: R is a fast evolving-language. It has a new version every few months (sometimes two versions in one month,with funny names). 
 
 ```{r}
 library(rversions)
