@@ -1,5 +1,5 @@
 ---
-title: "Good Statistical Practice (GSP): guidance for using R for scientific publication"
+title: "Good Statistical Practice (GSP): guidance for using R for scientific publication (working document)"
 author:
 - name: Caroline X. Gao
   familyname: Gao
@@ -1326,15 +1326,19 @@ iris %>%
 ```
 
 
+
+
 # Data visulisation 
 
 Cleveland’s five principles of graphical excellence.
 
-Principle 1: Show the data clearly
-Principle 2: Use simplicity in design
-Principle 3: Use good alignment on a common scale for quantities to be compared.
-Principle 4: Keep the visual encoding transparent.
-Principle 5: Use graphical forms consistent with Principles 1 to 4.
+* Principle 1: Show the data clearly
+* Principle 2: Use simplicity in design
+* Principle 3: Use good alignment on a common scale for quantities to be compared.
+* Principle 4: Keep the visual encoding transparent.
+* Principle 5: Use graphical forms consistent with Principles 1 to 4.
+
+
 
 
 
